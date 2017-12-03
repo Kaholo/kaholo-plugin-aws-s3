@@ -22,8 +22,45 @@
         {
           "name": "REGION",
           "viewName": "Region",
-          "type": "string"
-
+          "type": "collection",
+          "options": [
+            {
+              "id": "us-east-1",
+              "name": "US East (N. Virginia)"
+            },
+            {
+              "id": "us-west-1",
+              "name": "US West (N. California)"
+            },
+            {
+              "id": "us-west-2",
+              "name": "US West (Oregon)"
+            },
+            {
+              "id": "ap-southeast-1",
+              "name": "Asia Pacific (Singapore)"
+            },
+            {
+              "id": "ap-southeast-2",
+              "name": "Asia Pacific (Sydney)"
+            },
+            {
+              "id": "ap-northeast-1",
+              "name": "Asia Pacific (Tokyo)"
+            },
+            {
+              "id": "eu-west-1",
+              "name": "EU (Ireland)"
+            },
+            {
+              "id": "sa-east-1",
+              "name": "South America (São Paulo)"
+            },
+            {
+              "id": "eu-central-1",
+              "name": "EU (Frankfurt)"
+            }
+          ]
         }
       ]
     },
@@ -44,7 +81,45 @@
         {
           "name": "REGION",
           "viewName": "Region",
-          "type": "string"
+          "type": "collection",
+          "options": [
+            {
+              "id": "us-east-1",
+              "name": "US East (N. Virginia)"
+            },
+            {
+              "id": "us-west-1",
+              "name": "US West (N. California)"
+            },
+            {
+              "id": "us-west-2",
+              "name": "US West (Oregon)"
+            },
+            {
+              "id": "ap-southeast-1",
+              "name": "Asia Pacific (Singapore)"
+            },
+            {
+              "id": "ap-southeast-2",
+              "name": "Asia Pacific (Sydney)"
+            },
+            {
+              "id": "ap-northeast-1",
+              "name": "Asia Pacific (Tokyo)"
+            },
+            {
+              "id": "eu-west-1",
+              "name": "EU (Ireland)"
+            },
+            {
+              "id": "sa-east-1",
+              "name": "South America (São Paulo)"
+            },
+            {
+              "id": "eu-central-1",
+              "name": "EU (Frankfurt)"
+            }
+          ]
         },
         {
           "name": "BUCKET_NAME",
@@ -70,7 +145,45 @@
         {
           "name": "REGION",
           "viewName": "Region",
-          "type": "string"
+          "type": "collection",
+          "options": [
+            {
+              "id": "us-east-1",
+              "name": "US East (N. Virginia)"
+            },
+            {
+              "id": "us-west-1",
+              "name": "US West (N. California)"
+            },
+            {
+              "id": "us-west-2",
+              "name": "US West (Oregon)"
+            },
+            {
+              "id": "ap-southeast-1",
+              "name": "Asia Pacific (Singapore)"
+            },
+            {
+              "id": "ap-southeast-2",
+              "name": "Asia Pacific (Sydney)"
+            },
+            {
+              "id": "ap-northeast-1",
+              "name": "Asia Pacific (Tokyo)"
+            },
+            {
+              "id": "eu-west-1",
+              "name": "EU (Ireland)"
+            },
+            {
+              "id": "sa-east-1",
+              "name": "South America (São Paulo)"
+            },
+            {
+              "id": "eu-central-1",
+              "name": "EU (Frankfurt)"
+            }
+          ]
         },
         {
           "name": "BUCKET_NAME",
@@ -101,7 +214,45 @@
         {
           "name": "REGION",
           "viewName": "Region",
-          "type": "string"
+          "type": "collection",
+          "options": [
+            {
+              "id": "us-east-1",
+              "name": "US East (N. Virginia)"
+            },
+            {
+              "id": "us-west-1",
+              "name": "US West (N. California)"
+            },
+            {
+              "id": "us-west-2",
+              "name": "US West (Oregon)"
+            },
+            {
+              "id": "ap-southeast-1",
+              "name": "Asia Pacific (Singapore)"
+            },
+            {
+              "id": "ap-southeast-2",
+              "name": "Asia Pacific (Sydney)"
+            },
+            {
+              "id": "ap-northeast-1",
+              "name": "Asia Pacific (Tokyo)"
+            },
+            {
+              "id": "eu-west-1",
+              "name": "EU (Ireland)"
+            },
+            {
+              "id": "sa-east-1",
+              "name": "South America (São Paulo)"
+            },
+            {
+              "id": "eu-central-1",
+              "name": "EU (Frankfurt)"
+            }
+          ]
         },
         {
           "name": "BUCKET_NAME",
@@ -127,7 +278,45 @@
         {
           "name": "REGION",
           "viewName": "Region",
-          "type": "string"
+          "type": "collection",
+          "options": [
+            {
+              "id": "us-east-1",
+              "name": "US East (N. Virginia)"
+            },
+            {
+              "id": "us-west-1",
+              "name": "US West (N. California)"
+            },
+            {
+              "id": "us-west-2",
+              "name": "US West (Oregon)"
+            },
+            {
+              "id": "ap-southeast-1",
+              "name": "Asia Pacific (Singapore)"
+            },
+            {
+              "id": "ap-southeast-2",
+              "name": "Asia Pacific (Sydney)"
+            },
+            {
+              "id": "ap-northeast-1",
+              "name": "Asia Pacific (Tokyo)"
+            },
+            {
+              "id": "eu-west-1",
+              "name": "EU (Ireland)"
+            },
+            {
+              "id": "sa-east-1",
+              "name": "South America (São Paulo)"
+            },
+            {
+              "id": "eu-central-1",
+              "name": "EU (Frankfurt)"
+            }
+          ]
         },
         {
           "name": "BUCKET_NAME",
@@ -158,7 +347,45 @@
         {
           "name": "REGION",
           "viewName": "Region",
-          "type": "string"
+          "type": "collection",
+          "options": [
+            {
+              "id": "us-east-1",
+              "name": "US East (N. Virginia)"
+            },
+            {
+              "id": "us-west-1",
+              "name": "US West (N. California)"
+            },
+            {
+              "id": "us-west-2",
+              "name": "US West (Oregon)"
+            },
+            {
+              "id": "ap-southeast-1",
+              "name": "Asia Pacific (Singapore)"
+            },
+            {
+              "id": "ap-southeast-2",
+              "name": "Asia Pacific (Sydney)"
+            },
+            {
+              "id": "ap-northeast-1",
+              "name": "Asia Pacific (Tokyo)"
+            },
+            {
+              "id": "eu-west-1",
+              "name": "EU (Ireland)"
+            },
+            {
+              "id": "sa-east-1",
+              "name": "South America (São Paulo)"
+            },
+            {
+              "id": "eu-central-1",
+              "name": "EU (Frankfurt)"
+            }
+          ]
         },
         {
           "name": "BUCKET_NAME",
