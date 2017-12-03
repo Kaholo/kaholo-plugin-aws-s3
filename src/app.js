@@ -3,6 +3,7 @@
 let aws = require("aws-sdk");
 
 function listBuckets(action) {
+    console.log("!!!", action.params.REGION);
     return new Promise((resolve, reject) => {
         aws.config.update({
             region: action.params.REGION,

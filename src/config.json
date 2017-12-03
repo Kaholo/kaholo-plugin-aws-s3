@@ -7,7 +7,7 @@
   "methods": [
     {
       "name": "listBuckets",
-      "viewName": "Get buckets list",
+      "viewName": "Buckets list",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
@@ -23,6 +23,7 @@
           "name": "REGION",
           "viewName": "Region",
           "type": "string"
+
         }
       ]
     },
