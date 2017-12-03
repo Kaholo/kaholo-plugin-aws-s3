@@ -1,0 +1,170 @@
+{
+  "name": "Amazon-aws-s3",
+  "type": "executer",
+  "imgUrl": "logo.png",
+  "execProgram": "node",
+  "main": "app.js",
+  "methods": [
+    {
+      "name": "listBuckets",
+      "viewName": "Get buckets list",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "string"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "string"
+        },
+        {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "createBucket",
+      "viewName": "Create a bucket",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "string"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "string"
+        },
+        {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "string"
+        },
+        {
+          "name": "BUCKET_NAME",
+          "viewName": "Bucket name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "uploadFileToBucket",
+      "viewName": "Create a bucket",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "string"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "string"
+        },
+        {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "string"
+        },
+        {
+          "name": "BUCKET_NAME",
+          "viewName": "Bucket name",
+          "type": "string"
+        },
+        {
+          "name": "FILE_PATH",
+          "viewName": "File path",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "deleteBucket",
+      "viewName": "Delete a bucket",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "string"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "string"
+        },
+        {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "string"
+        },
+        {
+          "name": "BUCKET_NAME",
+          "viewName": "Bucket name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "deleteObject",
+      "viewName": "Delete an object",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "string"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "string"
+        },
+        {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "string"
+        },
+        {
+          "name": "BUCKET_NAME",
+          "viewName": "Bucket name",
+          "type": "string"
+        },
+        {
+          "name": "OBJECT_NAME",
+          "viewName": "Object name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "listObjectsInBucket",
+      "viewName": "List bucket's objects",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "string"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "string"
+        },
+        {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "string"
+        },
+        {
+          "name": "BUCKET_NAME",
+          "viewName": "Bucket name",
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}

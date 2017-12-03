@@ -1,0 +1,16 @@
+{
+  "name": "pm-plugin-MySQL",
+  "version": "1.0.0",
+  "description": "MySQL plugin for Productionmap",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Productionmap team (Yehonatan Bitton, Roy Talyosef)",
+  "license": "ISC",
+  "dependencies": {
+    "aws": "0.0.3-2",
+    "aws-sdk": "^2.162.0",
+    "mysql": "^2.15.0"
+  }
+}
