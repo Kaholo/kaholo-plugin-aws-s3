@@ -4,6 +4,7 @@
   "imgUrl": "logo.png",
   "execProgram": "node",
   "main": "app.js",
+  "version": "0.0.1",
   "methods": [
     {
       "name": "listBuckets",
@@ -386,11 +387,6 @@
               "name": "EU (Frankfurt)"
             }
           ]
-        },
-        {
-          "name": "BUCKET_NAME",
-          "viewName": "Bucket name",
-          "type": "string"
         }
       ]
     }
