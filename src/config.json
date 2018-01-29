@@ -4,7 +4,7 @@
   "imgUrl": "logo.png",
   "execProgram": "node",
   "main": "app.js",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "methods": [
     {
       "name": "listBuckets",
