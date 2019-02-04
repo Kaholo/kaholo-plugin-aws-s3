@@ -4,7 +4,7 @@
   "imgUrl": "logo.png",
   "execProgram": "node",
   "main": "app.js",
-  "version": "1.0.0",
+  "version": "1.2.1",
   "methods": [
     {
       "name": "listBuckets",
@@ -23,7 +23,7 @@
         {
           "name": "REGION",
           "viewName": "Region",
-          "type": "collection",
+          "type": "options",
           "options": [
             {
               "id": "us-east-1",
@@ -82,7 +82,7 @@
         {
           "name": "REGION",
           "viewName": "Region",
-          "type": "collection",
+          "type": "options",
           "options": [
             {
               "id": "us-east-1",
@@ -131,7 +131,7 @@
     },
     {
       "name": "uploadFileToBucket",
-      "viewName": "Create a bucket",
+      "viewName": "Upload File",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
@@ -146,7 +146,7 @@
         {
           "name": "REGION",
           "viewName": "Region",
-          "type": "collection",
+          "type": "options",
           "options": [
             {
               "id": "us-east-1",
@@ -195,6 +195,11 @@
           "name": "FILE_PATH",
           "viewName": "File path",
           "type": "string"
+        },
+        {
+          "name": "DEST_FILE_PATH",
+          "viewName": "Des file path",
+          "type": "string"
         }
       ]
     },
@@ -215,7 +220,7 @@
         {
           "name": "REGION",
           "viewName": "Region",
-          "type": "collection",
+          "type": "options",
           "options": [
             {
               "id": "us-east-1",
@@ -279,7 +284,7 @@
         {
           "name": "REGION",
           "viewName": "Region",
-          "type": "collection",
+          "type": "options",
           "options": [
             {
               "id": "us-east-1",
@@ -348,7 +353,7 @@
         {
           "name": "REGION",
           "viewName": "Region",
-          "type": "collection",
+          "type": "options",
           "options": [
             {
               "id": "us-east-1",
