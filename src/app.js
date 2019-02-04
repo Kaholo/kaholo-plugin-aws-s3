@@ -72,7 +72,8 @@ function uploadFileToBucket(action) {
         let uploadParams = {
             Bucket: action.params.BUCKET_NAME,
             Key: '',
-            Body: ''
+            Body: '',
+            Key : action.params.DEST_FILE_PATH
         };
 
         let filePath = action.params.FILE_PATH;
@@ -82,9 +83,6 @@ function uploadFileToBucket(action) {
             return reject("Error reading file", err);
         });
         uploadParams.Body = fileStream;
-
-        let path = require('path');
-        uploadParams.Key = path.basename(filePath);
 
         let s3 = new aws.S3();
         s3.upload(uploadParams, (error, data) => {

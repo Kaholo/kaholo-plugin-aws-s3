@@ -1,6 +1,6 @@
 {
   "name": "pm-plugin-aws-s3",
-  "version": "1.0.0",
+  "version": "1.2.1",
   "description": "AWS S3 plugin for Productionmap",
   "main": "app.js",
   "scripts": {
