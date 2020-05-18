@@ -2,12 +2,12 @@
 
 let aws = require("aws-sdk");
 
-function listBuckets(action) {
+function listBuckets(action,settings) {
     return new Promise((resolve, reject) => {
         aws.config.update({
             region: action.params.REGION,
-            "accessKeyId": action.params.AWS_ACCESS_KEY_ID,
-            "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY
+            "accessKeyId": action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID,
+            "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
         });
 
         let s3 = new aws.S3();
@@ -19,12 +19,12 @@ function listBuckets(action) {
     });
 }
 
-function createBucket(action) {
+function createBucket(action,settings) {
     return new Promise((resolve, reject) => {
         aws.config.update({
             region: action.params.REGION,
-            "accessKeyId": action.params.AWS_ACCESS_KEY_ID,
-            "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY
+            "accessKeyId": action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID,
+            "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
         });
 
         let bucketParam = {
@@ -40,12 +40,12 @@ function createBucket(action) {
     });
 }
 
-function deleteBucket(action) {
+function deleteBucket(action,settings) {
     return new Promise((resolve, reject) => {
         aws.config.update({
             region: action.params.REGION,
-            "accessKeyId": action.params.AWS_ACCESS_KEY_ID,
-            "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY
+            "accessKeyId": action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID,
+            "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
         });
 
         let bucketParam = {
@@ -61,12 +61,12 @@ function deleteBucket(action) {
     });
 }
 
-function uploadFileToBucket(action) {
+function uploadFileToBucket(action,settings) {
     return new Promise((resolve, reject) => {
         aws.config.update({
             region: action.params.REGION,
-            "accessKeyId": action.params.AWS_ACCESS_KEY_ID,
-            "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY
+            "accessKeyId": action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID,
+            "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
         });
 
         let uploadParams = {
@@ -94,12 +94,12 @@ function uploadFileToBucket(action) {
     });
 }
 
-function listObjects(action) {
+function listObjects(action,settings) {
     return new Promise((resolve, reject) => {
         aws.config.update({
             region: action.params.REGION,
-            "accessKeyId": action.params.AWS_ACCESS_KEY_ID,
-            "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY
+            "accessKeyId": action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID,
+            "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
         });
 
         let bucketParam = {
@@ -116,12 +116,12 @@ function listObjects(action) {
 }
 
 
-function deleteObject(action) {
+function deleteObject(action,settings) {
     return new Promise((resolve, reject) => {
         aws.config.update({
             region: action.params.REGION,
-            "accessKeyId": action.params.AWS_ACCESS_KEY_ID,
-            "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY
+            "accessKeyId": action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID,
+            "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
         });
 
         let params = {
