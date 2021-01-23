@@ -88,4 +88,17 @@ Removes the null version (if there is one) of an object and inserts a delete mar
 2. Secret key
 3. Region
 
+## Method: Manage Public Access Block
+This method change the permission of a bucket and decide if the bucket is open for public
+
+### Parameters:
+1. Access Key (String) can be override from plugin settings
+2. Secret key (String) can be override from plugin settings
+3. Region **Required**
+4. Block Public Acls (Boolean) **Required**
+5. Block public policy (Boolean) **Required**
+6. Ignore public Acls (Boolean) **Required**
+7. Restrick public Buckets (Boolean) **Required**
+8. Content MD5 (String) **Optional**
+9. Expected Bucket Owner (AccountID) **Required**
 
