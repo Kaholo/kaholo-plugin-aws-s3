@@ -4,7 +4,8 @@
   "imgUrl": "logo.png",
   "execProgram": "node",
   "main": "app.js",
-  "version": "1.2.2",
+  "version": "1.3.2",
+  "description":"AWS S3 wrapper plugin",
   "settings":[
     {
       "name":"AWS_ACCESS_KEY_ID",
@@ -404,6 +405,62 @@
               "name": "EU (Frankfurt)"
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "managePublicAccessBlock",
+      "viewName":"Manage Public Access Block",
+      "params":[
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "vault"
+        },
+        {
+          "name": "REGION",
+          "viewName":"Region",
+          "type":"string"
+        },
+        {
+          "name": "BUCKET_NAME",
+          "viewName": "Bucket name*",
+          "type":"string"
+        },
+        {
+          "name": "BlockPublicAcls",
+          "viewName": "Block Public Acls*",
+          "type":"boolean"
+        },
+        {
+          "name": "BlockPublicPolicy",
+          "viewName": "Block public policy*",
+          "type":"boolean"
+        },
+        {
+          "name": "IgnorePublicAcls",
+          "viewName": "Ignore public Acls*",
+          "type":"boolean"
+        },
+        {
+          "name": "RestrictPublicBuckets",
+          "viewName": "Restrick public Buckets*",
+          "type":"boolean"
+        },
+        {
+          "name": "ContentMD5",
+          "viewName": "RContent MD5",
+          "type":"string"
+        },
+        {
+          "name": "ExpectedBucketOwner",
+          "viewName": "Expected Bucket Owner (AccountID)*",
+          "type":"string"
         }
       ]
     }
