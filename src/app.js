@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 let aws = require("aws-sdk");
+const { listRegions } = require('./autocomplete');
 
 function listBuckets(action,settings) {
     return new Promise((resolve, reject) => {
         aws.config.update({
-            region: action.params.REGION,
+            region: action.params.REGION.id,
             "accessKeyId": action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID,
             "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
         });
@@ -22,7 +23,7 @@ function listBuckets(action,settings) {
 function createBucket(action,settings) {
     return new Promise((resolve, reject) => {
         aws.config.update({
-            region: action.params.REGION,
+            region: action.params.REGION.id,
             "accessKeyId": action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID,
             "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
         });
@@ -43,7 +44,7 @@ function createBucket(action,settings) {
 function deleteBucket(action,settings) {
     return new Promise((resolve, reject) => {
         aws.config.update({
-            region: action.params.REGION,
+            region: action.params.REGION.id,
             "accessKeyId": action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID,
             "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
         });
@@ -97,7 +98,7 @@ function uploadFileToBucket(action,settings) {
 function listObjects(action,settings) {
     return new Promise((resolve, reject) => {
         aws.config.update({
-            region: action.params.REGION,
+            region: action.params.REGION.id,
             "accessKeyId": action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID,
             "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
         });
@@ -119,7 +120,7 @@ function listObjects(action,settings) {
 function deleteObject(action,settings) {
     return new Promise((resolve, reject) => {
         aws.config.update({
-            region: action.params.REGION,
+            region: action.params.REGION.id,
             "accessKeyId": action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID,
             "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
         });
@@ -139,11 +140,45 @@ function deleteObject(action,settings) {
     });
 }
 
+function managePublicAccessBlock(action, settings) {
+    return new Promise((resolve, reject) => {
+        aws.config.update({
+            "region":action.params.REGION.id,
+            "accessKeyId": action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID,
+            "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
+        });
+        let jBlockPublicAcls = JSON.parse(action.params.BlockPublicAcls);
+        let jBlockPublicPolicy = JSON.parse(action.params.BlockPublicPolicy);
+        let jIgnorePublicAcls = JSON.parse(action.params.IgnorePublicAcls);
+        let jRestrictPublicBuckets = JSON.parse(action.params.RestrictPublicBuckets)
+        var params = {
+            Bucket: action.params.BUCKET_NAME, /* required */
+            PublicAccessBlockConfiguration: { /* required */
+              BlockPublicAcls: jBlockPublicAcls,
+              BlockPublicPolicy: jBlockPublicPolicy,
+              IgnorePublicAcls: jIgnorePublicAcls,
+              RestrictPublicBuckets: jRestrictPublicBuckets
+            },
+            ContentMD5: action.params.ContentMD5,
+            ExpectedBucketOwner: action.params.ExpectedBucketOwner
+          };
+        let s3 = new aws.S3();
+        s3.putPublicAccessBlock(params, (err, data) => {
+            if (err) 
+                return reject ({"err": err}); // an error occurred
+            return resolve (data) // successful response
+          })
+    });
+}
+
 module.exports = {
     listBuckets: listBuckets,
     createBucket: createBucket,
     uploadFileToBucket: uploadFileToBucket,
     deleteBucket: deleteBucket,
     listObjectsInBucket: listObjects,
-    deleteObject: deleteObject
+    deleteObject: deleteObject,
+    managePublicAccessBlock: managePublicAccessBlock,
+    //autocomplete
+    listRegions
 };
