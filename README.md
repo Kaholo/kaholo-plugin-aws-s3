@@ -88,4 +88,18 @@ Removes the null version (if there is one) of an object and inserts a delete mar
 2. Secret key
 3. Region
 
+## Method: Manage Public Access Block
+This method will set the permissions of the bucket according to the following [documentation](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putPublicAccessBlock-property)
+
+### Parameters:
+1. Access Key (vault) **Optional**
+2. Secret key (vault) **Optional**
+3. Region (Auto Complete) **Required**
+4. Bucket name (string) **Required**
+5. BlockPublicAcls (boolean) **Optional**
+6. BlockPublicPolicy (boolean) **Optional**
+7. IgnorePublicAcls (boolean) **Optional**
+8. RestrictPublicBuckets (boolean) **Optional**
+9. ContentMD5 (string) **Optional**
+10. ExpectedBucketOwner (account Id) **Required**
 
