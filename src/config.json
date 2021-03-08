@@ -4,7 +4,7 @@
   "imgUrl": "logo.png",
   "execProgram": "node",
   "main": "app.js",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "description":"AWS S3 wrapper plugin",
   "settings":[
     {
@@ -277,29 +277,40 @@
           "type":"string"
         },
         {
-          "name": "GRANT_TYPE",
-          "viewName": "Grant Type",
+          "name": "objGrantType",
+          "viewName": "Object Grant Type",
           "type":"options",
           "options": [
             {
-              "id":"GrantFullControl",
-              "name":"Grant full control"
+              "id":"readWrite",
+              "name":"Read and Write"
             },
             {
               "id":"GrantRead",
-              "name":"Grant read"
-            },
-            {
-              "id":"GrantReadACP",
-              "name":"Grant read ACP"
+              "name":"Read"
             },
             {
               "id":"GrantWrite",
-              "name":"Grant write"
+              "name":"Write"
+            }
+          ]
+        },
+        {
+          "name": "aclGrantType",
+          "viewName": "ACL Grant Type",
+          "type":"options",
+          "options": [
+            {
+              "id":"readWrite",
+              "name":"Read and Write"
+            },
+            {
+              "id":"GrantReadACP",
+              "name":"Read"
             },
             {
               "id":"GrantWriteACP",
-              "name":"Grant write ACP"
+              "name":"Write"
             }
           ]
         },
@@ -317,6 +328,57 @@
           "name":"emailAddress",
           "viewName":"User Email Address",
           "type":"string"
+        }
+      ]
+    },
+    {
+      "name":"putCannedACL",
+      "viewName":"apply canned ACL to Bucket",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "vault"
+        },
+        {
+          "name": "REGION",
+          "viewName":"Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegions"
+        },
+        {
+          "name": "BUCKET_NAME",
+          "viewName": "Bucket name*",
+          "type":"string"
+        },
+        {
+          "name": "ACL",
+          "viewName": "Canned ACL Type",
+          "type":"options",
+          "options": [
+            {
+              "id":"private",
+              "name":"Private"
+            },
+            {
+              "id":"public-read",
+              "name":"Public Read"
+            },
+            {
+              "id":"public-read-write",
+              "name":"Public Read Write"
+            },
+            {
+              "id":"authenticated-read",
+              "name":"Authenticated Read"
+            }
+          ]
         }
       ]
     }
