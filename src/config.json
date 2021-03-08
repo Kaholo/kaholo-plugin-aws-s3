@@ -4,7 +4,7 @@
   "imgUrl": "logo.png",
   "execProgram": "node",
   "main": "app.js",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description":"AWS S3 wrapper plugin",
   "settings":[
     {
@@ -246,6 +246,76 @@
         {
           "name": "ExpectedBucketOwner",
           "viewName": "Expected Bucket Owner (AccountID)*",
+          "type":"string"
+        }
+      ]
+    },
+    {
+      "name":"putBucketAcl",
+      "viewName":"Manage Bucket ACL",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "vault"
+        },
+        {
+          "name": "REGION",
+          "viewName":"Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegions"
+        },
+        {
+          "name": "BUCKET_NAME",
+          "viewName": "Bucket name*",
+          "type":"string"
+        },
+        {
+          "name": "GRANT_TYPE",
+          "viewName": "Grant Type",
+          "type":"options",
+          "options": [
+            {
+              "id":"GrantFullControl",
+              "name":"Grant full control"
+            },
+            {
+              "id":"GrantRead",
+              "name":"Grant read"
+            },
+            {
+              "id":"GrantReadACP",
+              "name":"Grant read ACP"
+            },
+            {
+              "id":"GrantWrite",
+              "name":"Grant write"
+            },
+            {
+              "id":"GrantWriteACP",
+              "name":"Grant write ACP"
+            }
+          ]
+        },
+        {
+          "name":"URI",
+          "viewName":"Group URI",
+          "type":"string"
+        },
+        {
+          "name":"userID",
+          "viewName":"User ID",
+          "type":"string"
+        },
+        {
+          "name":"emailAddress",
+          "viewName":"User Email Address",
           "type":"string"
         }
       ]
