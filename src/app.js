@@ -168,12 +168,54 @@ function putBucketAcl(action, settings) {
                          userID         ?   `id=${userID}` :
                          emailAddress   ?   `emailAddress=${emailAddress}` : "";
     if (!accessString){
-        throw "You must specify one of the following: Group URI, User ID or User Email Address";
+        throw "You must specify one of the following: Group URI/User ID/User Email Address";
     }
-    const grantType = action.params.GRANT_TYPE;
-
-    params[grantType] = accessString;
+    const objGrantType = action.params.objGrantType;
+    const aclGrantType = action.params.aclGrantType;
+    let grantTypes = [];
+    if (aclGrantType == "readWrite" && objGrantType == "readWrite"){
+        grantTypes.push("GrantFullControl");
+    }
+    else{
+        if (objGrantType === "readWrite"){
+            grantTypes = ["GrantRead", "GrantWrite"];
+        }
+        else if (objGrantType){
+            grantTypes.push(objGrantType);
+        }
+        if (aclGrantType === "readWrite"){
+            grantTypes.push("GrantReadACP")
+            grantTypes.push("GrantWriteACP");
+        }
+        else if (aclGrantType){
+            grantTypes.push(aclGrantType);
+        }
+        if (grantTypes.length === 0){
+            throw "You must specify at least one of the following: Object Grant Type/ACL Grant Type"
+        }
+    }
+    grantTypes.forEach(function(grantType){
+        params[grantType] = accessString;
+    })
     
+    const s3 = new aws.S3();
+    return new Promise((resolve, reject) => {
+        s3.putBucketAcl(params, function(err, data) {
+            if (err) {
+                return reject(err);
+            }
+            return resolve (data);
+        });
+    });
+}
+
+function putCannedACL(action, settings) {
+    updateAwsCreds(action, settings);
+
+    let params = {
+        Bucket: action.params.BUCKET_NAME,
+        ACL: action.params.ACL
+    };
     const s3 = new aws.S3();
     return new Promise((resolve, reject) => {
         s3.putBucketAcl(params, function(err, data) {
@@ -193,7 +235,8 @@ module.exports = {
     listObjectsInBucket: listObjects,
     deleteObject: deleteObject,
     managePublicAccessBlock: managePublicAccessBlock,
-    putBucketAcl,
+    putBucketAcl: putBucketAcl,
+    putCannedACL: putCannedACL,
     //autocomplete
     listRegions
 };
