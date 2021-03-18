@@ -103,7 +103,7 @@ This method will set the permissions of the bucket according to the following [d
 9. ContentMD5 (string) **Optional**
 10. ExpectedBucketOwner (account Id) **Required**
 
-# Method: Manage Bucket ACL
+## Method: Manage Bucket ACL
 Grants basic read/write permissions to the specified s3 bucket, to other AWS accounts. Does so according to the method described [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putBucketAcl-property)
 
 ### Parameters:
@@ -119,7 +119,7 @@ Grants basic read/write permissions to the specified s3 bucket, to other AWS acc
 * Notice! You have to provide one(and one only) of the following: Group URI/User ID/User Email Address. 
 * Also You have to provide Object Grant Type\ACL Grant Type\Both
 
-# Method: Apply Canned ACL to Bucket
+## Method: Apply Canned ACL to Bucket
 applies canned(prebuilt) ACL to bucket. Does so according to the method described [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putBucketAcl-property), using the 'ACL' parameter.
 
 ### Parameters:
@@ -128,7 +128,7 @@ applies canned(prebuilt) ACL to bucket. Does so according to the method describe
 4. Bucket name (string) **Required**
 5. Canned ACL Type (options) **Required**
 
-# Method: Manage Bucket Versioning
+## Method: Manage Bucket Versioning
 Sets the versioning state of an existing bucket. Does so according to the method described [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putBucketVersioning-property).
 
 ### Parameters:
@@ -139,7 +139,7 @@ Sets the versioning state of an existing bucket. Does so according to the method
 5. MFA Delete **Optional** - Specifies whether MFA delete is enabled in the bucket versioning configuration. Default is Disabled.
 6. MFA **Required with MFA Delete Enabled** - The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device
 
-# Method: Apply Bucket Policy
+## Method: Apply Bucket Policy
 Applies an Amazon S3 bucket policy to the bucket. Does so according to the method described [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putBucketPolicy-property).
 
 ### Parameters:
@@ -148,7 +148,7 @@ Applies an Amazon S3 bucket policy to the bucket. Does so according to the metho
 3. Bucket name (string) **Required**
 4. Policy (object/JSON string) **Required** - The bucket policy as a JSON string or an object from code.
 
-# Method: Get Bucket Policy
+## Method: Get Bucket Policy
 Get the Amazon S3 bucket policy of the bucket. Does so according to the method described [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getBucketPolicy-property).
 
 ### Parameters:
@@ -156,7 +156,7 @@ Get the Amazon S3 bucket policy of the bucket. Does so according to the method d
 2. Secret key (vault) **Optional**
 3. Bucket name (string) **Required**
 
-# Method: Delete Bucket Policy
+## Method: Delete Bucket Policy
 Deletes the Amazon S3 bucket policy of the bucket. Does so according to the method described [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#deleteBucketPolicy-property).
 
 ### Parameters:
@@ -164,7 +164,7 @@ Deletes the Amazon S3 bucket policy of the bucket. Does so according to the meth
 2. Secret key (vault) **Optional**
 3. Bucket name (string) **Required**
 
-# Method: Manage Bucket Logging
+## Method: Manage Bucket Logging
 Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. Does so according to the method described [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putBucketLogging-property).
 **In order for it to work you need to enable in the buckets ACL Read and Write permmision to your S3 log delivery group.**
 
