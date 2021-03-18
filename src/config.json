@@ -265,13 +265,6 @@
           "type": "vault"
         },
         {
-          "name": "REGION",
-          "viewName":"Region",
-          "type": "autocomplete",
-          "autocompleteType": "function",
-          "functionName": "listRegions"
-        },
-        {
           "name": "BUCKET_NAME",
           "viewName": "Bucket name*",
           "type":"string"
@@ -344,13 +337,6 @@
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Secret key",
           "type": "vault"
-        },
-        {
-          "name": "REGION",
-          "viewName":"Region",
-          "type": "autocomplete",
-          "autocompleteType": "function",
-          "functionName": "listRegions"
         },
         {
           "name": "BUCKET_NAME",

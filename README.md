@@ -109,7 +109,6 @@ Grants basic read/write permissions to the specified s3 bucket, to other AWS acc
 ### Parameters:
 1. Access Key (vault) **Optional**
 2. Secret key (vault) **Optional**
-3. Region (Auto Complete) **Required**
 4. Bucket name (string) **Required**
 5. Object Grant Type (options)
 5. ACL Grant Type (options)
@@ -117,8 +116,8 @@ Grants basic read/write permissions to the specified s3 bucket, to other AWS acc
 8. User ID (string)
 9. User Email Address (string)
 
-Notice! You have to provide one(and one only) of the following: Group URI/User ID/User Email Address
-Also You have to provide Object Grant Type\ACL Grant Type\Both
+* Notice! You have to provide one(and one only) of the following: Group URI/User ID/User Email Address. 
+* Also You have to provide Object Grant Type\ACL Grant Type\Both
 
 # Method: Apply Canned ACL to Bucket
 applies canned(prebuilt) ACL to bucket. Does so according to the method described [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putBucketAcl-property), using the 'ACL' parameter.
@@ -126,7 +125,6 @@ applies canned(prebuilt) ACL to bucket. Does so according to the method describe
 ### Parameters:
 1. Access Key (vault) **Optional**
 2. Secret key (vault) **Optional**
-3. Region (Auto Complete) **Required**
 4. Bucket name (string) **Required**
 5. Canned ACL Type (options) **Required**
 
