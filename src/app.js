@@ -3,6 +3,8 @@
 let aws = require("aws-sdk");
 const { listRegions } = require('./autocomplete');
 
+/// Helpers
+
 function updateAwsCreds(action, settings){
     aws.config.update({
         region: action.params.REGION.id,
@@ -10,6 +12,39 @@ function updateAwsCreds(action, settings){
         "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
     });
 }
+
+function getAwsClient(action, settings){
+    const keyId = action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID;
+    const secret = action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY;
+    let config = {
+        accessKeyId: keyId,
+        secretAccessKey: secret
+    }
+    if (action.params.REGION){
+        config.region = action.params.REGION.id
+    }
+    return new aws.S3(config);
+}
+
+const GRANTEE_TYPE_TO_FIELD = {
+    "CanonicalUser": "ID",
+    "AmazonCustomerByEmail": "EmailAddress",
+    "Group": "URI"
+}
+function addGrantees(text, granteeType, granteesArr){
+    const valField = GRANTEE_TYPE_TO_FIELD[granteeType];
+    text.split('\n').forEach((granteeVal) => {
+        const fixed = granteeVal.trim();
+        if (fixed){
+            let granteeObj = {
+                Type: granteeType
+            }
+            granteeObj[valField] = fixed;
+            granteesArr.push(granteeObj);
+        }
+    });
+}
+// Main methods
 
 async function listBuckets(action, settings) {
     updateAwsCreds(action, settings);
@@ -154,9 +189,7 @@ function managePublicAccessBlock(action, settings) {
     });
 }
 
-function putBucketAcl(action, settings) {
-    updateAwsCreds(action, settings);
-
+async function putBucketAcl(action, settings) {
     let params = {
         Bucket: action.params.BUCKET_NAME
     };
@@ -198,31 +231,177 @@ function putBucketAcl(action, settings) {
         params[grantType] = accessString;
     })
     
-    const s3 = new aws.S3();
+    const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
         s3.putBucketAcl(params, function(err, data) {
-            if (err) {
-                return reject(err);
-            }
-            return resolve (data);
+            if (err) return reject(err);
+            else     return resolve(data);
         });
     });
 }
 
-function putCannedACL(action, settings) {
-    updateAwsCreds(action, settings);
-
-    let params = {
+async function putCannedACL(action, settings) {
+    const params = {
         Bucket: action.params.BUCKET_NAME,
         ACL: action.params.ACL
     };
-    const s3 = new aws.S3();
+    const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
         s3.putBucketAcl(params, function(err, data) {
-            if (err) {
-                return reject(err);
-            }
-            return resolve (data);
+            if (err) return reject(err);
+            else     return resolve(data);
+        });
+    });
+}
+
+async function putBucketVersioning(action, settings){
+    if (action.params.mfaDelete === "Enabled" && !action.params.mfa){
+       throw "MFA must be provided when enabling MFA Delete"; 
+    }
+    const params = {
+        Bucket: action.params.bucketName, /* required */
+        VersioningConfiguration: {
+            MFADelete: action.params.mfaDelete || "Disabled",
+            Status: action.params.status
+        },
+        MFA: action.params.mfa
+    }
+    const s3 = getAwsClient(action, settings);
+    return new Promise((resolve, reject) => {
+        s3.putBucketVersioning(params, function(err, data) {
+            if (err) return reject(err);
+            else     return resolve(data);
+        });
+    });
+}
+
+async function putBucketPolicy(action, settings){
+    let policy = action.params.policy;
+    if (typeof policy === "object"){
+        policy = JSON.stringify(policy);
+    }
+    else if (typeof policy !== "string"){
+        throw "Policy must be either a JSON string or an object from code";
+    }
+    const params = {
+        Bucket: action.params.bucketName, /* required */
+        Policy: policy
+    }
+    const s3 = getAwsClient(action, settings);
+    return new Promise((resolve, reject) => {
+        s3.putBucketPolicy(params, function(err, data) {
+            if (err) return reject(err);
+            else     return resolve(data);
+        });
+    });
+}
+
+async function putBucketLogging(action, settings){
+    const loggingEnabled = !action.params.disableLogging;
+    let params = {
+        Bucket: action.params.bucketName, /* required */
+        BucketLoggingStatus: {}
+    }
+    if (loggingEnabled){
+        const targetBucket = (action.params.targetBucket || "").trim();
+        const targetPrefix = (action.params.targetPrefix || "").trim();
+        if (!targetBucket || !targetPrefix){
+            throw "When enablig logging you must provide Target Bucket and Target Prefix";
+        }
+        
+        // sets the same permission type to all grantees 
+        const permissionType = action.params.permissionType || "READ";
+        
+        let grantees = [];
+        addGrantees(action.params.groupUris || "", "Group", grantees);
+        addGrantees(action.params.userIds || "", "CanonicalUser", grantees);
+        addGrantees(action.params.emails || "", "AmazonCustomerByEmail", grantees);
+
+        if (grantees.length === 0){
+            throw "You must provide at least one user or group to give permmision to the log files"
+        }
+        params.BucketLoggingStatus.LoggingEnabled = {
+            TargetBucket: targetBucket,
+            TargetPrefix: targetPrefix,
+            TargetGrants: grantees.map((grantee) => {
+                return {
+                    Permission: permissionType,
+                    Grantee: grantee
+                }
+            })
+        };
+    }
+    const s3 = getAwsClient(action, settings);
+    return new Promise((resolve, reject) => {
+        s3.putBucketLogging(params, function(err, data) {
+            if (err) return reject(err);
+            else     return resolve(data);
+        });
+    });
+}
+
+async function putBucketEncryption(action, settings){
+    const sseAlgo = action.params.sseAlgo;
+    if (!sseAlgo){
+        throw "SSE Algorithem was not provided";
+    }
+    const bucketKeyEnabled = action.params.bucketKeyEnabled || false;
+    const kmsMasterKey = (action.params.kmsMasterKey || "").trim();
+    if (kmsMasterKey && sseAlgo !== "aws:kms"){
+        throw "KMS Master Key ID is allowed only if SSE Algorithem is AWS KMS";
+    }
+    if (!kmsMasterKey && sseAlgo === "aws:kms"){
+        throw "Must provide KMS Master Key ID with AWS KMS Encryption"
+    }
+    let params = {
+        Bucket: action.params.bucketName, /* required */
+        ServerSideEncryptionConfiguration: {
+            Rules: []
+        }
+    }
+    if (sseAlgo !== "none"){
+        let encryption = {
+            SSEAlgorithm: sseAlgo
+        };
+        if (sseAlgo == "aws:kms"){
+            encryption.KMSMasterKeyID = kmsMasterKey
+        }
+        params.ServerSideEncryptionConfiguration.Rules.push({
+            ApplyServerSideEncryptionByDefault: encryption,
+            BucketKeyEnabled: bucketKeyEnabled
+        });
+    }
+    const s3 = getAwsClient(action, settings);
+    return new Promise((resolve, reject) => {
+        s3.putBucketEncryption(params, function(err, data) {
+            if (err) return reject(err);
+            else     return resolve(data);
+        });
+    });
+}
+
+async function getBucketPolicy(action, settings){
+    const params = {
+        Bucket: action.params.bucketName
+    }
+    const s3 = getAwsClient(action, settings);
+    return new Promise((resolve, reject) => {
+        s3.getBucketPolicy(params, function(err, data) {
+            if (err) return reject(err);
+            else     return resolve(data);
+        });
+    });
+}
+
+async function deleteBucketPolicy(action, settings){
+    const params = {
+        Bucket: action.params.bucketName, /* required */
+    }
+    const s3 = getAwsClient(action, settings);
+    return new Promise((resolve, reject) => {
+        s3.deleteBucketPolicy(params, function(err, data) {
+            if (err) return reject(err);
+            else     return resolve(data);
         });
     });
 }
@@ -237,6 +416,12 @@ module.exports = {
     managePublicAccessBlock: managePublicAccessBlock,
     putBucketAcl: putBucketAcl,
     putCannedACL: putCannedACL,
+    putBucketVersioning: putBucketVersioning,
+    putBucketLogging: putBucketLogging,
+    putBucketEncryption: putBucketEncryption,
+    putBucketPolicy: putBucketPolicy,
+    getBucketPolicy: getBucketPolicy,
+    deleteBucketPolicy: deleteBucketPolicy,
     //autocomplete
     listRegions
 };

@@ -1,12 +1,12 @@
 {
   "name": "kaholo-plugin-aws-s3",
-  "version": "1.4.0",
+  "version": "1.5.4",
   "description": "AWS S3 plugin for Productionmap",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Kaholo team (Roy Talyosef)",
+  "author": "Kaholo team (Roy Talyosef And Amit Alon)",
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.858.0"

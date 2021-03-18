@@ -130,3 +130,58 @@ applies canned(prebuilt) ACL to bucket. Does so according to the method describe
 4. Bucket name (string) **Required**
 5. Canned ACL Type (options) **Required**
 
+# Method: Manage Bucket Versioning
+Sets the versioning state of an existing bucket. Does so according to the method described [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putBucketVersioning-property).
+
+### Parameters:
+1. Access Key (vault) **Optional**
+2. Secret key (vault) **Optional**
+3. Bucket name (string) **Required**
+4. Status (Enabled/Disabled) **Required** - The versioning state of the bucket
+5. MFA Delete **Optional** - Specifies whether MFA delete is enabled in the bucket versioning configuration. Default is Disabled.
+6. MFA **Required with MFA Delete Enabled** - The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device
+
+# Method: Apply Bucket Policy
+Applies an Amazon S3 bucket policy to the bucket. Does so according to the method described [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putBucketPolicy-property).
+
+### Parameters:
+1. Access Key (vault) **Optional**
+2. Secret key (vault) **Optional**
+3. Bucket name (string) **Required**
+4. Policy (object/JSON string) **Required** - The bucket policy as a JSON string or an object from code.
+
+# Method: Get Bucket Policy
+Get the Amazon S3 bucket policy of the bucket. Does so according to the method described [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getBucketPolicy-property).
+
+### Parameters:
+1. Access Key (vault) **Optional**
+2. Secret key (vault) **Optional**
+3. Bucket name (string) **Required**
+
+# Method: Delete Bucket Policy
+Deletes the Amazon S3 bucket policy of the bucket. Does so according to the method described [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#deleteBucketPolicy-property).
+
+### Parameters:
+1. Access Key (vault) **Optional**
+2. Secret key (vault) **Optional**
+3. Bucket name (string) **Required**
+
+# Method: Manage Bucket Logging
+Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. Does so according to the method described [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putBucketLogging-property).
+**In order for it to work you need to enable in the buckets ACL Read and Write permmision to your S3 log delivery group.**
+
+### Parameters:
+1. Access Key (vault) **Optional**
+2. Secret key (vault) **Optional**
+3. Source Bucket name (string) **Required** - The name of the bucket you want to create the logs for.
+4. Disable Logging(boolean) **Optional** - Check this parameter when you want to disable the logging
+5. Target Bucket Name (string) **Required for Enabling Logging** - The name of the bucket in which you want to store the logs created.
+6. Target Prefix (string)**Required for Enabling Logging** - The prefix to apply to each of the log files names.
+7. Permission Type (Read/Write/Full Control) **Optional** - The Kind of permmision to give to whom you give permmision to the 
+    logging parameters. Default is Read.
+8. Group URIs(text) **Optional** - The URI(s) of the group(s) you want to give permmision to. Seperate each group uri with a new line.
+9. User IDs(text) **Optional** - The ID(s) of the user(s) you want to give permmision to. Seperate each user ID with a new line.
+10. Email Addresses(text) **Optional** - The email address(es) of the user(s) you want to give permmision to. Seperate each email address 
+    with a new line.
+
+* Notice! You need to provide at least one of the following: Group URIs/User IDs/Email Addresses. The permmision specified in the Permmision Type will apply to all users and groups provided inside those parameters.

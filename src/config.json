@@ -4,7 +4,7 @@
   "imgUrl": "logo.png",
   "execProgram": "node",
   "main": "app.js",
-  "version": "1.4.0",
+  "version": "1.5.4",
   "description":"AWS S3 wrapper plugin",
   "settings":[
     {
@@ -379,6 +379,250 @@
               "name":"Authenticated Read"
             }
           ]
+        }
+      ]
+    },
+    {
+      "name":"putBucketVersioning",
+      "viewName":"Manage Bucket Versioning",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "vault"
+        },
+        {
+          "name": "bucketName",
+          "viewName": "Bucket name",
+          "type":"string"
+        },
+        {
+          "name": "status",
+          "viewName": "Status",
+          "type":"options",
+          "options": [
+            {
+              "id":"Enabled",
+              "name":"Enabled"
+            },
+            {
+              "id":"Suspended",
+              "name":"Suspended"
+            }
+          ]
+        },
+        {
+          "name": "mfaDelete",
+          "viewName": "MFA Delete",
+          "type":"options",
+          "options": [
+            {
+              "id":"Enabled",
+              "name":"Enabled"
+            },
+            {
+              "id":"Disabled",
+              "name":"Disabled"
+            }
+          ]
+        },
+        {
+          "name": "mfa",
+          "viewName": "MFA",
+          "type":"string"
+        }
+      ]
+    },
+    {
+      "name":"putBucketPolicy",
+      "viewName":"Apply Bucket Policy",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "vault"
+        },
+        {
+          "name": "bucketName",
+          "viewName": "Bucket name",
+          "type":"string"
+        },
+        {
+          "name": "policy",
+          "viewName": "Policy JSON String",
+          "type":"string"
+        }
+      ]
+    },
+    {
+      "name":"getBucketPolicy",
+      "viewName":"Get Bucket Policy",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "vault"
+        },
+        {
+          "name": "bucketName",
+          "viewName": "Bucket name",
+          "type":"string"
+        }
+      ]
+    },
+    {
+      "name":"deleteBucketPolicy",
+      "viewName":"Delete Bucket Policy",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "vault"
+        },
+        {
+          "name": "bucketName",
+          "viewName": "Bucket name",
+          "type":"string"
+        }
+      ]
+    },
+    {
+      "name":"putBucketLogging",
+      "viewName":"Manage Bucket Logging",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "vault"
+        },
+        {
+          "name": "bucketName",
+          "viewName": "Source Bucket name",
+          "type":"string"
+        },
+        {
+          "name": "disableLogging",
+          "viewName": "Disable Logging",
+          "type":"boolean"
+        },
+        {
+          "name": "targetBucket",
+          "viewName": "Target Bucket Name",
+          "type":"string"
+        },
+        {
+          "name": "targetPrefix",
+          "viewName": "Target Prefix",
+          "type":"string"
+        },
+        {
+          "name": "permissionType",
+          "viewName": "Permission Type",
+          "type": "options",
+          "options":[
+            {
+              "id":"READ",
+              "name":"Read"
+            },
+            {
+              "id":"WRITE",
+              "name":"Write"
+            },
+            {
+              "id":"FULL_CONTROL",
+              "name":"Full Control"
+            }
+          ]
+        },
+        {
+          "name": "groupUris",
+          "viewName": "Group URIs",
+          "type": "text"
+        },
+        {
+          "name": "userIds",
+          "viewName": "User IDs",
+          "type": "text"
+        },
+        {
+          "name": "emails",
+          "viewName": "Email Addresses",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name":"putBucketEncryption",
+      "viewName":"Manage Bucket Encryption",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access key",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Secret key",
+          "type": "vault"
+        },
+        {
+          "name": "bucketName",
+          "viewName": "Bucket name",
+          "type":"string"
+        },
+        {
+          "name": "sseAlgo",
+          "viewName": "Encryption Algorithm",
+          "type":"options",
+          "options": [
+            {
+              "id":"AES256",
+              "name":"SSE-S3 AES256"
+            },
+            {
+              "id":"aws:kms",
+              "name":"SSE-KMS"
+            },
+            {
+              "id": "none",
+              "name": "none"
+            }
+          ]
+        },
+        {
+          "name": "kmsMasterKey",
+          "viewName": "KMS Master Key ID",
+          "type":"string"
+        },
+        {
+          "name": "bucketKeyEnabled",
+          "viewName": "Bucket Key Enabled",
+          "type": "boolean"
         }
       ]
     }
