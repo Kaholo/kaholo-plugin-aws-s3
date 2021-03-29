@@ -1,100 +1,37 @@
-#!/usr/bin/env node
 
-let aws = require("aws-sdk");
 const { listRegions } = require('./autocomplete');
-
-/// Helpers
-
-function updateAwsCreds(action, settings){
-    aws.config.update({
-        region: action.params.REGION.id,
-        "accessKeyId": action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID,
-        "secretAccessKey": action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY 
-    });
-}
-
-function getAwsClient(action, settings){
-    const keyId = action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID;
-    const secret = action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY;
-    let config = {
-        accessKeyId: keyId,
-        secretAccessKey: secret
-    }
-    if (action.params.REGION){
-        config.region = action.params.REGION.id
-    }
-    return new aws.S3(config);
-}
-
-const GRANTEE_TYPE_TO_FIELD = {
-    "CanonicalUser": "ID",
-    "AmazonCustomerByEmail": "EmailAddress",
-    "Group": "URI"
-}
-function addGrantees(text, granteeType, granteesArr){
-    const valField = GRANTEE_TYPE_TO_FIELD[granteeType];
-    text.split('\n').forEach((granteeVal) => {
-        const fixed = granteeVal.trim();
-        if (fixed){
-            let granteeObj = {
-                Type: granteeType
-            }
-            granteeObj[valField] = fixed;
-            granteesArr.push(granteeObj);
-        }
-    });
-}
-// Main methods
+const { getAwsClient, addGrantees, getAwsCallback } = require("./helpers");
 
 async function listBuckets(action, settings) {
-    updateAwsCreds(action, settings);
-    const s3 = new aws.S3();
+    const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.listBuckets((err, data) => {
-            if (err)
-                return reject(err);
-            return resolve(data);
-        });
+        s3.listBuckets(getAwsCallback(resolve, reject));
     });
 }
 
-function createBucket(action,settings) {
-    updateAwsCreds(action, settings);
-
+async function createBucket(action,settings) {
     const bucketParam = {
         Bucket: action.params.BUCKET_NAME
     };
 
-    const s3 = new aws.S3();
+    const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.createBucket(bucketParam, (error, data) => {
-            if (error)
-                return reject({ "err": error });
-            return resolve(data);
-        });
+        s3.createBucket(bucketParam, getAwsCallback(resolve, reject));
     });
 }
 
-function deleteBucket(action,settings) {
-    updateAwsCreds(action, settings);
-
+async function deleteBucket(action,settings) {
     const bucketParam = {
         Bucket: action.params.BUCKET_NAME
     };
 
-    const s3 = new aws.S3();
+    const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.deleteBucket(bucketParam, (error, data) => {
-            if (error)
-                return reject({ "err": error });
-            return resolve(data);
-        });
+        s3.deleteBucket(bucketParam, getAwsCallback(resolve, reject));
     });
 }
 
-function uploadFileToBucket(action,settings) {
-    updateAwsCreds(action, settings);
-
+async function uploadFileToBucket(action,settings) {
     const filePath = action.params.FILE_PATH;
     const fs = require('fs');
     const fileStream = fs.createReadStream(filePath);
@@ -106,7 +43,7 @@ function uploadFileToBucket(action,settings) {
         Key: action.params.DEST_FILE_PATH,
         Body: ""
     };
-    const s3 = new aws.S3();
+    const s3 = getAwsClient(action, settings);
 
     return new Promise((resolve, reject) => {
         fileStream.on('error', function(err) {
@@ -116,54 +53,35 @@ function uploadFileToBucket(action,settings) {
             uploadParams.Body += chunk;
         });
         fileStream.on('end', () => { 
-            s3.upload(uploadParams, (err, data) => {
-                if (err)
-                    return reject(err);
-                return resolve(data);
-            });
+            s3.upload(uploadParams, getAwsCallback(resolve, reject));
         });
     });
 }
 
-function listObjects(action,settings) {
-    updateAwsCreds(action, settings);
-
+async function listObjects(action,settings) {
     const bucketParam = {
         Bucket: action.params.BUCKET_NAME
     };
 
-    const s3 = new aws.S3();
+    const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.deleteBucket(bucketParam, (err, data) => {
-            if (err)
-                return reject(err);
-            return resolve(data);
-        });
+        s3.deleteBucket(bucketParam, getAwsCallback(resolve, reject));
     });
 }
 
-
-function deleteObject(action,settings) {
-    updateAwsCreds(action, settings);
-
+async function deleteObject(action,settings) {
     const params = {
         Bucket: action.params.BUCKET_NAME,
         Key: action.params.OBJECT_NAME
     };
 
-    const s3 = new aws.S3();
+    const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.deleteObject(params, (err, data) => {
-            if (err)
-                return reject(err);
-            return resolve(data);
-        });
+        s3.deleteObject(params, getAwsCallback(resolve, reject));
     });
 }
 
-function managePublicAccessBlock(action, settings) {
-    updateAwsCreds(action, settings);
-
+async function managePublicAccessBlock(action, settings) {
     const jBlockPublicAcls = JSON.parse(action.params.BlockPublicAcls);
     const jBlockPublicPolicy = JSON.parse(action.params.BlockPublicPolicy);
     const jIgnorePublicAcls = JSON.parse(action.params.IgnorePublicAcls);
@@ -179,13 +97,9 @@ function managePublicAccessBlock(action, settings) {
         ContentMD5: action.params.ContentMD5,
         ExpectedBucketOwner: action.params.ExpectedBucketOwner
     };
-    const s3 = new aws.S3();
+    const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.putPublicAccessBlock(params, (err, data) => {
-            if (err) 
-                return reject ({"err": err}); // an error occurred
-            return resolve (data) // successful response
-          })
+        s3.putPublicAccessBlock(params, getAwsCallback(resolve, reject));
     });
 }
 
@@ -233,10 +147,7 @@ async function putBucketAcl(action, settings) {
     
     const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.putBucketAcl(params, function(err, data) {
-            if (err) return reject(err);
-            else     return resolve(data);
-        });
+        s3.putBucketAcl(params, getAwsCallback(resolve, reject));
     });
 }
 
@@ -247,10 +158,7 @@ async function putCannedACL(action, settings) {
     };
     const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.putBucketAcl(params, function(err, data) {
-            if (err) return reject(err);
-            else     return resolve(data);
-        });
+        s3.putBucketAcl(params, getAwsCallback(resolve, reject));
     });
 }
 
@@ -268,10 +176,7 @@ async function putBucketVersioning(action, settings){
     }
     const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.putBucketVersioning(params, function(err, data) {
-            if (err) return reject(err);
-            else     return resolve(data);
-        });
+        s3.putBucketVersioning(params, getAwsCallback(resolve, reject));
     });
 }
 
@@ -289,10 +194,7 @@ async function putBucketPolicy(action, settings){
     }
     const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.putBucketPolicy(params, function(err, data) {
-            if (err) return reject(err);
-            else     return resolve(data);
-        });
+        s3.putBucketPolicy(params, getAwsCallback(resolve, reject));
     });
 }
 
@@ -333,10 +235,7 @@ async function putBucketLogging(action, settings){
     }
     const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.putBucketLogging(params, function(err, data) {
-            if (err) return reject(err);
-            else     return resolve(data);
-        });
+        s3.putBucketLogging(params, getAwsCallback(resolve, reject));
     });
 }
 
@@ -347,12 +246,7 @@ async function putBucketEncryption(action, settings){
     }
     const bucketKeyEnabled = action.params.bucketKeyEnabled || false;
     const kmsMasterKey = (action.params.kmsMasterKey || "").trim();
-    if (kmsMasterKey && sseAlgo !== "aws:kms"){
-        throw "KMS Master Key ID is allowed only if SSE Algorithem is AWS KMS";
-    }
-    if (!kmsMasterKey && sseAlgo === "aws:kms"){
-        throw "Must provide KMS Master Key ID with AWS KMS Encryption"
-    }
+    
     let params = {
         Bucket: action.params.bucketName, /* required */
         ServerSideEncryptionConfiguration: {
@@ -364,6 +258,9 @@ async function putBucketEncryption(action, settings){
             SSEAlgorithm: sseAlgo
         };
         if (sseAlgo == "aws:kms"){
+            if (!kmsMasterKey){
+                throw "Must provide KMS Master Key ID with AWS KMS Encryption"
+            }
             encryption.KMSMasterKeyID = kmsMasterKey
         }
         params.ServerSideEncryptionConfiguration.Rules.push({
@@ -373,10 +270,7 @@ async function putBucketEncryption(action, settings){
     }
     const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.putBucketEncryption(params, function(err, data) {
-            if (err) return reject(err);
-            else     return resolve(data);
-        });
+        s3.putBucketEncryption(params, getAwsCallback(resolve, reject));
     });
 }
 
@@ -386,10 +280,7 @@ async function getBucketPolicy(action, settings){
     }
     const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.getBucketPolicy(params, function(err, data) {
-            if (err) return reject(err);
-            else     return resolve(data);
-        });
+        s3.getBucketPolicy(params, getAwsCallback(resolve, reject));
     });
 }
 
@@ -399,10 +290,7 @@ async function deleteBucketPolicy(action, settings){
     }
     const s3 = getAwsClient(action, settings);
     return new Promise((resolve, reject) => {
-        s3.deleteBucketPolicy(params, function(err, data) {
-            if (err) return reject(err);
-            else     return resolve(data);
-        });
+        s3.deleteBucketPolicy(params, getAwsCallback(resolve, reject));
     });
 }
 
