@@ -1,6 +1,6 @@
 {
   "name": "kaholo-plugin-aws-s3",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "description": "AWS S3 plugin for Productionmap",
   "main": "app.js",
   "scripts": {

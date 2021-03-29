@@ -4,7 +4,7 @@
   "imgUrl": "logo.png",
   "execProgram": "node",
   "main": "app.js",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "description":"AWS S3 wrapper plugin",
   "settings":[
     {
@@ -21,7 +21,7 @@
   "methods": [
     {
       "name": "listBuckets",
-      "viewName": "Buckets list",
+      "viewName": "Buckets List",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
@@ -44,7 +44,7 @@
     },
     {
       "name": "createBucket",
-      "viewName": "Create a bucket",
+      "viewName": "Create a Bucket",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
@@ -110,7 +110,7 @@
     },
     {
       "name": "deleteBucket",
-      "viewName": "Delete a bucket",
+      "viewName": "Delete a Bucket",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
@@ -171,7 +171,7 @@
     },
     {
       "name": "listObjectsInBucket",
-      "viewName": "List bucket's objects",
+      "viewName": "List Bucket's objects",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
@@ -326,7 +326,7 @@
     },
     {
       "name":"putCannedACL",
-      "viewName":"apply canned ACL to Bucket",
+      "viewName":"Apply Canned ACL to Bucket",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
