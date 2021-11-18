@@ -4,270 +4,329 @@
   "imgUrl": "logo.png",
   "execProgram": "node",
   "main": "app.js",
-  "version": "1.5.5",
-  "description":"AWS S3 wrapper plugin",
+  "version": "2.0.0",
+  "description": "Kaholo plugin for integration with AWS S3 API.",
   "settings":[
     {
-      "name":"AWS_ACCESS_KEY_ID",
-      "viewName": "Access key",
+      "name": "AWS_ACCESS_KEY_ID",
+      "viewName": "Access Key ID",
       "type": "vault"
     },
     {
       "name": "AWS_SECRET_ACCESS_KEY",
-      "viewName": "Secret key",
+      "viewName": "Access Key Secret",
       "type": "vault"
+    },
+    {
+      "name": "REGION",
+      "viewName": "Region",
+      "type": "string"
     }
   ],
   "methods": [
     {
-      "name": "listBuckets",
-      "viewName": "Buckets List",
-      "params": [
-        {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
-          "type": "vault"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
-          "type": "vault"
-        },
-        {
-          "name": "REGION",
-          "viewName":"Region",
-          "type": "autocomplete",
-          "autocompleteType": "function",
-          "functionName": "listRegions"
-        }
-      ]
-    },
-    {
       "name": "createBucket",
-      "viewName": "Create a Bucket",
+      "viewName": "Create Bucket",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
           "name": "REGION",
-          "viewName":"Region",
+          "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions"
+          "functionName": "listRegionsAuto"
         },
         {
           "name": "BUCKET_NAME",
-          "viewName": "Bucket name",
+          "viewName": "Name",
           "type": "string"
         }
       ]
     },
     {
       "name": "uploadFileToBucket",
-      "viewName": "Upload File",
+      "viewName": "Upload File To Bucket",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
           "name": "REGION",
-          "viewName":"Region",
+          "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions"
+          "functionName": "listRegionsAuto"
         },
         {
           "name": "BUCKET_NAME",
-          "viewName": "Bucket name",
-          "type": "string"
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to upload the object to.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
           "name": "FILE_PATH",
-          "viewName": "File path",
+          "viewName": "File Path",
           "type": "string"
         },
         {
           "name": "DEST_FILE_PATH",
-          "viewName": "Dest file path",
+          "viewName": "Dest Object Path",
           "type": "string"
         }
       ]
     },
     {
       "name": "deleteBucket",
-      "viewName": "Delete a Bucket",
+      "viewName": "Delete Bucket",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
           "name": "REGION",
-          "viewName":"Region",
+          "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions"
+          "functionName": "listRegionsAuto"
         },
         {
           "name": "BUCKET_NAME",
-          "viewName": "Bucket name",
-          "type": "string"
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to delete.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         }
       ]
     },
     {
       "name": "deleteObject",
-      "viewName": "Delete an object",
+      "viewName": "Delete Object",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
           "name": "REGION",
-          "viewName":"Region",
+          "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions"
+          "functionName": "listRegionsAuto"
         },
         {
           "name": "BUCKET_NAME",
-          "viewName": "Bucket name",
-          "type": "string"
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to make the request on.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
           "name": "OBJECT_NAME",
-          "viewName": "Object name",
+          "viewName": "Object Path",
           "type": "string"
         }
       ]
     },
     {
       "name": "listObjectsInBucket",
-      "viewName": "List Bucket's objects",
+      "viewName": "List Bucket's Objects",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
           "name": "REGION",
-          "viewName":"Region",
+          "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions"
+          "functionName": "listRegionsAuto"
+        },
+        {
+          "name": "BUCKET_NAME",
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to make the request on.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
+        },
+        {
+          "name": "prefix",
+          "viewName": "Prefix",
+          "type": "string",
+          "description": "Limits the response to keys that begin with the specified prefix.",
+          "placeholder": "folder1/folder2/"
+        },
+        {
+          "name": "maxResults",
+          "viewName": "Max Results",
+          "type": "string",
+          "description": "The maximum number of results to return. Default value is 1000.",
+          "placeholder": "1000"
+        },
+        {
+          "name": "nextToken",
+          "viewName": "Next Continuation Token",
+          "type": "string",
+          "description": "In case of pagination. If listed objects and more results left to return than 'NextContinuationToken' will be provided for you to continue listing from the point stopped.",
+          "placeholder": "1ueGcxLPRx1Tr/XYExHnhbYLgveDs2J/wm36Hy4vbOwM=",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html"
+        }
+      ]
+    },
+    {
+      "name": "listBuckets",
+      "viewName": "List Buckets",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access Key ID",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Access Key Secret",
+          "type": "vault"
+        },
+        {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto"
         }
       ]
     },
     {
       "name": "managePublicAccessBlock",
-      "viewName":"Manage Public Access Block",
+      "viewName": "Manage Public Access Block",
       "params":[
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
           "name": "REGION",
-          "viewName":"Region",
+          "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions"
+          "functionName": "listRegionsAuto"
         },
         {
           "name": "BUCKET_NAME",
-          "viewName": "Bucket name*",
-          "type":"string"
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to make the request on.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
           "name": "BlockPublicAcls",
-          "viewName": "Block Public Acls*",
-          "type":"boolean"
+          "viewName": "Block Public Acls",
+          "type": "boolean"
         },
         {
           "name": "BlockPublicPolicy",
-          "viewName": "Block public policy*",
-          "type":"boolean"
+          "viewName": "Block Public Policy",
+          "type": "boolean"
         },
         {
           "name": "IgnorePublicAcls",
-          "viewName": "Ignore public Acls*",
-          "type":"boolean"
+          "viewName": "Ignore Public Acls",
+          "type": "boolean"
         },
         {
           "name": "RestrictPublicBuckets",
-          "viewName": "Restrick public Buckets*",
-          "type":"boolean"
-        },
-        {
-          "name": "ContentMD5",
-          "viewName": "RContent MD5",
-          "type":"string"
-        },
-        {
-          "name": "ExpectedBucketOwner",
-          "viewName": "Expected Bucket Owner (AccountID)*",
-          "type":"string"
+          "viewName": "Restrict Public Buckets",
+          "type": "boolean"
         }
       ]
     },
     {
-      "name":"putBucketAcl",
-      "viewName":"Manage Bucket ACL",
+      "name": "putBucketAcl",
+      "viewName": "Manage Bucket ACL",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto"
+        },
+        {
           "name": "BUCKET_NAME",
-          "viewName": "Bucket name*",
-          "type":"string"
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to make the request on.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
           "name": "objGrantType",
@@ -285,6 +344,10 @@
             {
               "id":"GrantWrite",
               "name":"Write"
+            },
+            {
+              "id":"none",
+              "name":"None"
             }
           ]
         },
@@ -304,227 +367,329 @@
             {
               "id":"GrantWriteACP",
               "name":"Write"
+            },
+            {
+              "id":"none",
+              "name":"None"
             }
           ]
         },
         {
           "name":"URI",
-          "viewName":"Group URI",
-          "type":"string"
+          "viewName":"Groups URIs",
+          "type":"options",
+          "description": "The uri of the predefined group(s) to allow access to the bucket. To specify multiple values provide an array of group URIs from code.",
+          "options": [
+            {
+              "id": "http://acs.amazonaws.com/groups/global/AuthenticatedUsers",
+              "name": "Authenticated Users"
+            },
+            {
+              "id": "http://acs.amazonaws.com/groups/global/AllUsers",
+              "name": "All Users"
+            },
+            {
+              "id": "http://acs.amazonaws.com/groups/s3/LogDelivery",
+              "name": "Log Delivery Group"
+            }
+          ]
         },
         {
           "name":"userID",
-          "viewName":"User ID",
-          "type":"string"
+          "viewName":"Users Canonical IDs",
+          "type":"text"
         },
         {
           "name":"emailAddress",
-          "viewName":"User Email Address",
-          "type":"string"
+          "viewName":"Users Email Addresses",
+          "type":"text"
+        },
+        {
+          "name": "grantToSignedUser",
+          "viewName": "Grant To Signed User",
+          "type": "boolean",
+          "description": "Grant the user making this request access to the bucket."
+        },
+        {
+          "name": "dontOverwrite",
+          "viewName": "Don't Overwrite",
+          "type": "boolean",
+          "description": "Grant the user making this request access to the bucket."
         }
       ]
     },
     {
-      "name":"putCannedACL",
-      "viewName":"Apply Canned ACL to Bucket",
+      "name": "putCannedACL",
+      "viewName": "Apply Canned ACL to Bucket",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto"
+        },
+        {
           "name": "BUCKET_NAME",
-          "viewName": "Bucket name*",
-          "type":"string"
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to make the request on.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
           "name": "ACL",
           "viewName": "Canned ACL Type",
-          "type":"options",
+          "type": "options",
           "options": [
             {
-              "id":"private",
-              "name":"Private"
+              "id": "private",
+              "name": "Private"
             },
             {
-              "id":"public-read",
-              "name":"Public Read"
+              "id": "public-read",
+              "name": "Public Read"
             },
             {
-              "id":"public-read-write",
-              "name":"Public Read Write"
+              "id": "public-read-write",
+              "name": "Public Read Write"
             },
             {
-              "id":"authenticated-read",
-              "name":"Authenticated Read"
+              "id": "authenticated-read",
+              "name": "Authenticated Read"
             }
           ]
         }
       ]
     },
     {
-      "name":"putBucketVersioning",
-      "viewName":"Manage Bucket Versioning",
+      "name": "putBucketVersioning",
+      "viewName": "Manage Bucket Versioning",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto"
+        },
+        {
           "name": "bucketName",
-          "viewName": "Bucket name",
-          "type":"string"
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to make the request on.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
           "name": "status",
           "viewName": "Status",
-          "type":"options",
+          "type": "options",
           "options": [
             {
-              "id":"Enabled",
-              "name":"Enabled"
+              "id": "Enabled",
+              "name": "Enabled"
             },
             {
-              "id":"Suspended",
-              "name":"Suspended"
+              "id": "Suspended",
+              "name": "Suspended"
             }
           ]
         },
         {
           "name": "mfaDelete",
           "viewName": "MFA Delete",
-          "type":"options",
+          "type": "options",
           "options": [
             {
-              "id":"Enabled",
-              "name":"Enabled"
+              "id": "Enabled",
+              "name": "Enabled"
             },
             {
-              "id":"Disabled",
-              "name":"Disabled"
+              "id": "Disabled",
+              "name": "Disabled"
             }
           ]
         },
         {
           "name": "mfa",
           "viewName": "MFA",
-          "type":"string"
+          "type": "string"
         }
       ]
     },
     {
-      "name":"putBucketPolicy",
-      "viewName":"Apply Bucket Policy",
+      "name": "putBucketPolicy",
+      "viewName": "Apply Bucket Policy",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto"
+        },
+        {
           "name": "bucketName",
-          "viewName": "Bucket name",
-          "type":"string"
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to make the request on.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
           "name": "policy",
-          "viewName": "Policy JSON String",
-          "type":"string"
+          "viewName": "Policy Object",
+          "type": "text"
         }
       ]
     },
     {
-      "name":"getBucketPolicy",
-      "viewName":"Get Bucket Policy",
+      "name": "getBucketPolicy",
+      "viewName": "Get Bucket Policy",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto"
+        },
+        {
           "name": "bucketName",
-          "viewName": "Bucket name",
-          "type":"string"
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to make the request on.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         }
       ]
     },
     {
-      "name":"deleteBucketPolicy",
-      "viewName":"Delete Bucket Policy",
+      "name": "deleteBucketPolicy",
+      "viewName": "Delete Bucket Policy",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto"
+        },
+        {
           "name": "bucketName",
-          "viewName": "Bucket name",
-          "type":"string"
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to make the request on.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         }
       ]
     },
     {
-      "name":"putBucketLogging",
-      "viewName":"Manage Bucket Logging",
+      "name": "putBucketLogging",
+      "viewName": "Manage Bucket Logging",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto"
+        },
+        {
           "name": "bucketName",
-          "viewName": "Source Bucket name",
-          "type":"string"
+          "viewName": "Source Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto"
         },
         {
           "name": "disableLogging",
           "viewName": "Disable Logging",
-          "type":"boolean"
+          "type": "boolean"
         },
         {
           "name": "targetBucket",
-          "viewName": "Target Bucket Name",
-          "type":"string"
+          "viewName": "Target Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto"
         },
         {
           "name": "targetPrefix",
           "viewName": "Target Prefix",
-          "type":"string"
+          "type": "string"
         },
         {
           "name": "permissionType",
@@ -532,67 +697,106 @@
           "type": "options",
           "options":[
             {
-              "id":"READ",
-              "name":"Read"
+              "id": "READ",
+              "name": "Read"
             },
             {
-              "id":"WRITE",
-              "name":"Write"
+              "id": "WRITE",
+              "name": "Write"
             },
             {
-              "id":"FULL_CONTROL",
-              "name":"Full Control"
+              "id": "FULL_CONTROL",
+              "name": "Full Control"
             }
           ]
         },
         {
-          "name": "groupUris",
-          "viewName": "Group URIs",
-          "type": "text"
+          "name":"groupUris",
+          "viewName":"Groups URIs",
+          "type":"options",
+          "description": "The uri of the predefined group(s) to allow access to the bucket. To specify multiple values provide an array of group URIs from code.",
+          "options": [
+            {
+              "id": "http://acs.amazonaws.com/groups/global/AuthenticatedUsers",
+              "name": "Authenticated Users"
+            },
+            {
+              "id": "http://acs.amazonaws.com/groups/global/AllUsers",
+              "name": "All Users"
+            },
+            {
+              "id": "http://acs.amazonaws.com/groups/s3/LogDelivery",
+              "name": "Log Delivery Group"
+            }
+          ]
         },
         {
           "name": "userIds",
-          "viewName": "User IDs",
+          "viewName": "User Canonical IDs",
           "type": "text"
         },
         {
           "name": "emails",
           "viewName": "Email Addresses",
           "type": "text"
+        },
+        {
+          "name": "grantToSignedUser",
+          "viewName": "Grant To Signed User",
+          "type": "boolean",
+          "description": "Grant the user making this request access to the bucket logging resources."
+        },
+        {
+          "name": "dontOverwrite",
+          "viewName": "Don't Overwrite",
+          "type": "boolean",
+          "description": "If true, only update values provided and not all of them. If false, overwite existing configuration with all field values."
         }
       ]
     },
     {
-      "name":"putBucketEncryption",
-      "viewName":"Manage Bucket Encryption",
+      "name": "putBucketEncryption",
+      "viewName": "Manage Bucket Encryption",
       "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access key",
+          "viewName": "Access Key ID",
           "type": "vault"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Secret key",
+          "viewName": "Access Key Secret",
           "type": "vault"
         },
         {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto"
+        },
+        {
           "name": "bucketName",
-          "viewName": "Bucket name",
-          "type":"string"
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to make the request on.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
           "name": "sseAlgo",
           "viewName": "Encryption Algorithm",
-          "type":"options",
+          "type": "options",
           "options": [
             {
-              "id":"AES256",
-              "name":"SSE-S3 AES256"
+              "id": "AES256",
+              "name": "SSE-S3 AES256"
             },
             {
-              "id":"aws:kms",
-              "name":"SSE-KMS"
+              "id": "aws:kms",
+              "name": "SSE-KMS"
             },
             {
               "id": "none",
@@ -602,13 +806,195 @@
         },
         {
           "name": "kmsMasterKey",
-          "viewName": "KMS Master Key ID",
-          "type":"string"
+          "viewName": "KMS Master Key",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listKeysAuto",
+          "description": "For SSE-KMS encryption, the ID of the KMS key to provide for the bucket encryption."
         },
         {
           "name": "bucketKeyEnabled",
           "viewName": "Bucket Key Enabled",
           "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "putBucketWebsite",
+      "viewName": "Enable Bucket Website Hosting",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access Key ID",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Access Key Secret",
+          "type": "vault"
+        },
+        {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto"
+        },
+        {
+          "name": "bucket",
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to make the request on.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
+        },
+        {
+          "name": "errorDocument",
+          "viewName": "Error Document",
+          "type": "string",
+          "description": "The object key name to use when a 4XX class error occurs.",
+          "placeholder": "error.html",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/CustomErrorDocSupport.html"
+        },
+        {
+          "name": "indexDocument",
+          "viewName": "Index Document Suffix",
+          "type": "string",
+          "description": "A suffix that is appended to a request that is for a directory on the website endpoint. Can't use ecscape characters. For index.html suffix value, on a request to samplebucket/images/ the object with the key images/index.html will be returned.",
+          "placeholder": "index.html",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/IndexDocumentSupport.html"
+        },
+        {
+          "name": "routingRules",
+          "viewName": "Routing Rules",
+          "type": "string",
+          "description": "Rules that define when a redirect is applied and the redirect behavior.",
+          "placeholder": "[\n {\n  \"Condition\": {\n   \"HttpErrorCodeReturnedEquals\": \"404\"\n  },\n  \"Redirect\": {\n   \"HostName\": \"ec2-11-22-333-44.compute-1.amazonaws.com\",\n   \"ReplaceKeyPrefixWith\": \"report-404/\"\n  }\n }\n]",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/how-to-page-redirect.html#advanced-conditional-redirects"
+        }
+      ]
+    },
+    {
+      "name": "putBucketWebsiteRedirect",
+      "viewName": "Enable Bucket Website Redirect",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access Key ID",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Access Key Secret",
+          "type": "vault"
+        },
+        {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto"
+        },
+        {
+          "name": "bucket",
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to make the request on.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
+        },
+        {
+          "name": "redirectTo",
+          "viewName": "Redirect To Host",
+          "type": "string",
+          "description": "The host name to redirect all requests to.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
+        },
+        {
+          "name": "redirectProtocol",
+          "viewName": "Redirect Algorithm",
+          "type": "options",
+          "options": [
+            {
+              "id": "http",
+              "name": "HTTP"
+            },
+            {
+              "id": "https",
+              "name": "HTTPS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "getBucketWebsite",
+      "viewName": "Get Bucket Website Hosting Configuration",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access Key ID",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Access Key Secret",
+          "type": "vault"
+        },
+        {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto"
+        },
+        {
+          "name": "bucket",
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to get it's static website hosting configuration.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
+        }
+      ]
+    },
+    {
+      "name": "deleteBucketWebsite",
+      "viewName": "Disable Bucket Website Hosting",
+      "params": [
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "viewName": "Access Key ID",
+          "type": "vault"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "viewName": "Access Key Secret",
+          "type": "vault"
+        },
+        {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAuto"
+        },
+        {
+          "name": "bucket",
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to disable static website hosting on.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         }
       ]
     }
