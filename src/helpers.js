@@ -1,37 +1,20 @@
-let aws = require("aws-sdk");
-
-function getAwsClient(action, settings){
-    const keyId = action.params.AWS_ACCESS_KEY_ID || settings.AWS_ACCESS_KEY_ID;
-    const secret = action.params.AWS_SECRET_ACCESS_KEY || settings.AWS_SECRET_ACCESS_KEY;
-    let config = {
-        accessKeyId: keyId,
-        secretAccessKey: secret
-    }
-    if (action.params.REGION){
-        config.region = action.params.REGION.id
-    }
-    return new aws.S3(config);
-}
-
-
 const GRANTEE_TYPE_TO_FIELD = {
     "CanonicalUser": "ID",
     "AmazonCustomerByEmail": "EmailAddress",
     "Group": "URI"
 }
 
-function addGrantees(text, granteeType, granteesArr){
+function parseGrantees(grantees, granteeType){
+    return grantees.map((grantee) => parseGrantee(grantee, granteeType));
+}
+
+function parseGrantee(grantee, granteeType){
     const valField = GRANTEE_TYPE_TO_FIELD[granteeType];
-    text.split('\n').forEach((granteeVal) => {
-        const fixed = granteeVal.trim();
-        if (fixed){
-            let granteeObj = {
-                Type: granteeType
-            }
-            granteeObj[valField] = fixed;
-            granteesArr.push(granteeObj);
-        }
-    });
+    granteeObj = {
+        Type: granteeType
+    }
+    granteeObj[valField] = grantee;
+    return granteeObj;
 }
 
 function getAwsCallback(resolve, reject){
@@ -41,8 +24,42 @@ function getAwsCallback(resolve, reject){
     }
 }
 
+function removeUndefinedAndEmpty(obj, removeSpecial){
+    Object.entries(obj).forEach(([key, value]) => {
+        if (value === undefined) delete obj[key];
+        if (removeSpecial && typeof(value) === "string") delete obj[key]; 
+        if (Array.isArray(value) && value.length === 0) delete obj[key];
+        if (typeof(value) === 'object'){
+            removeUndefinedAndEmpty(value);
+            if (Object.keys(value).length === 0) delete obj[key];
+        };
+    });
+    return obj;
+}
+
+function getGrants(grantees, permissionTypes){
+    return permissionTypes.map(permissionType => grantees.map(grantee => ({
+        Grantee: grantee,
+        Permission: permissionType
+    }))).flat();
+}
+
+function combineGrants(currentGrants, newGrants){
+    if (currentGrants.length === 0) return newGrants;
+    return currentGrants.concat(newGrants.filter(newGrant => !currentGrants.find(grant => {
+        if (grant.Permission !== newGrant.Permission) return false;
+        if (grant.Grantee.Type !== newGrant.Grantee.Type) return false;
+        const valField = GRANTEE_TYPE_TO_FIELD[grant.Grantee.Type];
+        if (grant.Grantee[valField] !== newGrant.Grantee[valField]) return false;
+        return true;
+    })));
+}
+
 module.exports = { 
-    getAwsClient,
-    addGrantees,
-    getAwsCallback
+    removeUndefinedAndEmpty,
+    parseGrantees,
+    parseGrantee,
+    getAwsCallback,
+    getGrants,
+    combineGrants
 }
