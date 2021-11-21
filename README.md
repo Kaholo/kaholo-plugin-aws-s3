@@ -184,10 +184,10 @@ Manage the encryption of the specified bucket.
 1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
 2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
 3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Optional** - The bucket to make the request on.
+4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
 [Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
 5. Encryption Algorithm (Options) **Optional** - Whether to enable encryption, and if AWS should use S3 default key, or a specified KMS Key. Possible values: **SSE-S3 AES256 | SSE-KMS | none**
-6. KMS Master Key (Autocomplete) **Required SSE-KMS encryption** - For SSE-KMS encryption, the ID of the KMS key to provide for the bucket encryption.
+6. KMS Master Key (Autocomplete) **Required for SSE-KMS encryption** - For SSE-KMS encryption, the ID of the KMS key to provide for the bucket encryption.
 7. Bucket Key Enabled (Boolean) **Optional** - Specifies whether AWS should use an S3 Bucket Key with server-side encryption using KMS (SSE-KMS) for new objects in the bucket. Existing objects are not affected. 
 
 ## Method: Enable Bucket Website Hosting
@@ -197,7 +197,7 @@ Enable Bucket Website Hosting
 1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
 2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
 3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Optional** - The bucket to make the request on.
+4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
 [Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
 5. Error Document (String) **Optional** - The object key name to use when a 4XX class error occurs.
 [Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/CustomErrorDocSupport.html)
@@ -213,11 +213,11 @@ Enable Bucket Website Redirect
 1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
 2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
 3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Optional** - The bucket to make the request on.
+4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
 [Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-5. Redirect To Host (String) **Optional** - The host name to redirect all requests to.
+5. Redirect To Host (String) **Required** - The host name to redirect all requests to.
 [Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-6. Redirect Algorithm (Options) **Optional** - Possible values: **HTTP | HTTPS**
+6. Redirect Algorithm (Options) **Required** - Possible values: **HTTP | HTTPS**
 
 ## Method: Get Bucket Website Hosting Configuration
 Get Bucket Website Hosting Configuration
@@ -226,7 +226,7 @@ Get Bucket Website Hosting Configuration
 1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
 2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
 3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Optional** - The bucket to get it's static website hosting configuration.
+4. Bucket (Autocomplete) **Required** - The bucket to get it's static website hosting configuration.
 [Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
 
 ## Method: Disable Bucket Website Hosting
@@ -236,5 +236,5 @@ Disable Bucket Website Hosting
 1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
 2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
 3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Optional** - The bucket to disable static website hosting on.
+4. Bucket (Autocomplete) **Required** - The bucket to disable static website hosting on.
 [Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
