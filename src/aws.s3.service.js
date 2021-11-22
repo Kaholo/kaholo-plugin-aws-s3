@@ -297,6 +297,10 @@ module.exports = class S3Service{
     // list functions
     
     async listRegions(){
+        if (!this.creds.region){
+            // need to specify region in creds for some reason even to list regions
+            this.creds.region = "us-east-1";
+        }
         const ec2 = new AWS.EC2(this.creds);
         return ec2.describeRegions().promise();
     }
