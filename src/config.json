@@ -6,6 +6,8 @@
   "main": "app.js",
   "version": "2.0.2",
   "description": "Kaholo plugin for integration with AWS S3 API.",
+  "category": "COMPUTE",
+  "keywords": ["GCP", "compute", "google", "platform", "vm", "instance", "cloud", "cluster", "project", "infra", "infrastructure", "cli", "network", "subnetwork", "firewall", "IP", "route"],
   "settings": [
     {
       "name": "AWS_ACCESS_KEY_ID",
