@@ -4,23 +4,32 @@
   "imgUrl": "logo.png",
   "execProgram": "node",
   "main": "app.js",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Kaholo plugin for integration with AWS S3 API.",
-  "settings":[
+  "settings": [
     {
       "name": "AWS_ACCESS_KEY_ID",
       "viewName": "Access Key ID",
-      "type": "vault"
+      "type": "vault",
+      "description": "The default AWS Access Key ID to use for authentication.",
+      "placeholder": "AKIAIOSFODNN7EXAMPLE",
+      "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
     },
     {
       "name": "AWS_SECRET_ACCESS_KEY",
       "viewName": "Access Key Secret",
-      "type": "vault"
+      "type": "vault",
+      "description": "The default AWS Access Key secret to use for authentication.",
+      "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+      "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
     },
     {
       "name": "REGION",
       "viewName": "Region",
-      "type": "string"
+      "type": "string",
+      "description": "The ID of the default region to make requests on.",
+      "placeholder": "us-east-2",
+      "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
     }
   ],
   "methods": [
@@ -31,24 +40,36 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Create the new bucket in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "BUCKET_NAME",
           "viewName": "Name",
-          "type": "string"
+          "type": "string",
+          "description": "The name of the new bucket to create.",
+          "placeholder": "bucket-01",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html"
         }
       ]
     },
@@ -59,19 +80,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "BUCKET_NAME",
@@ -86,12 +116,18 @@
         {
           "name": "FILE_PATH",
           "viewName": "File Path",
-          "type": "string"
+          "type": "string",
+          "description": "Local location of the file to upload.",
+          "placeholder": "/home/user/file_to_upload.js",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html"
         },
         {
           "name": "DEST_FILE_PATH",
           "viewName": "Dest Object Path",
-          "type": "string"
+          "type": "string",
+          "description": "Destination to upload the file in the S3 bucket.",
+          "placeholder": "s3://home/folder/",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html"
         }
       ]
     },
@@ -102,19 +138,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "BUCKET_NAME",
@@ -135,19 +180,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "BUCKET_NAME",
@@ -162,7 +216,10 @@
         {
           "name": "OBJECT_NAME",
           "viewName": "Object Path",
-          "type": "string"
+          "type": "string",
+          "description": "Objects are the fundamental entities stored in Amazon S3. Objects consist of object data and metadata. The metadata is a set of name-value pairs that describe the object. These pairs include some default metadata, such as the date last modified, and standard HTTP metadata, such as Content-Type.",
+          "placeholder": "object-name-1",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/delete-objects.html"
         }
       ]
     },
@@ -173,19 +230,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "BUCKET_NAME",
@@ -201,23 +267,25 @@
           "name": "prefix",
           "viewName": "Prefix",
           "type": "string",
-          "description": "Limits the response to keys that begin with the specified prefix.",
-          "placeholder": "folder1/folder2/"
+          "description": "Managing a prefix to limit the response to the keys.",
+          "placeholder": "folder1/folder2/",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html"
         },
         {
           "name": "maxResults",
           "viewName": "Max Results",
           "type": "string",
           "description": "The maximum number of results to return. Default value is 1000.",
-          "placeholder": "1000"
+          "placeholder": "1000",
+          "learnUrl": "https://github.com/Kaholo/kaholo-plugin-amazon-s3"
         },
         {
           "name": "nextToken",
           "viewName": "Next Continuation Token",
           "type": "string",
-          "description": "In case of pagination. If listed objects and more results left to return than 'NextContinuationToken' will be provided for you to continue listing from the point stopped.",
+          "description": "In case of pagination. If listed objects and more results are left to return then 'NextContinuationToken' will be provided for you to continue listing from the point stopped.",
           "placeholder": "1ueGcxLPRx1Tr/XYExHnhbYLgveDs2J/wm36Hy4vbOwM=",
-          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html"
+          "learnUrl": "ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken is obfuscated and is not a real key."
         }
       ]
     },
@@ -228,42 +296,60 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         }
       ]
     },
     {
       "name": "managePublicAccessBlock",
       "viewName": "Manage Public Access Block",
-      "params":[
+      "params": [
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "BUCKET_NAME",
@@ -278,22 +364,34 @@
         {
           "name": "BlockPublicAcls",
           "viewName": "Block Public Acls",
-          "type": "boolean"
+          "type": "boolean",
+          "description": "S3 Block Public Access provides controls across an entire AWS Account or at the individual S3 bucket level to ensure that objects never have public access, now and in the future. Public access is granted to buckets and objects through access control lists (ACLs), bucket policies, or both.",
+          "placeholder": "Disable / Enable",
+          "learnUrl": "https://aws.amazon.com/s3/features/block-public-access/"
         },
         {
           "name": "BlockPublicPolicy",
           "viewName": "Block Public Policy",
-          "type": "boolean"
+          "type": "boolean",
+          "description": "S3 Block Public Access provides controls across an entire AWS Account or at the individual S3 bucket level to ensure that objects never have public access, now and in the future. Public access is granted to buckets and objects through access control lists (ACL), bucket policies, or both.",
+          "placeholder": "Disable / Enable",
+          "learnUrl": "https://aws.amazon.com/s3/features/block-public-access/"
         },
         {
           "name": "IgnorePublicAcls",
           "viewName": "Ignore Public Acls",
-          "type": "boolean"
+          "type": "boolean",
+          "description": "In order to ensure that public access to all your S3 buckets and objects is blocked, turn on block all public access at the account level. These settings apply account-wide for all current and future buckets.",
+          "placeholder": "Disable / Enable",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html"
         },
         {
           "name": "RestrictPublicBuckets",
           "viewName": "Restrict Public Buckets",
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Specifies whether AWS should restrict public bucket policies for this bucket.",
+          "placeholder": "bucket-01",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         }
       ]
     },
@@ -304,19 +402,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "BUCKET_NAME",
@@ -331,53 +438,59 @@
         {
           "name": "objGrantType",
           "viewName": "Object Grant Type",
-          "type":"options",
+          "type": "options",
           "options": [
             {
-              "id":"readWrite",
-              "name":"Read and Write"
+              "id": "readWrite",
+              "name": "Read and Write"
             },
             {
-              "id":"GrantRead",
-              "name":"Read"
+              "id": "GrantRead",
+              "name": "Read"
             },
             {
-              "id":"GrantWrite",
-              "name":"Write"
+              "id": "GrantWrite",
+              "name": "Write"
             },
             {
-              "id":"none",
-              "name":"None"
+              "id": "none",
+              "name": "None"
             }
-          ]
+          ],
+          "description": "The type of permission to give to the specified users and groups for access to the buckets objects.",
+          "placeholder": "Read and Write | Read | Write | None",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/managing-acls.html"
         },
         {
           "name": "aclGrantType",
           "viewName": "ACL Grant Type",
-          "type":"options",
+          "type": "options",
           "options": [
             {
-              "id":"readWrite",
-              "name":"Read and Write"
+              "id": "readWrite",
+              "name": "Read and Write"
             },
             {
-              "id":"GrantReadACP",
-              "name":"Read"
+              "id": "GrantReadACP",
+              "name": "Read"
             },
             {
-              "id":"GrantWriteACP",
-              "name":"Write"
+              "id": "GrantWriteACP",
+              "name": "Write"
             },
             {
-              "id":"none",
-              "name":"None"
+              "id": "none",
+              "name": "None"
             }
-          ]
+          ],
+          "description": "The type of permission to give to the specified users and groups for accessing and editing permissions for this bucket.",
+          "placeholder": "Read and Write | Read | Write | None",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/managing-acls.html"
         },
         {
-          "name":"URI",
-          "viewName":"Groups URIs",
-          "type":"options",
+          "name": "URI",
+          "viewName": "Groups URIs",
+          "type": "options",
           "description": "The uri of the predefined group(s) to allow access to the bucket. To specify multiple values provide an array of group URIs from code.",
           "options": [
             {
@@ -392,29 +505,41 @@
               "id": "http://acs.amazonaws.com/groups/s3/LogDelivery",
               "name": "Log Delivery Group"
             }
-          ]
+          ],
+          "placeholder": "Authenticated Users | All Users | Log Delivery Group",
+          "learnUrl": "https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/s3/model/GroupGrantee.html"
         },
         {
-          "name":"userID",
-          "viewName":"Users Canonical IDs",
-          "type":"text"
+          "name": "userID",
+          "viewName": "Users Canonical IDs",
+          "type": "text",
+          "description": "The canonical user ID is an alpha-numeric identifier, that is an obfuscated form of the AWS account ID. You may use this ID to identify an AWS account when granting cross-account access.",
+          "placeholder": "79a59df900b949e55d96a1e698fbacedfd6e09d98eacf8f8d5218e7cd47ef2be",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/finding-canonical-user-id.html#:~:text=The%20canonical%20user%20ID%20is,and%20objects%20using%20Amazon%20S3."
         },
         {
-          "name":"emailAddress",
-          "viewName":"Users Email Addresses",
-          "type":"text"
+          "name": "emailAddress",
+          "viewName": "Users Email Addresses",
+          "type": "text",
+          "description": "Permitting the access to users with the mentioned email addresses.",
+          "placeholder": "user@gmail.com",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html"
         },
         {
           "name": "grantToSignedUser",
           "viewName": "Grant To Signed User",
           "type": "boolean",
-          "description": "Grant the user making this request access to the bucket."
+          "description": "Permitting a user to request access to the logging resources.",
+          "placeholder": "Disable / Enable",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html"
         },
         {
           "name": "dontOverwrite",
           "viewName": "Don't Overwrite",
           "type": "boolean",
-          "description": "Grant the user making this request access to the bucket."
+          "description": "If true, add new permissions to existing permissions(In case they don't already exist). If false, overwrite existing permissions with new permissions provided in the request.",
+          "placeholder": "Disable / Enable",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html"
         }
       ]
     },
@@ -425,19 +550,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "BUCKET_NAME",
@@ -470,7 +604,10 @@
               "id": "authenticated-read",
               "name": "Authenticated Read"
             }
-          ]
+          ],
+          "description": "Each S3 bucket and file has an associated Access Control List (ACL) with grantees and permissions. A canned ACL is a predefined set of grantees and permissions that can be set when creating a bucket or file.",
+          "placeholder": "Private | Public Read | Public Read Write | Authenticated Read",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectAcl.html"
         }
       ]
     },
@@ -481,19 +618,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "bucketName",
@@ -518,7 +664,10 @@
               "id": "Suspended",
               "name": "Suspended"
             }
-          ]
+          ],
+          "description": "whether to enable or disable versioning in the bucket.",
+          "placeholder": "Disable / Enable",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html"
         },
         {
           "name": "mfaDelete",
@@ -533,12 +682,18 @@
               "id": "Disabled",
               "name": "Disabled"
             }
-          ]
+          ],
+          "description": "whether to enable or disable MFA Delete feature in the bucket.",
+          "placeholder": "Enabled | Disabled. Default value is disabled.",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingMFADelete.html"
         },
         {
           "name": "mfa",
           "viewName": "MFA",
-          "type": "string"
+          "type": "string",
+          "description": "MFA-protected API access is used to enforce another authentication factor (MFA code) when accessing sensitive Amazon S3 resources.",
+          "placeholder": "123456789123",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/RESTAuthentication.html"
         }
       ]
     },
@@ -549,19 +704,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "bucketName",
@@ -576,7 +740,10 @@
         {
           "name": "policy",
           "viewName": "Policy Object",
-          "type": "text"
+          "type": "text",
+          "description": "The policy to apply to this bucket",
+          "placeholder": "e.g.",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html"
         }
       ]
     },
@@ -587,19 +754,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "bucketName",
@@ -620,19 +796,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "bucketName",
@@ -653,49 +838,70 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Create the new bucket in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "bucketName",
           "viewName": "Source Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto"
+          "functionName": "listBucketsAuto",
+          "description": "The bucket to enable or disable logging in.",
+          "placeholder": "bucket-01",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/logging-with-S3.html"
         },
         {
           "name": "disableLogging",
           "viewName": "Disable Logging",
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enable/Disable logging for the S3 bucket.",
+          "placeholder": "Disable / Enable",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/logging-with-S3.html"
         },
         {
           "name": "targetBucket",
           "viewName": "Target Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto"
+          "functionName": "listBucketsAuto",
+          "description": "Save logs in the specified bucket in the field.",
+          "placeholder": "angular-bucket-app",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html"
         },
         {
           "name": "targetPrefix",
           "viewName": "Target Prefix",
-          "type": "string"
+          "type": "string",
+          "description": "Managing a prefix to call the created log file names.",
+          "placeholder": "bucket-01-",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html"
         },
         {
           "name": "permissionType",
           "viewName": "Permission Type",
           "type": "options",
-          "options":[
+          "options": [
             {
               "id": "READ",
               "name": "Read"
@@ -708,13 +914,16 @@
               "id": "FULL_CONTROL",
               "name": "Full Control"
             }
-          ]
+          ],
+          "description": "Permitting the access to the logs inside the specified bucket.",
+          "placeholder": "Read | Write | Full Control",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html"
         },
         {
-          "name":"groupUris",
-          "viewName":"Groups URIs",
-          "type":"options",
-          "description": "The uri of the predefined group(s) to allow access to the bucket. To specify multiple values provide an array of group URIs from code.",
+          "name": "groupUris",
+          "viewName": "Groups URIs",
+          "type": "options",
+          "description": "Uniform Resource Identifier (URI) to help streamline user login workflows.",
           "options": [
             {
               "id": "http://acs.amazonaws.com/groups/global/AuthenticatedUsers",
@@ -728,29 +937,41 @@
               "id": "http://acs.amazonaws.com/groups/s3/LogDelivery",
               "name": "Log Delivery Group"
             }
-          ]
+          ],
+          "placeholder": "Authenticated Users | All Users | Log Delivery Group",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html#:~:text=If%20you%20access%20a%20bucket,URLs%20to%20access%20a%20bucket."
         },
         {
           "name": "userIds",
           "viewName": "User Canonical IDs",
-          "type": "text"
+          "type": "text",
+          "description": "The canonical user ID is an alpha-numeric identifier, that is an obfuscated form of the AWS account ID. You can use this ID to identify an AWS account when granting cross-account access.",
+          "placeholder": "79a59df900b949e55d96a1e698fbacedfd6e09d98eacf8f8d5218e7cd47ef2be",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/finding-canonical-user-id.html#:~:text=The%20canonical%20user%20ID%20is,and%20objects%20using%20Amazon%20S3."
         },
         {
           "name": "emails",
           "viewName": "Email Addresses",
-          "type": "text"
+          "type": "text",
+          "description": "Permitting the access to the logs inside the specified bucket to users with the mentioned email addresses.",
+          "placeholder": "user@gmail.com",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html"
         },
         {
           "name": "grantToSignedUser",
           "viewName": "Grant To Signed User",
           "type": "boolean",
-          "description": "Grant the user making this request access to the bucket logging resources."
+          "description": "Permitting a user to request access to the logging resources.",
+          "placeholder": "Disable / Enable",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html"
         },
         {
           "name": "dontOverwrite",
           "viewName": "Don't Overwrite",
           "type": "boolean",
-          "description": "If true, only update values provided and not all of them. If false, overwite existing configuration with all field values."
+          "description": "Not to overwrite written logs and keep creating new log files.",
+          "placeholder": "Disable / Enable",
+          "learnUrl": "https://aws.amazon.com/premiumsupport/knowledge-center/secure-s3-resources/"
         }
       ]
     },
@@ -761,19 +982,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Create the new bucket in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "bucketName",
@@ -802,7 +1032,10 @@
               "id": "none",
               "name": "none"
             }
-          ]
+          ],
+          "description": "AWS encrypts data using 256-bit AES encryption, also known as AES-256. You can apply encryption to data stored using Amazon S3's Standard.",
+          "placeholder": "SSE-S3 AES256 | SSE-KMS | none",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/serv-side-encryption.html"
         },
         {
           "name": "kmsMasterKey",
@@ -810,12 +1043,17 @@
           "type": "autocomplete",
           "autocompleteType": "function",
           "functionName": "listKeysAuto",
-          "description": "For SSE-KMS encryption, the ID of the KMS key to provide for the bucket encryption."
+          "description": "S3 service master key S3 will decrypt the object for anyone with permission to access this object. Use an AWS Key Management Service master key. S3 will decrypt the object for anyone with permission to access this object and permission to use the master key.",
+          "placeholder": "aws:s3:arn.:::bucket-01",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html"
         },
         {
           "name": "bucketKeyEnabled",
           "viewName": "Bucket Key Enabled",
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Specifies whether AWS should use an S3 Bucket Key with server-side encryption using KMS (SSE-KMS) for new objects in the bucket. Existing objects are not affected.",
+          "placeholder": "Disabled / Enabled",
+          "learnUrl": "https://docs.aws.amazon.com/kms/latest/developerguide/services-s3.html"
         }
       ]
     },
@@ -826,19 +1064,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Create the new bucket in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "bucket",
@@ -854,7 +1101,7 @@
           "name": "errorDocument",
           "viewName": "Error Document",
           "type": "string",
-          "description": "The object key name to use when a 4XX class error occurs.",
+          "description": "After you configure your bucket as a static website, when an error occurs, Amazon S3 returns an HTML error document.",
           "placeholder": "error.html",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/CustomErrorDocSupport.html"
         },
@@ -862,7 +1109,7 @@
           "name": "indexDocument",
           "viewName": "Index Document Suffix",
           "type": "string",
-          "description": "A suffix that is appended to a request that is for a directory on the website endpoint. Can't use ecscape characters. For index.html suffix value, on a request to samplebucket/images/ the object with the key images/index.html will be returned.",
+          "description": "A suffix that is appended to a request that is for a directory on the website endpoint",
           "placeholder": "index.html",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/IndexDocumentSupport.html"
         },
@@ -870,9 +1117,9 @@
           "name": "routingRules",
           "viewName": "Routing Rules",
           "type": "string",
-          "description": "Rules that define when a redirect is applied and the redirect behavior.",
+          "description": "When enabling static website hosting for your bucket, you can optionally specify advanced redirection rules.",
           "placeholder": "[\n {\n  \"Condition\": {\n   \"HttpErrorCodeReturnedEquals\": \"404\"\n  },\n  \"Redirect\": {\n   \"HostName\": \"ec2-11-22-333-44.compute-1.amazonaws.com\",\n   \"ReplaceKeyPrefixWith\": \"report-404/\"\n  }\n }\n]",
-          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/how-to-page-redirect.html#advanced-conditional-redirects"
+          "learnUrl": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-websiteconfiguration-routingrules.html"
         }
       ]
     },
@@ -883,19 +1130,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Create the new bucket in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "bucket",
@@ -911,7 +1167,7 @@
           "name": "redirectTo",
           "viewName": "Redirect To Host",
           "type": "string",
-          "description": "The host name to redirect all requests to.",
+          "description": "The host name to redirect all requests to",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
@@ -928,7 +1184,10 @@
               "id": "https",
               "name": "HTTPS"
             }
-          ]
+          ],
+          "description": "Defining if the internet url is secure or not.",
+          "placeholder": "HTTP | HTTPS",
+          "learnUrl": "https://github.com/Kaholo/kaholo-plugin-amazon-s3"
         }
       ]
     },
@@ -939,19 +1198,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Create the new bucket in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "bucket",
@@ -972,19 +1240,28 @@
         {
           "name": "AWS_ACCESS_KEY_ID",
           "viewName": "Access Key ID",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "AKIAIOSFODNN7EXAMPLE",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "AWS_SECRET_ACCESS_KEY",
           "viewName": "Access Key Secret",
-          "type": "vault"
+          "type": "vault",
+          "description": "This is a parameter taken from the vault to access AWS",
+          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
         },
         {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegionsAuto"
+          "functionName": "listRegionsAuto",
+          "description": "Create the new bucket in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "bucket",
