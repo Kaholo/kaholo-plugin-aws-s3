@@ -4,9 +4,9 @@
   "imgUrl": "logo.png",
   "execProgram": "node",
   "main": "app.js",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Kaholo plugin for integration with AWS S3 API.",
-  "category": "COMPUTE",
+  "category": "STORAGE",
   "keywords": ["GCP", "compute", "google", "platform", "vm", "instance", "cloud", "cluster", "project", "infra", "infrastructure", "cli", "network", "subnetwork", "firewall", "IP", "route"],
   "settings": [
     {
@@ -744,7 +744,6 @@
           "viewName": "Policy Object",
           "type": "text",
           "description": "The policy to apply to this bucket",
-          "placeholder": "e.g.",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html"
         }
       ]
