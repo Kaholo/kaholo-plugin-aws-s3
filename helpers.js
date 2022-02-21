@@ -1,65 +1,147 @@
+const _ = require("lodash");
+const fs = require("fs");
+
 const GRANTEE_TYPE_TO_FIELD = {
-    "CanonicalUser": "ID",
-    "AmazonCustomerByEmail": "EmailAddress",
-    "Group": "URI"
+  CanonicalUser: "ID",
+  AmazonCustomerByEmail: "EmailAddress",
+  Group: "URI",
+};
+
+function getGranteeId(grant) {
+  return grant.Grantee[GRANTEE_TYPE_TO_FIELD[grant.Grantee.Type]];
 }
 
-function parseGrantees(grantees, granteeType){
-    return grantees.map((grantee) => parseGrantee(grantee, granteeType));
+function parseGrantee(grantee, granteeType) {
+  const valField = GRANTEE_TYPE_TO_FIELD[granteeType];
+  return {
+    Type: granteeType,
+    [valField]: grantee,
+  };
 }
 
-function parseGrantee(grantee, granteeType){
-    const valField = GRANTEE_TYPE_TO_FIELD[granteeType];
-    granteeObj = {
-        Type: granteeType
-    }
-    granteeObj[valField] = grantee;
-    return granteeObj;
+function parseGrantees(grantees, granteeType) {
+  return grantees.map((grantee) => parseGrantee(grantee, granteeType));
 }
 
-function getAwsCallback(resolve, reject){
-    return (err, data) => {
-        if (err) return reject(err);
-        return resolve(data);
-    }
+function getGrants(grantees, permissionTypes) {
+  return permissionTypes.map((permissionType) => grantees.map((grantee) => ({
+    Grantee: grantee,
+    Permission: permissionType,
+  }))).flat();
 }
 
-function removeUndefinedAndEmpty(obj, removeSpecial){
-    Object.entries(obj).forEach(([key, value]) => {
-        if (value === undefined) delete obj[key];
-        if (removeSpecial && typeof(value) === "string") delete obj[key]; 
-        if (Array.isArray(value) && value.length === 0) delete obj[key];
-        if (typeof(value) === 'object'){
-            removeUndefinedAndEmpty(value);
-            if (Object.keys(value).length === 0) delete obj[key];
-        };
+function combineGrants(currentGrants, newGrants) {
+  if (currentGrants.length === 0) { return newGrants; }
+
+  const grantsAreEqual = (a, b) => a.Permission === b.Permission
+        && a.Grantee.Type === b.Grantee.Type
+        && getGranteeId(a) === getGranteeId(b);
+
+  const applicableNewGrants = newGrants.reduce(
+    (acc, current) => (currentGrants.every((grant) => !grantsAreEqual(grant, current))
+      ? [...acc, current]
+      : acc),
+    [],
+  );
+
+  return [
+    ...currentGrants, ...applicableNewGrants,
+  ];
+}
+
+function resolveACLGrantType(aclGrantType) {
+  switch (aclGrantType) {
+    case "readWrite":
+      return ["READ_ACP", "WRITE_ACP"];
+    case "GrantReadACP":
+      return ["READ_ACP"];
+    case "GrantWriteACP":
+      return ["WRITE_ACP"];
+    case "":
+    case "none":
+      return [];
+    default:
+      return [aclGrantType];
+  }
+}
+
+function resolveObjectGrantType(objectGrantType) {
+  switch (objectGrantType) {
+    case "readWrite":
+      return ["READ", "WRITE"];
+    case "GrantRead":
+      return ["READ"];
+    case "GrantWrite":
+      return ["WRITE"];
+    case "":
+    case "none":
+      return [];
+    default:
+      return [objectGrantType];
+  }
+}
+
+function resolveBucketAclPermissions(params) {
+  if (params.aclGrantType === "readWrite" && params.objGrantType === "readWrite") {
+    return ["FULL_CONTROL"];
+  }
+
+  const result = _.concat(
+    resolveObjectGrantType(params.objGrantType),
+    resolveACLGrantType(params.aclGrantType),
+  );
+
+  if (_.isEmpty(result)) {
+    throw new Error("You must specify at least one of the following: Object Grant Type/ACL Grant Type");
+  }
+
+  return result;
+}
+
+async function readFile(filepath) {
+  if (!fs.existsSync(filepath)) {
+    throw new Error(`Couldn't find the file at ${filepath}`);
+  }
+  const filestream = fs.createReadStream(filepath);
+
+  let body = "";
+  return new Promise((resolve, reject) => {
+    filestream.on("error", (err) => {
+      reject(new Error(`Error reading source file: ${err.message}`));
     });
-    return obj;
+    filestream.on("data", (chunk) => {
+      body += chunk;
+    });
+    filestream.on("end", () => {
+      resolve(body);
+    });
+  });
 }
 
-function getGrants(grantees, permissionTypes){
-    return permissionTypes.map(permissionType => grantees.map(grantee => ({
-        Grantee: grantee,
-        Permission: permissionType
-    }))).flat();
+async function getUserId(client) {
+  return (await client.listBuckets().promise()).Owner.ID;
 }
 
-function combineGrants(currentGrants, newGrants){
-    if (currentGrants.length === 0) return newGrants;
-    return currentGrants.concat(newGrants.filter(newGrant => !currentGrants.find(grant => {
-        if (grant.Permission !== newGrant.Permission) return false;
-        if (grant.Grantee.Type !== newGrant.Grantee.Type) return false;
-        const valField = GRANTEE_TYPE_TO_FIELD[grant.Grantee.Type];
-        if (grant.Grantee[valField] !== newGrant.Grantee[valField]) return false;
-        return true;
-    })));
+async function getNewGrantees({
+  groups, users, emails, grantToSignedUser,
+}, client) {
+  const newGrantees = [
+    ...parseGrantees(groups, "Group"),
+    ...parseGrantees(users, "CanonicalUser"),
+    ...parseGrantees(emails, "EmailAddress"),
+  ];
+
+  if (grantToSignedUser && !_.isNil(client)) {
+    newGrantees.push(parseGrantee(await getUserId(client), "CanonicalUser"));
+  }
+
+  return newGrantees;
 }
 
-module.exports = { 
-    removeUndefinedAndEmpty,
-    parseGrantees,
-    parseGrantee,
-    getAwsCallback,
-    getGrants,
-    combineGrants
-}
+module.exports = {
+  readFile,
+  resolveBucketAclPermissions,
+  getNewGrantees,
+  getGrants,
+  combineGrants,
+};

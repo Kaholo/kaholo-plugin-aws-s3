@@ -1,222 +1,157 @@
-const parsers = require("./parsers");
-const S3Service = require('./aws.s3.service');
+const aws = require("aws-sdk");
 
-async function createBucket(action, settings){
-    const { BUCKET_NAME: bucket } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.createBucket({
-        bucket: parsers.string(bucket)
-    });
+const awsPlugin = require("kaholo-aws-plugin");
+const payloadFunctions = require("./payload-functions");
+const helpers = require("./helpers");
+const autocomplete = require("./autocomplete");
+
+async function uploadFileToBucket(action, settings) {
+  const { client, params } = awsPlugin.handleInput(aws.S3, action, settings);
+  const fileBody = await helpers.readFile(params.srcPath);
+
+  const payload = {
+    Bucket: params.bucket,
+    Key: params.destPath,
+    Body: fileBody,
+  };
+
+  return client.upload(payload).promise();
 }
 
-async function uploadFileToBucket(action, settings){
-    const { BUCKET_NAME: bucket, FILE_PATH: srcPath, DEST_FILE_PATH: destPath } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.uploadFileToBucket({
-        bucket: parsers.autocomplete(bucket),
-        srcPath: parsers.string(srcPath),
-        destPath: parsers.string(destPath)
-    });
+async function putBucketAcl(action, settings) {
+  const { client, params } = awsPlugin.handleInput(aws.S3, action, settings);
+
+  if (!(params.grantToSignedUser
+      || params.groups.length
+      || params.users.length
+      || params.emails.length)) {
+    throw new Error("Please provide at least one receiver of the permissions");
+  }
+
+  const permissionTypes = helpers.resolveBucketAclPermissions(params);
+  const newGrantees = helpers.getNewGrantees(params, client);
+  const currentAcl = await client.getBucketAcl({ Bucket: params.bucket }).promise();
+  const currentGrants = params.dontOverwrite ? currentAcl.Grants : [];
+  const newGrants = helpers.getGrants(newGrantees, permissionTypes);
+
+  return client.putBucketAcl({
+    Bucket: params.bucket,
+    AccessControlPolicy: {
+      Grants: helpers.combineGrants(currentGrants, newGrants),
+      Owner: currentAcl.Owner,
+    },
+  }).promise();
 }
 
-async function deleteBucket(action, settings){
-    const { BUCKET_NAME: bucket } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.deleteBucket({
-        bucket: parsers.autocomplete(bucket)
-    });
+async function putBucketPolicy(action, settings) {
+  const client = awsPlugin.getServiceInstance(aws.S3, action.params, settings);
+  const params = awsPlugin.helpers.readActionArguments(action, { Policy: "object" });
+  return client.putBucketPolicy({ ...params, Policy: JSON.stringify(params.Policy) }).promise();
 }
 
-async function deleteObject(action, settings){
-    const { BUCKET_NAME: bucket, OBJECT_NAME: path } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.deleteObject({
-        bucket: parsers.autocomplete(bucket),
-        path: parsers.string(path)
-    });
-}
+async function putBucketLogging(action, settings) {
+  const { client, params } = awsPlugin.handleInput(aws.S3, action, settings);
 
-async function managePublicAccessBlock(action, settings){
-    const { BUCKET_NAME: bucket, BlockPublicAcls: blockPublicAcls, 
-        BlockPublicPolicy: blockPublicPolicy, IgnorePublicAcls: ignorePublicAcls, 
-        RestrictPublicBuckets: restrictPublicBuckets } = action.params;
-
-    const client = S3Service.from(action.params, settings);
-    return client.managePublicAccessBlock({
-        bucket: parsers.autocomplete(bucket),
-        blockPublicAcls: parsers.boolean(blockPublicAcls),
-        blockPublicPolicy: parsers.boolean(blockPublicPolicy),
-        ignorePublicAcls: parsers.boolean(ignorePublicAcls),
-        restrictPublicBuckets: parsers.boolean(restrictPublicBuckets)
-    });
-}
-
-async function putBucketAcl(action, settings){
-    const { BUCKET_NAME: bucket, objGrantType, aclGrantType, URI: groups, userID: users,
-        emailAddress: emails, grantToSignedUser, dontOverwrite } = action.params;
-    
-    const client = S3Service.from(action.params, settings);
-    return client.putBucketAcl({
-        bucket: parsers.autocomplete(bucket),
-        objGrantType: objGrantType,
-        aclGrantType: aclGrantType,
-        groups: parsers.array(groups),
-        users: parsers.array(users),
-        emails: parsers.array(emails),
-        grantToSignedUser: parsers.boolean(grantToSignedUser),
-        dontOverwrite: parsers.boolean(dontOverwrite)
-    });
-}
-
-async function putCannedACL(action, settings){
-    const { BUCKET_NAME: bucket, ACL } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.putCannedACL({
-        bucket: parsers.autocomplete(bucket),
-        ACL
-    });
-}
-
-async function putBucketVersioning(action, settings){
-    const { bucketName: bucket, status, mfaDelete, mfa } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.putBucketVersioning({
-        bucket: parsers.autocomplete(bucket),
-        status: status,
-        mfaDelete: mfaDelete,
-        mfa: parsers.string(mfa)
-    });
-}
-
-async function putBucketPolicy(action, settings){
-    const { bucketName: bucket, policy } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.putBucketPolicy({
-        bucket: parsers.autocomplete(bucket),
-        policy: parsers.object(policy)
-    });
-}
-
-async function getBucketPolicy(action, settings){
-    const { bucketName: bucket } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.getBucketPolicy({
-        bucket: parsers.autocomplete(bucket)
-    });
-}
-
-async function deleteBucketPolicy(action, settings){
-    const { bucketName: bucket } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.deleteBucketPolicy({
-        bucket: parsers.autocomplete(bucket)
-    });
-}
-
-async function putBucketLogging(action, settings){
-    const { bucketName: srcBucket, disableLogging, targetBucket, targetPrefix, 
-        permissionType, groupUris: groups, userIds: users, emails, 
-        grantToSignedUser, dontOverwrite} = action.params;
-    
-    const client = S3Service.from(action.params, settings);
+  if (params.disableLogging) {
     return client.putBucketLogging({
-        srcBucket: parsers.autocomplete(srcBucket),
-        disableLogging: parsers.boolean(disableLogging),
-        targetBucket: parsers.autocomplete(targetBucket),
-        targetPrefix: parsers.string(targetPrefix),
-        permissionType: permissionType,
-        groups: parsers.array(groups),
-        users: parsers.array(users),
-        emails: parsers.array(emails),
-        grantToSignedUser: parsers.boolean(grantToSignedUser),
-        dontOverwrite: parsers.boolean(dontOverwrite)
-    });
+      Bucket: params.srcBucket,
+      BucketLoggingStatus: {
+        LoggingEnabled: false,
+      },
+    }).promise();
+  }
+
+  let { targetBucket, targetPrefix } = params;
+  let currentGrants = [];
+
+  if (params.dontOverwrite) {
+    const loggingConfig = (await client.getBucketLogging({ Bucket: params.srcBucket }).promise());
+    if (loggingConfig.LoggingEnabled) {
+      currentGrants = loggingConfig.TargetGrants || currentGrants;
+      targetBucket = loggingConfig.TargetBucket || targetBucket;
+      targetPrefix = loggingConfig.TargetPrefix || targetPrefix;
+    }
+  }
+
+  if (!targetBucket || !targetPrefix) {
+    throw new Error("When enabling logging you must provide Target Bucket and Target Prefix");
+  }
+
+  const newGrantees = await helpers.getNewGrantees(params, client);
+  const newGrants = params.permissionType
+    ? helpers.getGrants(newGrantees, [params.permissionType])
+    : [];
+  const targetGrants = helpers.combineGrants(currentGrants, newGrants);
+
+  const payload = {
+    Bucket: params.srcBucket,
+    BucketLoggingStatus: {
+      LoggingEnabled: {
+        TargetBucket: targetBucket,
+        TargetPrefix: targetPrefix,
+        TargetGrants: targetGrants.length > 0 ? targetGrants : undefined,
+      },
+    },
+  };
+
+  return client.putBucketLogging(payload).promise();
 }
 
-async function putBucketEncryption(action, settings){
-    const { bucketName: bucket, sseAlgo, kmsMasterKey, bucketKeyEnabled } = action.params;
-    const client = S3Service.from(action.params, settings);
+async function putBucketEncryption(action, settings) {
+  const { client, params } = awsPlugin.handleInput(aws.S3, action, settings);
+
+  if (!params.sseAlgo || params.sseAlgo === "none") {
     return client.putBucketEncryption({
-        bucket: parsers.autocomplete(bucket),
-        kmsMasterKey: parsers.autocomplete(kmsMasterKey),
-        bucketKeyEnabled: parsers.boolean(bucketKeyEnabled),
-        sseAlgo
-    });
+      Bucket: params.bucket,
+      ServerSideEncryptionConfiguration: { Rules: [] },
+    }).promise();
+  }
+
+  if (params.sseAlgo === "aws:kms" && !params.kmsMasterKey) {
+    throw new Error("Please provide KMS Master Key ID with AWS KMS Encryption");
+  }
+
+  const payload = {
+    Bucket: params.bucket,
+    ServerSideEncryptionConfiguration: {
+      Rules: [{
+        ApplyServerSideEncryptionByDefault: {
+          SSEAlgorithm: params.sseAlgo,
+          KMSMasterKeyID: params.kmsMasterKey,
+        },
+        BucketKeyEnabled: params.bucketKeyEnabled,
+      }],
+    },
+  };
+
+  return client.putBucketEncryption(payload).promise();
 }
 
-async function putBucketWebsite(action, settings){
-    const { bucket, errorDocument, indexDocument, routingRules } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.putBucketWebsite({
-        bucket: parsers.autocomplete(bucket),
-        errorDocument: parsers.string(errorDocument),
-        indexDocument: parsers.string(indexDocument),
-        routingRules: parsers.string(routingRules)
-    });
-}
-
-async function putBucketWebsiteRedirect(action, settings){
-    const { bucket, redirectTo, redirectProtocol } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.putBucketWebsiteRedirect({
-        bucket: parsers.autocomplete(bucket),
-        redirectTo: parsers.string(redirectTo),
-        redirectProtocol
-    });
-}
-
-async function deleteBucketWebsite(action, settings){
-    const { bucket } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.deleteBucketWebsite({
-        bucket: parsers.autocomplete(bucket)
-    });
-}
-
-async function getBucketWebsite(action, settings){
-    const { bucket } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.getBucketWebsite({
-        bucket: parsers.autocomplete(bucket)
-    });
-} 
-
-async function listBuckets(action, settings){
-    const client = S3Service.from(action.params, settings);
-    return client.listBuckets();
-}
-
-async function listObjectsInBucket(action, settings){
-    const { BUCKET_NAME: bucket, prefix, maxResults, nextToken } = action.params;
-    const client = S3Service.from(action.params, settings);
-    return client.listObjectsInBucket({
-        bucket: parsers.autocomplete(bucket),
-        prefix: parsers.string(prefix),
-        maxResults: parsers.number(maxResults),
-        nextToken: parsers.string(nextToken)
-    });
+function s3Func(functionName, payloadFunction = null) {
+  return awsPlugin.mapToAws(aws.S3, functionName, payloadFunction);
 }
 
 module.exports = {
-	createBucket,
-	uploadFileToBucket,
-	deleteBucket,
-	deleteObject,
-	managePublicAccessBlock,
-	putBucketAcl,
-	putCannedACL,
-	putBucketVersioning,
-	putBucketPolicy,
-	getBucketPolicy,
-	deleteBucketPolicy,
-	putBucketLogging,
-	putBucketEncryption,
-	putBucketWebsite,
-	putBucketWebsiteRedirect,
-	deleteBucketWebsite,
-	getBucketWebsite,
-    listBuckets,
-	listObjectsInBucket,
-    // Autocomplete Functions
-    ...require("./autocomplete")
-}
+  createBucket: s3Func("createBucket", payloadFunctions.prepareCreateBucketPayload),
+  deleteBucket: s3Func("deleteBucket"),
+  deleteObject: s3Func("deleteObject"),
+  listObjectsInBucket: s3Func("listObjectsV2"),
+  listBuckets: s3Func("listBuckets"),
+  managePublicAccessBlock: s3Func("managePublicAccessBlock", payloadFunctions.prepareManagePublicAccessBlockPayload),
+  putCannedACL: s3Func("putCannedACL"),
+  putBucketVersioning: s3Func("putBucketVersioning", payloadFunctions.preparePutBucketVersioningPayload),
+  getBucketPolicy: s3Func("getBucketPolicy"),
+  deleteBucketPolicy: s3Func("deleteBucketPolicy"),
+  deleteBucketWebsite: s3Func("deleteBucketWebsite"),
+  getBucketWebsite: s3Func("getBucketWebsite"),
+  putBucketWebsite: s3Func("putBucketWebsite", payloadFunctions.preparePutBucketWebsitePayload),
+  putBucketWebsiteRedirect: s3Func("putBucketWebsite", payloadFunctions.preparePutBucketWebsiteRedirectPayload),
+  uploadFileToBucket,
+  putBucketAcl,
+  putBucketLogging,
+  putBucketEncryption,
+  putBucketPolicy,
+
+  // Autocomplete Functions
+  ...autocomplete,
+};

@@ -66,7 +66,8 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "BUCKET_NAME",
+          "name": "Bucket",
+          "required": true,
           "viewName": "Name",
           "type": "string",
           "description": "The name of the new bucket to create.",
@@ -106,27 +107,30 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "BUCKET_NAME",
+          "name": "bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "required": true,
+          "functionName": "listBuckets",
           "description": "The bucket to upload the object to.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
-          "name": "FILE_PATH",
+          "name": "srcPath",
           "viewName": "File Path",
           "type": "string",
+          "required": true,
           "description": "Local location of the file to upload.",
           "placeholder": "/home/user/file_to_upload.js",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html"
         },
         {
-          "name": "DEST_FILE_PATH",
+          "name": "destPath",
           "viewName": "Dest Object Path",
           "type": "string",
+          "required": true,
           "description": "Destination to upload the file in the S3 bucket.",
           "placeholder": "s3://home/folder/",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html"
@@ -164,11 +168,12 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "BUCKET_NAME",
+          "name": "Bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to delete.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -206,19 +211,21 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "BUCKET_NAME",
+          "name": "Bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
-          "name": "OBJECT_NAME",
+          "name": "Key",
           "viewName": "Object Path",
           "type": "string",
+          "required": true,
           "description": "Objects are the fundamental entities stored in Amazon S3. Objects consist of object data and metadata. The metadata is a set of name-value pairs that describe the object. These pairs include some default metadata, such as the date last modified, and standard HTTP metadata, such as Content-Type.",
           "placeholder": "object-name-1",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/delete-objects.html"
@@ -256,17 +263,18 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "BUCKET_NAME",
+          "name": "Bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
-          "name": "prefix",
+          "name": "Prefix",
           "viewName": "Prefix",
           "type": "string",
           "description": "Managing a prefix to limit the response to the keys.",
@@ -274,7 +282,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html"
         },
         {
-          "name": "maxResults",
+          "name": "MaxKeys",
           "viewName": "Max Results",
           "type": "string",
           "description": "The maximum number of results to return. Default value is 1000.",
@@ -282,7 +290,7 @@
           "learnUrl": "https://github.com/Kaholo/kaholo-plugin-amazon-s3"
         },
         {
-          "name": "nextToken",
+          "name": "ContinuationToken",
           "viewName": "Next Continuation Token",
           "type": "string",
           "description": "In case of pagination. If listed objects and more results are left to return then 'NextContinuationToken' will be provided for you to continue listing from the point stopped.",
@@ -354,11 +362,12 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "BUCKET_NAME",
+          "name": "Bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -428,11 +437,12 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "BUCKET_NAME",
+          "name": "bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -490,7 +500,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/managing-acls.html"
         },
         {
-          "name": "URI",
+          "name": "groups",
           "viewName": "Groups URIs",
           "type": "options",
           "description": "The uri of the predefined group(s) to allow access to the bucket. To specify multiple values provide an array of group URIs from code.",
@@ -512,7 +522,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/s3/model/GroupGrantee.html"
         },
         {
-          "name": "userID",
+          "name": "users",
           "viewName": "Users Canonical IDs",
           "type": "text",
           "description": "The canonical user ID is an alpha-numeric identifier, that is an obfuscated form of the AWS account ID. You may use this ID to identify an AWS account when granting cross-account access.",
@@ -520,7 +530,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/finding-canonical-user-id.html#:~:text=The%20canonical%20user%20ID%20is,and%20objects%20using%20Amazon%20S3."
         },
         {
-          "name": "emailAddress",
+          "name": "emails",
           "viewName": "Users Email Addresses",
           "type": "text",
           "description": "Permitting the access to users with the mentioned email addresses.",
@@ -576,11 +586,12 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "BUCKET_NAME",
+          "name": "Bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -589,6 +600,7 @@
           "name": "ACL",
           "viewName": "Canned ACL Type",
           "type": "options",
+          "required": true,
           "options": [
             {
               "id": "private",
@@ -644,17 +656,18 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "bucketName",
+          "name": "Bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
-          "name": "status",
+          "name": "Status",
           "viewName": "Status",
           "type": "options",
           "options": [
@@ -672,7 +685,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html"
         },
         {
-          "name": "mfaDelete",
+          "name": "MFADelete",
           "viewName": "MFA Delete",
           "type": "options",
           "options": [
@@ -690,7 +703,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingMFADelete.html"
         },
         {
-          "name": "mfa",
+          "name": "MFA",
           "viewName": "MFA",
           "type": "string",
           "description": "MFA-protected API access is used to enforce another authentication factor (MFA code) when accessing sensitive Amazon S3 resources.",
@@ -730,19 +743,21 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "bucketName",
+          "name": "Bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
-          "name": "policy",
+          "name": "Policy",
           "viewName": "Policy Object",
           "type": "text",
+          "required": true,
           "description": "The policy to apply to this bucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html"
         }
@@ -779,11 +794,12 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "bucketName",
+          "name": "Bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -821,11 +837,12 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "bucketName",
+          "name": "Bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -863,11 +880,11 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "bucketName",
+          "name": "srcBucket",
           "viewName": "Source Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to enable or disable logging in.",
           "placeholder": "bucket-01",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/logging-with-S3.html"
@@ -885,7 +902,7 @@
           "viewName": "Target Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "Save logs in the specified bucket in the field.",
           "placeholder": "angular-bucket-app",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html"
@@ -921,7 +938,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html"
         },
         {
-          "name": "groupUris",
+          "name": "groups",
           "viewName": "Groups URIs",
           "type": "options",
           "description": "Uniform Resource Identifier (URI) to help streamline user login workflows.",
@@ -943,7 +960,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html#:~:text=If%20you%20access%20a%20bucket,URLs%20to%20access%20a%20bucket."
         },
         {
-          "name": "userIds",
+          "name": "users",
           "viewName": "User Canonical IDs",
           "type": "text",
           "description": "The canonical user ID is an alpha-numeric identifier, that is an obfuscated form of the AWS account ID. You can use this ID to identify an AWS account when granting cross-account access.",
@@ -1007,11 +1024,11 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "bucketName",
+          "name": "bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -1043,7 +1060,7 @@
           "viewName": "KMS Master Key",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listKeysAuto",
+          "functionName": "listKeys",
           "description": "S3 service master key S3 will decrypt the object for anyone with permission to access this object. Use an AWS Key Management Service master key. S3 will decrypt the object for anyone with permission to access this object and permission to use the master key.",
           "placeholder": "aws:s3:arn.:::bucket-01",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html"
@@ -1093,7 +1110,7 @@
           "viewName": "Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -1159,7 +1176,7 @@
           "viewName": "Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -1223,11 +1240,12 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "bucket",
+          "name": "Bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to get it's static website hosting configuration.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -1265,11 +1283,12 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "bucket",
+          "name": "Bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBuckets",
           "description": "The bucket to disable static website hosting on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
