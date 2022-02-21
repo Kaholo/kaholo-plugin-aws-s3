@@ -153,5 +153,7 @@ module.exports = {
   putBucketPolicy,
 
   // Autocomplete Functions
-  ...autocomplete,
+  listBucketsAutocomplete: autocomplete.listBucketsAutocomplete,
+  listRegionsAutocomplete: autocomplete.listRegionsAutocomplete,
+  listKeysAutocomplete: autocomplete.listKeysAutocomplete,
 };
