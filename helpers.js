@@ -126,9 +126,9 @@ async function getNewGrantees({
   groups, users, emails, grantToSignedUser,
 }, client) {
   const newGrantees = [
-    ...parseGrantees(groups, "Group"),
-    ...parseGrantees(users, "CanonicalUser"),
-    ...parseGrantees(emails, "EmailAddress"),
+    ...parseGrantees(groups || [], "Group"),
+    ...parseGrantees(users || [], "CanonicalUser"),
+    ...parseGrantees(emails || [], "EmailAddress"),
   ];
 
   if (grantToSignedUser && !_.isNil(client)) {

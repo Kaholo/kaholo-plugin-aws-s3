@@ -19,17 +19,21 @@ async function uploadFileToBucket(action, settings) {
 }
 
 async function putBucketAcl(action, settings) {
-  const { client, params } = awsPlugin.handleInput(aws.S3, action, settings);
+  const { client, params } = awsPlugin.handleInput(aws.S3, action, settings, {
+    groups: "array",
+    users: "array",
+    emails: "array",
+  });
 
   if (!(params.grantToSignedUser
-      || params.groups.length
-      || params.users.length
-      || params.emails.length)) {
+      || params.groups?.length
+      || params.users?.length
+      || params.emails?.length)) {
     throw new Error("Please provide at least one receiver of the permissions");
   }
 
   const permissionTypes = helpers.resolveBucketAclPermissions(params);
-  const newGrantees = helpers.getNewGrantees(params, client);
+  const newGrantees = await helpers.getNewGrantees(params, client);
   const currentAcl = await client.getBucketAcl({ Bucket: params.bucket }).promise();
   const currentGrants = params.dontOverwrite ? currentAcl.Grants : [];
   const newGrants = helpers.getGrants(newGrantees, permissionTypes);
@@ -50,7 +54,11 @@ async function putBucketPolicy(action, settings) {
 }
 
 async function putBucketLogging(action, settings) {
-  const { client, params } = awsPlugin.handleInput(aws.S3, action, settings);
+  const { client, params } = awsPlugin.handleInput(aws.S3, action, settings, {
+    groups: "array",
+    users: "array",
+    emails: "array",
+  });
 
   if (params.disableLogging) {
     return client.putBucketLogging({
