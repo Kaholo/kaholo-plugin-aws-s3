@@ -1,5 +1,6 @@
 const aws = require("aws-sdk");
 
+const _ = require("lodash");
 const awsPlugin = require("kaholo-aws-plugin");
 const payloadFunctions = require("./payload-functions");
 const helpers = require("./helpers");
@@ -26,9 +27,9 @@ async function putBucketAcl(action, settings) {
   });
 
   if (!(params.grantToSignedUser
-      || params.groups?.length
-      || params.users?.length
-      || params.emails?.length)) {
+      || !_.isEmpty(params.groups)
+      || !_.isEmpty(params.users)
+      || !_.isEmpty(params.emails))) {
     throw new Error("Please provide at least one receiver of the permissions");
   }
 

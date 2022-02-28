@@ -24,10 +24,10 @@ function parseGrantees(grantees, granteeType) {
 }
 
 function getGrants(grantees, permissionTypes) {
-  return permissionTypes.map((permissionType) => grantees.map((grantee) => ({
+  return _.flatten(permissionTypes.map((permissionType) => grantees.map((grantee) => ({
     Grantee: grantee,
     Permission: permissionType,
-  }))).flat();
+  }))));
 }
 
 function combineGrants(currentGrants, newGrants) {

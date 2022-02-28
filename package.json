@@ -9,13 +9,15 @@
 	},
 	"author": "Kaholo Group(Amit Alon)",
 	"license": "ISC",
-	"dependencies": {
-		"aws-sdk": "^2.1030.0",
+	"devDependencies": {
 		"eslint": "^8.8.0",
 		"eslint-config-airbnb-base": "^15.0.0",
 		"eslint-plugin-import": "^2.25.4",
-		"jest": "^27.5.0",
-		"kaholo-aws-plugin": "github:Kaholo/aws-plugin#KP-565",
+		"jest": "^27.5.0"
+	},
+	"dependencies": {
+		"aws-sdk": "^2.1030.0",
+		"kaholo-aws-plugin": "file:aws-plugin",
 		"lodash": "^4.17.21"
 	}
 }
