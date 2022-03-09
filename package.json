@@ -1,6 +1,5 @@
 {
 	"name": "kaholo-plugin-amazon-aws-s3",
-	"version": "2.0.4",
 	"description": "Kaholo plugin for integration with AWS S3 API.",
 	"main": "app.js",
 	"scripts": {

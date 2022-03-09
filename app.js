@@ -28,11 +28,12 @@ async function deleteBucket(action, settings){
 }
 
 async function deleteObject(action, settings){
-    const { BUCKET_NAME: bucket, OBJECT_NAME: path } = action.params;
+    const { BUCKET_NAME: bucket, OBJECT_NAME: path, RECURSIVELY: recursively } = action.params;
     const client = S3Service.from(action.params, settings);
     return client.deleteObject({
         bucket: parsers.autocomplete(bucket),
-        path: parsers.string(path)
+        path: parsers.string(path),
+        recursively: parsers.boolean(recursively)
     });
 }
 

@@ -3,6 +3,31 @@ const parsers = require("./parsers");
 const AWS = require("aws-sdk");
 const fs = require("fs");
 
+async function emptyS3Directory(bucket, dir, s3) {
+    const listParams = {
+        Bucket: bucket,
+        Prefix: dir
+    };
+
+    const listedObjects = await s3.listObjectsV2(listParams).promise();
+
+    if (listedObjects.Contents.length === 0) return;
+
+    const deleteParams = {
+        Bucket: bucket,
+        Delete: { Objects: [] }
+    };
+
+    listedObjects.Contents.forEach(({ Key }) => {
+        console.warn(`adding ${Key} to delete`);
+        deleteParams.Delete.Objects.push({ Key });
+    });
+
+    await s3.deleteObjects(deleteParams).promise();
+
+    if (listedObjects.IsTruncated) await emptyS3Directory(bucket, dir);
+}
+
 module.exports = class S3Service{
     constructor({accessKeyId, secretAccessKey, region}){
         if (!accessKeyId || !secretAccessKey) throw "Didn't provide access key!";
@@ -79,15 +104,18 @@ module.exports = class S3Service{
         });
     }
     
-    async deleteObject({bucket, path}){
+    async deleteObject({bucket, path, recursively}){
         if (!bucket || !path){ 
             throw "Didn't provide one of the required parameters.";
+        }
+        if (recursively) {
+            await emptyS3Directory(bucket, path, this.s3);
         }
         return this.s3.deleteObject({
             Bucket: bucket,
             Key: path
         }).promise();
-        
+
     }
     
     // manage bucket configurations methods
