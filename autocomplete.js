@@ -4,7 +4,7 @@ const parsers = require("./parsers");
 const S3Service = require("./aws.s3.service");
 
 const MAX_RESULTS = 10;
-const MISSING_OR_INCORRECT_CREDENTIALS_ERROR = "Missing or incorrect credentials - please select valid access and secret keys first";
+const MISSING_OR_INCORRECT_CREDENTIALS_MESSAGE = "Missing or incorrect credentials - please select valid access and secret keys first";
 
 // auto complete helper methods
 
@@ -100,7 +100,7 @@ async function listRegions(query, pluginSettings, actionParams) {
     }),
   ).catch((err) => {
     console.error(err);
-    throw MISSING_OR_INCORRECT_CREDENTIALS_ERROR;
+    throw MISSING_OR_INCORRECT_CREDENTIALS_MESSAGE;
   });
 }
 
