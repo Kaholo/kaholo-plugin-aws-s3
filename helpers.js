@@ -27,12 +27,20 @@ function getAwsCallback(resolve, reject) {
 function removeUndefinedAndEmpty(obj, removeSpecial) {
   const resolvedObj = obj;
   Object.entries(resolvedObj).forEach(([key, value]) => {
-    if (value === undefined) { delete resolvedObj[key]; }
-    if (removeSpecial && typeof (value) === "string") { delete resolvedObj[key]; }
-    if (Array.isArray(value) && value.length === 0) { delete resolvedObj[key]; }
+    if (value === undefined) {
+      delete resolvedObj[key];
+    }
+    if (removeSpecial && typeof (value) === "string") {
+      delete resolvedObj[key];
+    }
+    if (Array.isArray(value) && value.length === 0) {
+      delete resolvedObj[key];
+    }
     if (typeof (value) === "object") {
       removeUndefinedAndEmpty(value);
-      if (Object.keys(value).length === 0) { delete resolvedObj[key]; }
+      if (Object.keys(value).length === 0) {
+        delete resolvedObj[key];
+      }
     }
   });
   return resolvedObj;

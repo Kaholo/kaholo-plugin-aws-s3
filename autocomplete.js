@@ -53,11 +53,11 @@ function handleResult(result, query, keyField, valField) {
 
 function listAuto(listFuncName, outputName, fields = []) {
   return async (query, pluginSettings, triggerParameters) => {
-    const settings = mapAutoParams(pluginSettings); const
-      params = mapAutoParams(triggerParameters);
+    const settings = mapAutoParams(pluginSettings);
+    const params = mapAutoParams(triggerParameters);
     const client = S3Service.from(params, settings);
-    let nextToken; const
-      items = [];
+    let nextToken;
+    const items = [];
     do {
       // eslint-disable-next-line
       const result = await client[listFuncName]({
