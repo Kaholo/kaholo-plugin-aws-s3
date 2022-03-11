@@ -5,9 +5,11 @@ const fs = require("fs");
 
 async function emptyS3Directory(bucket, dir, s3) {
     const listParams = {
-        Bucket: bucket,
-        Prefix: dir
+        Bucket: bucket
     };
+    if (dir) {
+        listParams.Prefix = dir;
+    }
 
     const listedObjects = await s3.listObjectsV2(listParams).promise();
 
@@ -25,7 +27,9 @@ async function emptyS3Directory(bucket, dir, s3) {
 
     await s3.deleteObjects(deleteParams).promise();
 
-    if (listedObjects.IsTruncated) await emptyS3Directory(bucket, dir);
+    if (listedObjects.IsTruncated) {
+        await emptyS3Directory(bucket, dir, s3);
+    }
 }
 
 module.exports = class S3Service{
@@ -72,8 +76,11 @@ module.exports = class S3Service{
         })).promise();
     }
     
-    async deleteBucket({bucket}){
+    async deleteBucket({ bucket, recursively }){
         if (!bucket) throw "Must specify a bucket to delete.";
+        if (recursively) {
+            await emptyS3Directory(bucket, '', this.s3);
+        }
         return this.s3.deleteBucket({Bucket: bucket}).promise();
     }
     

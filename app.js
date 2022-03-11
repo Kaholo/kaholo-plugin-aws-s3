@@ -20,10 +20,11 @@ async function uploadFileToBucket(action, settings){
 }
 
 async function deleteBucket(action, settings){
-    const { BUCKET_NAME: bucket } = action.params;
+    const { BUCKET_NAME: bucket, RECURSIVELY: recursively } = action.params;
     const client = S3Service.from(action.params, settings);
     return client.deleteBucket({
-        bucket: parsers.autocomplete(bucket)
+        bucket: parsers.autocomplete(bucket),
+        recursively: parsers.boolean(recursively)
     });
 }
 

@@ -172,6 +172,13 @@
           "description": "The bucket to delete.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
+        },
+        {
+          "name": "RECURSIVELY",
+          "viewName": "Delete Recursively",
+          "type": "boolean",
+          "description" : "Recursively delete bucket and all its objects.",
+          "default": false
         }
       ]
     },
@@ -227,7 +234,8 @@
           "name": "RECURSIVELY",
           "viewName": "Delete Recursively",
           "type": "boolean",
-          "description" : "Recursively delete object and all it's contents."
+          "description" : "Recursively delete object and all its contents.",
+          "default": false
         }
       ]
     },
