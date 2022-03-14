@@ -4,6 +4,7 @@ const fs = require("fs");
 const GRANTEE_TYPE_TO_FIELD = {
   CanonicalUser: "ID",
   AmazonCustomerByEmail: "EmailAddress",
+  EmailAddress: "EmailAddress",
   Group: "URI",
 };
 
@@ -122,13 +123,13 @@ async function getUserId(client) {
   return (await client.listBuckets().promise()).Owner.ID;
 }
 
-async function getNewGrantees({
+async function getNewGrantees(client, {
   groups, users, emails, grantToSignedUser,
-}, client) {
+}) {
   const newGrantees = [
     ...parseGrantees(groups || [], "Group"),
     ...parseGrantees(users || [], "CanonicalUser"),
-    ...parseGrantees(emails || [], "EmailAddress"),
+    ...parseGrantees(emails || [], "AmazonCustomerByEmail"),
   ];
 
   if (grantToSignedUser && !_.isNil(client)) {

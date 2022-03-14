@@ -1,13 +1,12 @@
 const aws = require("aws-sdk");
-
 const _ = require("lodash");
+
 const awsPlugin = require("kaholo-aws-plugin");
 const payloadFunctions = require("./payload-functions");
 const helpers = require("./helpers");
 const autocomplete = require("./autocomplete");
 
-async function uploadFileToBucket(action, settings) {
-  const { client, params } = awsPlugin.handleInput(aws.S3, action, settings);
+async function uploadFileToBucket(client, params) {
   const fileBody = await helpers.readFile(params.srcPath);
 
   const payload = {
@@ -19,48 +18,36 @@ async function uploadFileToBucket(action, settings) {
   return client.upload(payload).promise();
 }
 
-async function putBucketAcl(action, settings) {
-  const { client, params } = awsPlugin.handleInput(aws.S3, action, settings, {
-    groups: "array",
-    users: "array",
-    emails: "array",
-  });
-
-  if (!(params.grantToSignedUser
-      || !_.isEmpty(params.groups)
-      || !_.isEmpty(params.users)
-      || !_.isEmpty(params.emails))) {
+async function putBucketAcl(client, params) {
+  if (!params.grantToSignedUser
+    && _.isEmpty(params.groups)
+    && _.isEmpty(params.users)
+    && _.isEmpty(params.emails)
+  ) {
     throw new Error("Please provide at least one receiver of the permissions");
   }
 
   const permissionTypes = helpers.resolveBucketAclPermissions(params);
-  const newGrantees = await helpers.getNewGrantees(params, client);
+  const newGrantees = await helpers.getNewGrantees(client, params);
   const currentAcl = await client.getBucketAcl({ Bucket: params.bucket }).promise();
   const currentGrants = params.dontOverwrite ? currentAcl.Grants : [];
   const newGrants = helpers.getGrants(newGrantees, permissionTypes);
-
-  return client.putBucketAcl({
+  const payload = {
     Bucket: params.bucket,
     AccessControlPolicy: {
       Grants: helpers.combineGrants(currentGrants, newGrants),
       Owner: currentAcl.Owner,
     },
-  }).promise();
+  };
+
+  return client.putBucketAcl(payload).promise();
 }
 
-async function putBucketPolicy(action, settings) {
-  const client = awsPlugin.getServiceInstance(aws.S3, action.params, settings);
-  const params = awsPlugin.helpers.readActionArguments(action, { Policy: "object" });
+async function putBucketPolicy(client, params) {
   return client.putBucketPolicy({ ...params, Policy: JSON.stringify(params.Policy) }).promise();
 }
 
-async function putBucketLogging(action, settings) {
-  const { client, params } = awsPlugin.handleInput(aws.S3, action, settings, {
-    groups: "array",
-    users: "array",
-    emails: "array",
-  });
-
+async function putBucketLogging(client, params) {
   if (params.disableLogging) {
     return client.putBucketLogging({
       Bucket: params.srcBucket,
@@ -74,7 +61,7 @@ async function putBucketLogging(action, settings) {
   let currentGrants = [];
 
   if (params.dontOverwrite) {
-    const loggingConfig = (await client.getBucketLogging({ Bucket: params.srcBucket }).promise());
+    const loggingConfig = await client.getBucketLogging({ Bucket: params.srcBucket }).promise();
     if (loggingConfig.LoggingEnabled) {
       currentGrants = loggingConfig.TargetGrants || currentGrants;
       targetBucket = loggingConfig.TargetBucket || targetBucket;
@@ -86,7 +73,7 @@ async function putBucketLogging(action, settings) {
     throw new Error("When enabling logging you must provide Target Bucket and Target Prefix");
   }
 
-  const newGrantees = await helpers.getNewGrantees(params, client);
+  const newGrantees = await helpers.getNewGrantees(client, params);
   const newGrants = params.permissionType
     ? helpers.getGrants(newGrantees, [params.permissionType])
     : [];
@@ -106,9 +93,7 @@ async function putBucketLogging(action, settings) {
   return client.putBucketLogging(payload).promise();
 }
 
-async function putBucketEncryption(action, settings) {
-  const { client, params } = awsPlugin.handleInput(aws.S3, action, settings);
-
+async function putBucketEncryption(client, params) {
   if (!params.sseAlgo || params.sseAlgo === "none") {
     return client.putBucketEncryption({
       Bucket: params.bucket,
@@ -136,33 +121,31 @@ async function putBucketEncryption(action, settings) {
   return client.putBucketEncryption(payload).promise();
 }
 
-function s3Func(functionName, payloadFunction = null) {
-  return awsPlugin.mapToAws(aws.S3, functionName, payloadFunction);
-}
-
-module.exports = {
-  createBucket: s3Func("createBucket", payloadFunctions.prepareCreateBucketPayload),
-  deleteBucket: s3Func("deleteBucket"),
-  deleteObject: s3Func("deleteObject"),
-  listObjectsInBucket: s3Func("listObjectsV2"),
-  listBuckets: s3Func("listBuckets"),
-  managePublicAccessBlock: s3Func("managePublicAccessBlock", payloadFunctions.prepareManagePublicAccessBlockPayload),
-  putCannedACL: s3Func("putCannedACL"),
-  putBucketVersioning: s3Func("putBucketVersioning", payloadFunctions.preparePutBucketVersioningPayload),
-  getBucketPolicy: s3Func("getBucketPolicy"),
-  deleteBucketPolicy: s3Func("deleteBucketPolicy"),
-  deleteBucketWebsite: s3Func("deleteBucketWebsite"),
-  getBucketWebsite: s3Func("getBucketWebsite"),
-  putBucketWebsite: s3Func("putBucketWebsite", payloadFunctions.preparePutBucketWebsitePayload),
-  putBucketWebsiteRedirect: s3Func("putBucketWebsite", payloadFunctions.preparePutBucketWebsiteRedirectPayload),
-  uploadFileToBucket,
-  putBucketAcl,
-  putBucketLogging,
-  putBucketEncryption,
-  putBucketPolicy,
-
-  // Autocomplete Functions
-  listBucketsAutocomplete: autocomplete.listBucketsAutocomplete,
-  listRegionsAutocomplete: autocomplete.listRegionsAutocomplete,
-  listKeysAutocomplete: autocomplete.listKeysAutocomplete,
-};
+module.exports = awsPlugin.bootstrap(
+  aws.S3,
+  {
+    createBucket: awsPlugin.mapToAwsMethod("createBucket", payloadFunctions.prepareCreateBucketPayload),
+    deleteBucket: awsPlugin.mapToAwsMethod("deleteBucket"),
+    deleteObject: awsPlugin.mapToAwsMethod("deleteObject"),
+    listObjectsInBucket: awsPlugin.mapToAwsMethod("listObjectsV2"),
+    listBuckets: awsPlugin.mapToAwsMethod("listBuckets"),
+    managePublicAccessBlock: awsPlugin.mapToAwsMethod("managePublicAccessBlock", payloadFunctions.prepareManagePublicAccessBlockPayload),
+    putCannedACL: awsPlugin.mapToAwsMethod("putCannedACL"),
+    putBucketVersioning: awsPlugin.mapToAwsMethod("putBucketVersioning", payloadFunctions.preparePutBucketVersioningPayload),
+    getBucketPolicy: awsPlugin.mapToAwsMethod("getBucketPolicy"),
+    deleteBucketPolicy: awsPlugin.mapToAwsMethod("deleteBucketPolicy"),
+    deleteBucketWebsite: awsPlugin.mapToAwsMethod("deleteBucketWebsite"),
+    getBucketWebsite: awsPlugin.mapToAwsMethod("getBucketWebsite"),
+    putBucketWebsite: awsPlugin.mapToAwsMethod("putBucketWebsite", payloadFunctions.preparePutBucketWebsitePayload),
+    putBucketWebsiteRedirect: awsPlugin.mapToAwsMethod("putBucketWebsite", payloadFunctions.preparePutBucketWebsiteRedirectPayload),
+    uploadFileToBucket,
+    putBucketAcl,
+    putBucketLogging,
+    putBucketEncryption,
+    putBucketPolicy,
+  },
+  {
+    // Autocomplete Functions
+    ...autocomplete,
+  },
+);

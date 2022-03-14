@@ -503,6 +503,7 @@
           "name": "groups",
           "viewName": "Groups URIs",
           "type": "options",
+          "parserType": "array",
           "description": "The uri of the predefined group(s) to allow access to the bucket. To specify multiple values provide an array of group URIs from code.",
           "options": [
             {
@@ -525,6 +526,7 @@
           "name": "users",
           "viewName": "Users Canonical IDs",
           "type": "text",
+          "parserType": "array",
           "description": "The canonical user ID is an alpha-numeric identifier, that is an obfuscated form of the AWS account ID. You may use this ID to identify an AWS account when granting cross-account access.",
           "placeholder": "79a59df900b949e55d96a1e698fbacedfd6e09d98eacf8f8d5218e7cd47ef2be",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/finding-canonical-user-id.html#:~:text=The%20canonical%20user%20ID%20is,and%20objects%20using%20Amazon%20S3."
@@ -533,6 +535,7 @@
           "name": "emails",
           "viewName": "Users Email Addresses",
           "type": "text",
+          "parserType": "array",
           "description": "Permitting the access to users with the mentioned email addresses.",
           "placeholder": "user@gmail.com",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html"
@@ -757,6 +760,7 @@
           "name": "Policy",
           "viewName": "Policy Object",
           "type": "text",
+          "parserType": "object",
           "required": true,
           "description": "The policy to apply to this bucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html"
@@ -941,6 +945,7 @@
           "name": "groups",
           "viewName": "Groups URIs",
           "type": "options",
+          "parserType": "array",
           "description": "Uniform Resource Identifier (URI) to help streamline user login workflows.",
           "options": [
             {
@@ -963,6 +968,7 @@
           "name": "users",
           "viewName": "User Canonical IDs",
           "type": "text",
+          "parserType": "array",
           "description": "The canonical user ID is an alpha-numeric identifier, that is an obfuscated form of the AWS account ID. You can use this ID to identify an AWS account when granting cross-account access.",
           "placeholder": "79a59df900b949e55d96a1e698fbacedfd6e09d98eacf8f8d5218e7cd47ef2be",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/finding-canonical-user-id.html#:~:text=The%20canonical%20user%20ID%20is,and%20objects%20using%20Amazon%20S3."
@@ -971,6 +977,7 @@
           "name": "emails",
           "viewName": "Email Addresses",
           "type": "text",
+          "parserType": "array",
           "description": "Permitting the access to the logs inside the specified bucket to users with the mentioned email addresses.",
           "placeholder": "user@gmail.com",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html"
