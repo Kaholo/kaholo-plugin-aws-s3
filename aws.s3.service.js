@@ -5,35 +5,6 @@ const {
 } = require("./helpers");
 const parsers = require("./parsers");
 
-async function emptyS3Directory(bucket, dir, s3) {
-  const listParams = {
-    Bucket: bucket,
-  };
-  if (dir) {
-    listParams.Prefix = dir;
-  }
-
-  const listedObjects = await s3.listObjectsV2(listParams).promise();
-
-  if (listedObjects.Contents.length === 0) { return; }
-
-  const deleteParams = {
-    Bucket: bucket,
-    Delete: { Objects: [] },
-  };
-
-  listedObjects.Contents.forEach(({ Key }) => {
-    console.warn(`adding ${Key} to delete`);
-    deleteParams.Delete.Objects.push({ Key });
-  });
-
-  await s3.deleteObjects(deleteParams).promise();
-
-  if (listedObjects.IsTruncated) {
-    await emptyS3Directory(bucket, dir, s3);
-  }
-}
-
 module.exports = class S3Service {
   constructor({ accessKeyId, secretAccessKey, region }) {
     if (!accessKeyId || !secretAccessKey) {
@@ -82,10 +53,38 @@ module.exports = class S3Service {
     })).promise();
   }
 
+  async emptyDirectory(bucket, dir) {
+    const listParams = {
+      Bucket: bucket,
+    };
+    if (dir) {
+      listParams.Prefix = dir;
+    }
+
+    const listedObjects = await this.s3.listObjectsV2(listParams).promise();
+    if (listedObjects.Contents.length === 0) {
+      return;
+    }
+    const deleteParams = {
+      Bucket: bucket,
+      Delete: { Objects: [] },
+    };
+
+    listedObjects.Contents.forEach(({ Key }) => {
+      console.warn(`adding ${Key} to delete`);
+      deleteParams.Delete.Objects.push({ Key });
+    });
+
+    await this.s3.deleteObjects(deleteParams).promise();
+    if (listedObjects.IsTruncated) {
+      await this.emptyDirectory(bucket, dir);
+    }
+  }
+
   async deleteBucket({ bucket, recursively }) {
     if (!bucket) { throw new Error("Must specify a bucket to delete."); }
     if (recursively) {
-      await emptyS3Directory(bucket, "", this.s3);
+      await this.emptyDirectory(bucket);
     }
     return this.s3.deleteBucket({ Bucket: bucket }).promise();
   }
@@ -120,7 +119,7 @@ module.exports = class S3Service {
       throw new Error("Didn't provide one of the required parameters.");
     }
     if (recursively) {
-      await emptyS3Directory(bucket, path, this.s3);
+      await this.emptyDirectory(bucket, path);
     }
     return this.s3.deleteObject({
       Bucket: bucket,
