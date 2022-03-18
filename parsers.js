@@ -2,7 +2,7 @@ function parseArray(value) {
   if (!value) { return []; }
   if (Array.isArray(value)) { return value; }
   if (typeof (value) === "string") { return value.split("\n").map((line) => line.trim()).filter((line) => line); }
-  throw new Error("Unsupprted array format");
+  throw new Error("Unsupported array format");
 }
 
 module.exports = {

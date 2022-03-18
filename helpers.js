@@ -4,6 +4,28 @@ const GRANTEE_TYPE_TO_FIELD = {
   Group: "URI",
 };
 
+function combineGrants(currentGrants, newGrants) {
+  if (currentGrants.length === 0) { return newGrants; }
+  return currentGrants.concat(newGrants.filter((newGrant) => !currentGrants.find((grant) => {
+    if (grant.Permission !== newGrant.Permission) { return false; }
+    if (grant.Grantee.Type !== newGrant.Grantee.Type) { return false; }
+    const valField = GRANTEE_TYPE_TO_FIELD[grant.Grantee.Type];
+    if (grant.Grantee[valField] !== newGrant.Grantee[valField]) { return false; }
+    return true;
+  })));
+}
+
+function parseGrantees(grantees, granteeType) {
+  return grantees.map((grantee) => parseGrantee(grantee, granteeType));
+}
+
+function getGrants(grantees, permissionTypes) {
+  return permissionTypes.map((permissionType) => grantees.map((grantee) => ({
+    Grantee: grantee,
+    Permission: permissionType,
+  }))).flat();
+}
+
 function parseGrantee(grantee, granteeType) {
   const valField = GRANTEE_TYPE_TO_FIELD[granteeType];
   const granteeObj = {
@@ -11,10 +33,6 @@ function parseGrantee(grantee, granteeType) {
   };
   granteeObj[valField] = grantee;
   return granteeObj;
-}
-
-function parseGrantees(grantees, granteeType) {
-  return grantees.map((grantee) => parseGrantee(grantee, granteeType));
 }
 
 function getAwsCallback(resolve, reject) {
@@ -44,24 +62,6 @@ function removeUndefinedAndEmpty(obj, removeSpecial) {
     }
   });
   return resolvedObj;
-}
-
-function getGrants(grantees, permissionTypes) {
-  return permissionTypes.map((permissionType) => grantees.map((grantee) => ({
-    Grantee: grantee,
-    Permission: permissionType,
-  }))).flat();
-}
-
-function combineGrants(currentGrants, newGrants) {
-  if (currentGrants.length === 0) { return newGrants; }
-  return currentGrants.concat(newGrants.filter((newGrant) => !currentGrants.find((grant) => {
-    if (grant.Permission !== newGrant.Permission) { return false; }
-    if (grant.Grantee.Type !== newGrant.Grantee.Type) { return false; }
-    const valField = GRANTEE_TYPE_TO_FIELD[grant.Grantee.Type];
-    if (grant.Grantee[valField] !== newGrant.Grantee[valField]) { return false; }
-    return true;
-  })));
 }
 
 module.exports = {

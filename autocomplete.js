@@ -4,52 +4,7 @@ const parsers = require("./parsers");
 const S3Service = require("./aws.s3.service");
 
 const MAX_RESULTS = 10;
-const MISSING_OR_INCORRECT_CREDENTIALS_MESSAGE = "Missing or incorrect credentials - please select valid access and secret keys first";
-
-// auto complete helper methods
-
-function mapAutoParams(autoParams) {
-  const params = {};
-  autoParams.forEach((param) => {
-    params[param.name] = parsers.autocomplete(param.value);
-  });
-  return params;
-}
-
-/** *
- * @returns {{id, value}} formatted autocomplete item
- ** */
-function getAutoResult(id, value) {
-  return {
-    id: id || value,
-    value: value || id,
-  };
-}
-
-function filterItems(items, query) {
-  let filteredItems = items;
-  if (query) {
-    const qWords = query.split(/[. ]/g).map((word) => word.toLowerCase()); // split by '.' or ' ' and make lower case
-    filteredItems = filteredItems.filter((item) => (
-      qWords.every((word) => item.value.toLowerCase().includes(word))
-    ));
-    filteredItems = filteredItems.sort((word1, word2) => (
-      word1.value.toLowerCase().indexOf(qWords[0]) - word2.value.toLowerCase().indexOf(qWords[0])
-    ));
-  }
-  return filteredItems.splice(0, MAX_RESULTS);
-}
-
-/** *
- * @returns {[{id, value}]} filtered result items
- ** */
-function handleResult(result, query, keyField, valField) {
-  if (!result || result.length === 0) { return []; }
-  const items = result.map((item) => (
-    getAutoResult(keyField ? item[keyField] : item, keyField ? item[valField] : item)
-  ));
-  return filterItems(items, query);
-}
+const MISSING_OR_INCORRECT_CREDENTIALS_ERROR_MESSAGE = "Missing or incorrect credentials - please select valid access and secret keys first";
 
 function listAuto(listFuncName, outputName, fields = []) {
   return async (query, pluginSettings, triggerParameters) => {
@@ -100,8 +55,53 @@ async function listRegions(query, pluginSettings, actionParams) {
     }),
   ).catch((err) => {
     console.error(err);
-    throw MISSING_OR_INCORRECT_CREDENTIALS_MESSAGE;
+    throw MISSING_OR_INCORRECT_CREDENTIALS_ERROR_MESSAGE;
   });
+}
+
+// auto complete helper methods
+
+/** *
+ * @returns {[{id, value}]} filtered result items
+ ** */
+function handleResult(result, query, keyField, valField) {
+  if (!result || result.length === 0) { return []; }
+  const items = result.map((item) => (
+    getAutoResult(keyField ? item[keyField] : item, keyField ? item[valField] : item)
+  ));
+  return filterItems(items, query);
+}
+
+function filterItems(items, query) {
+  let filteredItems = items;
+  if (query) {
+    const qWords = query.split(/[. ]/g).map((word) => word.toLowerCase()); // split by '.' or ' ' and make lower case
+    filteredItems = filteredItems.filter((item) => (
+      qWords.every((word) => item.value.toLowerCase().includes(word))
+    ));
+    filteredItems = filteredItems.sort((word1, word2) => (
+      word1.value.toLowerCase().indexOf(qWords[0]) - word2.value.toLowerCase().indexOf(qWords[0])
+    ));
+  }
+  return filteredItems.splice(0, MAX_RESULTS);
+}
+
+function mapAutoParams(autoParams) {
+  const params = {};
+  autoParams.forEach((param) => {
+    params[param.name] = parsers.autocomplete(param.value);
+  });
+  return params;
+}
+
+/** *
+ * @returns {{id, value}} formatted autocomplete item
+ ** */
+function getAutoResult(id, value) {
+  return {
+    id: id || value,
+    value: value || id,
+  };
 }
 
 module.exports = {
