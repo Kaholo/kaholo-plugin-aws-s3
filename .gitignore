@@ -1,5 +1,4 @@
 node_modules
-aws-plugin/node_modules
 package-lock.json
 test
 .history
