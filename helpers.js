@@ -1,5 +1,6 @@
 const _ = require("lodash");
 const fs = require("fs");
+const { removeUndefinedAndEmpty } = require("kaholo-aws-plugin/helpers");
 
 const GRANTEE_TYPE_TO_FIELD = {
   CanonicalUser: "ID",
@@ -139,10 +140,37 @@ async function getNewGrantees(client, {
   return newGrantees;
 }
 
+async function emptyDirectory(client, bucket, directory = "") {
+  const listPayload = removeUndefinedAndEmpty({
+    Bucket: bucket,
+    Prefix: directory,
+  });
+
+  const listedObjects = await client.listObjectsV2(listPayload).promise();
+  if (listedObjects.Contents.length === 0) {
+    return;
+  }
+
+  const deletePayload = {
+    Bucket: bucket,
+    Delete: { Objects: [] },
+  };
+
+  listedObjects.Contents.forEach(({ Key }) => {
+    deletePayload.Delete.Objects.push({ Key });
+  });
+
+  await client.deleteObjects(deletePayload).promise();
+  if (listedObjects.IsTruncated) {
+    await emptyDirectory(bucket, directory);
+  }
+}
+
 module.exports = {
   readFile,
   resolveBucketAclPermissions,
   getNewGrantees,
   getGrants,
   combineGrants,
+  emptyDirectory,
 };

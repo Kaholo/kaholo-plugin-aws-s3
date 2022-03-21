@@ -1,4 +1,5 @@
 node_modules
+.kaholotmp
 package-lock.json
 test
 .history
