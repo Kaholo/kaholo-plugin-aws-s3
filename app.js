@@ -7,6 +7,20 @@ const helpers = require("./helpers");
 const autocomplete = require("./autocomplete");
 const consts = require("./consts.json");
 
+async function deleteBucket(client, params) {
+  if (params.recursively) {
+    await helpers.emptyDirectory(client, params.Bucket);
+  }
+  return client.deleteBucket({ Bucket: params.Bucket }).promise();
+}
+
+async function deleteObject(client, params) {
+  if (params.recursively) {
+    await helpers.emptyDirectory(client, params.Bucket, params.Key);
+  }
+  return client.deleteObject({ Bucket: params.Bucket, Key: params.Key }).promise();
+}
+
 async function uploadFileToBucket(client, params) {
   const fileBody = await helpers.readFile(params.srcPath);
 
@@ -133,8 +147,8 @@ module.exports = awsPlugin.bootstrap(
   aws.S3,
   {
     createBucket: awsPlugin.mapToAwsMethod("createBucket", payloadFunctions.prepareCreateBucketPayload),
-    deleteBucket: awsPlugin.mapToAwsMethod("deleteBucket"),
-    deleteObject: awsPlugin.mapToAwsMethod("deleteObject"),
+    deleteBucket,
+    deleteObject,
     listObjectsInBucket: awsPlugin.mapToAwsMethod("listObjectsV2"),
     listBuckets: awsPlugin.mapToAwsMethod("listBuckets"),
     managePublicAccessBlock: awsPlugin.mapToAwsMethod("managePublicAccessBlock", payloadFunctions.prepareManagePublicAccessBlockPayload),
