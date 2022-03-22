@@ -241,7 +241,7 @@
           "name": "recursively",
           "viewName": "Delete Recursively",
           "type": "boolean",
-          "description" : "Recursively delete bucket and all its objects.",
+          "description": "Recursively remove all of the objects in the directory before deleting it",
           "default": false
         }
       ]
