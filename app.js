@@ -1,10 +1,11 @@
-const aws = require("aws-sdk");
 const _ = require("lodash");
-
+const aws = require("aws-sdk");
 const awsPlugin = require("kaholo-aws-plugin");
+
 const payloadFunctions = require("./payload-functions");
 const helpers = require("./helpers");
 const autocomplete = require("./autocomplete");
+const consts = require("./consts.json");
 
 async function uploadFileToBucket(client, params) {
   const fileBody = await helpers.readFile(params.srcPath);
@@ -25,6 +26,13 @@ async function putBucketAcl(client, params) {
     && _.isEmpty(params.emails)
   ) {
     throw new Error("Please provide at least one receiver of the permissions");
+  }
+
+  if (!_.isEmpty(params.emails)) {
+    const bucketLocation = await client.getBucketLocation({ Bucket: params.bucket }).promise();
+    if (!consts.REGIONS_SUPPORTING_EMAIL_GRANTEES.includes(bucketLocation.LocationConstraint)) {
+      throw new Error(consts.INCORRECT_REGION_FOR_EMAIL_GRANTEES_ERROR_MESSAGE);
+    }
   }
 
   const permissionTypes = helpers.resolveBucketAclPermissions(params);
