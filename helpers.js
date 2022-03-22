@@ -166,6 +166,20 @@ async function emptyDirectory(client, bucket, directory = "") {
   }
 }
 
+function sanitizeS3Path(path, filename) {
+  let resultPath = path.trim();
+  if (path === "" || path === "/") {
+    return filename;
+  }
+  if (_.startsWith(resultPath, "/")) {
+    resultPath = resultPath.substring(1);
+  }
+  if (_.endsWith(resultPath, "/")) {
+    resultPath += filename;
+  }
+  return resultPath;
+}
+
 module.exports = {
   readFile,
   resolveBucketAclPermissions,
@@ -173,4 +187,5 @@ module.exports = {
   getGrants,
   combineGrants,
   emptyDirectory,
+  sanitizeS3Path,
 };
