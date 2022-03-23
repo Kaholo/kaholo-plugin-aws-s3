@@ -6,7 +6,6 @@ const awsPlugin = require("kaholo-aws-plugin");
 const payloadFunctions = require("./payload-functions");
 const helpers = require("./helpers");
 const autocomplete = require("./autocomplete");
-const consts = require("./consts.json");
 
 async function deleteBucket(client, params) {
   if (params.recursively) {
@@ -54,13 +53,6 @@ async function putBucketAcl(client, params) {
     throw new Error("Please provide at least one receiver of the permissions");
   }
 
-  if (!_.isEmpty(params.emails)) {
-    const bucketLocation = await client.getBucketLocation({ Bucket: params.bucket }).promise();
-    if (!consts.REGIONS_SUPPORTING_EMAIL_GRANTEES.includes(bucketLocation.LocationConstraint)) {
-      throw new Error(consts.INCORRECT_REGION_FOR_EMAIL_GRANTEES_ERROR_MESSAGE);
-    }
-  }
-
   const permissionTypes = helpers.resolveBucketAclPermissions(params);
   const newGrantees = await helpers.getNewGrantees(client, params);
   const currentAcl = await client.getBucketAcl({ Bucket: params.bucket }).promise();
@@ -74,7 +66,13 @@ async function putBucketAcl(client, params) {
     },
   };
 
-  return client.putBucketAcl(payload).promise();
+  return client.putBucketAcl(payload).promise()
+    .catch((error) => {
+      if (error.code === "UnsupportedArgument" && params.emails.length > 0) {
+        console.error("Notice: Using email address to specify a grantee is only supported for buckets created in specific AWS Regions. For more information visit: https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAcl.html\n");
+      }
+      throw error;
+    });
 }
 
 async function putBucketPolicy(client, params) {
