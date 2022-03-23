@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const path = require("path");
 const aws = require("aws-sdk");
 const awsPlugin = require("kaholo-aws-plugin");
 
@@ -23,10 +24,11 @@ async function deleteObject(client, params) {
 
 async function uploadFileToBucket(client, params) {
   const fileBody = await helpers.readFile(params.srcPath);
+  const filename = path.basename(params.srcPath);
 
   const payload = {
     Bucket: params.bucket,
-    Key: params.destPath,
+    Key: helpers.sanitizeS3Path(params.destPath, filename),
     Body: fileBody,
   };
 
