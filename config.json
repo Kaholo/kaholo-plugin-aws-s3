@@ -294,22 +294,6 @@
           "description": "Managing a prefix to limit the response to the keys.",
           "placeholder": "folder1/folder2/",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html"
-        },
-        {
-          "name": "MaxKeys",
-          "viewName": "Max Results",
-          "type": "string",
-          "description": "The maximum number of results to return. Default value is 1000.",
-          "placeholder": "1000",
-          "learnUrl": "https://github.com/Kaholo/kaholo-plugin-amazon-s3"
-        },
-        {
-          "name": "ContinuationToken",
-          "viewName": "Next Continuation Token",
-          "type": "string",
-          "description": "In case of pagination. If listed objects and more results are left to return then 'NextContinuationToken' will be provided for you to continue listing from the point stopped.",
-          "placeholder": "1ueGcxLPRx1Tr/XYExHnhbYLgveDs2J/wm36Hy4vbOwM=",
-          "learnUrl": "ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken is obfuscated and is not a real key."
         }
       ]
     },
