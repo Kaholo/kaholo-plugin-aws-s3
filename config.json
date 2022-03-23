@@ -243,6 +243,13 @@
           "type": "boolean",
           "description": "Recursively remove all of the objects in the directory before deleting it",
           "default": false
+        },
+        {
+          "name": "failOnObjectNotFound",
+          "viewName": "Fail on object not found",
+          "type": "boolean",
+          "description": "Check this option if the action should fail in case the object under provided  path does not exist",
+          "default": false
         }
       ]
     },

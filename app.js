@@ -12,14 +12,24 @@ async function deleteBucket(client, params) {
   if (params.recursively) {
     await helpers.emptyDirectory(client, params.Bucket);
   }
-  return client.deleteBucket({ Bucket: params.Bucket }).promise();
+  return client.deleteBucket({ Bucket: params.Bucket }).promise().then(() => "Bucket deleted successfully");
 }
 
 async function deleteObject(client, params) {
+  if (params.failOnObjectNotFound) {
+    const listObjectsResult = await client.listObjectsV2({
+      Bucket: params.Bucket,
+      Prefix: params.Key,
+    }).promise();
+
+    if (listObjectsResult.Contents.length === 0) {
+      throw new Error(`No object in selected bucket under path: "${params.Key}"`);
+    }
+  }
   if (params.recursively) {
     await helpers.emptyDirectory(client, params.Bucket, params.Key);
   }
-  return client.deleteObject({ Bucket: params.Bucket, Key: params.Key }).promise();
+  return client.deleteObject({ Bucket: params.Bucket, Key: params.Key }).promise().then(() => "Operation finished successfully");
 }
 
 async function uploadFileToBucket(client, params) {
