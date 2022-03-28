@@ -17,7 +17,7 @@
 	},
 	"dependencies": {
 		"aws-sdk": "2.1030.0",
-		"kaholo-aws-plugin": "github:Kaholo/aws-plugin#KP-565",
+		"kaholo-aws-plugin": "github:Kaholo/aws-plugin",
 		"lodash": "4.17.21"
 	}
 }

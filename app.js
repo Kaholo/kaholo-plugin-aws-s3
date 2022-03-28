@@ -7,11 +7,26 @@ const payloadFunctions = require("./payload-functions");
 const helpers = require("./helpers");
 const autocomplete = require("./autocomplete");
 
+const simpleAwsFunctions = {
+  createBucket: awsPlugin.generateAwsMethod("createBucket", payloadFunctions.prepareCreateBucketPayload),
+  listObjectsInBucket: awsPlugin.generateAwsMethod("listObjectsV2"),
+  listBuckets: awsPlugin.generateAwsMethod("listBuckets"),
+  managePublicAccessBlock: awsPlugin.generateAwsMethod("managePublicAccessBlock", payloadFunctions.prepareManagePublicAccessBlockPayload),
+  putCannedACL: awsPlugin.generateAwsMethod("putCannedACL"),
+  putBucketVersioning: awsPlugin.generateAwsMethod("putBucketVersioning", payloadFunctions.preparePutBucketVersioningPayload),
+  getBucketPolicy: awsPlugin.generateAwsMethod("getBucketPolicy"),
+  deleteBucketPolicy: awsPlugin.generateAwsMethod("deleteBucketPolicy"),
+  deleteBucketWebsite: awsPlugin.generateAwsMethod("deleteBucketWebsite"),
+  getBucketWebsite: awsPlugin.generateAwsMethod("getBucketWebsite"),
+  putBucketWebsite: awsPlugin.generateAwsMethod("putBucketWebsite", payloadFunctions.preparePutBucketWebsitePayload),
+  putBucketWebsiteRedirect: awsPlugin.generateAwsMethod("putBucketWebsite", payloadFunctions.preparePutBucketWebsiteRedirectPayload),
+};
+
 async function deleteBucket(client, params) {
   if (params.recursively) {
     await helpers.emptyDirectory(client, params.Bucket);
   }
-  return client.deleteBucket({ Bucket: params.Bucket }).promise().then(() => "Bucket deleted successfully");
+  return client.deleteBucket({ Bucket: params.Bucket }).promise();
 }
 
 async function deleteObject(client, params) {
@@ -28,7 +43,7 @@ async function deleteObject(client, params) {
   if (params.recursively) {
     await helpers.emptyDirectory(client, params.Bucket, params.Key);
   }
-  return client.deleteObject({ Bucket: params.Bucket, Key: params.Key }).promise().then(() => "Operation finished successfully");
+  return client.deleteObject({ Bucket: params.Bucket, Key: params.Key }).promise();
 }
 
 async function uploadFileToBucket(client, params) {
@@ -156,20 +171,9 @@ async function putBucketEncryption(client, params) {
 module.exports = awsPlugin.bootstrap(
   aws.S3,
   {
-    createBucket: awsPlugin.mapToAwsMethod("createBucket", payloadFunctions.prepareCreateBucketPayload),
+    ...simpleAwsFunctions,
     deleteBucket,
     deleteObject,
-    listObjectsInBucket: awsPlugin.mapToAwsMethod("listObjectsV2"),
-    listBuckets: awsPlugin.mapToAwsMethod("listBuckets"),
-    managePublicAccessBlock: awsPlugin.mapToAwsMethod("managePublicAccessBlock", payloadFunctions.prepareManagePublicAccessBlockPayload),
-    putCannedACL: awsPlugin.mapToAwsMethod("putCannedACL"),
-    putBucketVersioning: awsPlugin.mapToAwsMethod("putBucketVersioning", payloadFunctions.preparePutBucketVersioningPayload),
-    getBucketPolicy: awsPlugin.mapToAwsMethod("getBucketPolicy"),
-    deleteBucketPolicy: awsPlugin.mapToAwsMethod("deleteBucketPolicy"),
-    deleteBucketWebsite: awsPlugin.mapToAwsMethod("deleteBucketWebsite"),
-    getBucketWebsite: awsPlugin.mapToAwsMethod("getBucketWebsite"),
-    putBucketWebsite: awsPlugin.mapToAwsMethod("putBucketWebsite", payloadFunctions.preparePutBucketWebsitePayload),
-    putBucketWebsiteRedirect: awsPlugin.mapToAwsMethod("putBucketWebsite", payloadFunctions.preparePutBucketWebsiteRedirectPayload),
     uploadFileToBucket,
     putBucketAcl,
     putBucketLogging,
