@@ -11,7 +11,7 @@ const simpleAwsFunctions = {
   createBucket: awsPlugin.generateAwsMethod("createBucket", payloadFunctions.prepareCreateBucketPayload),
   listObjectsInBucket: awsPlugin.generateAwsMethod("listObjectsV2"),
   listBuckets: awsPlugin.generateAwsMethod("listBuckets"),
-  managePublicAccessBlock: awsPlugin.generateAwsMethod("managePublicAccessBlock", payloadFunctions.prepareManagePublicAccessBlockPayload),
+  managePublicAccessBlock: awsPlugin.generateAwsMethod("putPublicAccessBlock", payloadFunctions.prepareManagePublicAccessBlockPayload),
   putCannedACL: awsPlugin.generateAwsMethod("putCannedACL"),
   putBucketVersioning: awsPlugin.generateAwsMethod("putBucketVersioning", payloadFunctions.preparePutBucketVersioningPayload),
   getBucketPolicy: awsPlugin.generateAwsMethod("getBucketPolicy"),
