@@ -125,11 +125,11 @@ async function getUserId(client) {
 }
 
 async function getNewGrantees(client, {
-  groups, users, emails, grantToSignedUser,
+  groupUris, userIds, emails, grantToSignedUser,
 }) {
   const newGrantees = [
-    ...parseGrantees(groups || [], "Group"),
-    ...parseGrantees(users || [], "CanonicalUser"),
+    ...parseGrantees(groupUris || [], "Group"),
+    ...parseGrantees(userIds || [], "CanonicalUser"),
     ...parseGrantees(emails || [], "AmazonCustomerByEmail"),
   ];
 

@@ -66,7 +66,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "Bucket",
+          "name": "BUCKET_NAME",
           "required": true,
           "viewName": "Name",
           "type": "string",
@@ -107,7 +107,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "bucket",
+          "name": "BUCKET_NAME",
           "viewName": "Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -118,7 +118,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
-          "name": "srcPath",
+          "name": "FILE_PATH",
           "viewName": "File Path",
           "type": "string",
           "required": true,
@@ -127,7 +127,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html"
         },
         {
-          "name": "destPath",
+          "name": "DEST_FILE_PATH",
           "viewName": "Dest Object Path",
           "type": "string",
           "required": true,
@@ -168,7 +168,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "Bucket",
+          "name": "BUCKET_NAME",
           "viewName": "Bucket",
           "type": "autocomplete",
           "required": true,
@@ -179,7 +179,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
-          "name": "recursively",
+          "name": "RECURSIVELY",
           "viewName": "Delete Recursively",
           "type": "boolean",
           "description" : "Recursively delete bucket and all its objects.",
@@ -218,7 +218,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "Bucket",
+          "name": "BUCKET_NAME",
           "viewName": "Bucket",
           "type": "autocomplete",
           "required": true,
@@ -229,7 +229,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
-          "name": "Key",
+          "name": "OBJECT_NAME",
           "viewName": "Object Path",
           "type": "string",
           "required": true,
@@ -238,7 +238,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/delete-objects.html"
         },
         {
-          "name": "recursively",
+          "name": "RECURSIVELY",
           "viewName": "Delete Recursively",
           "type": "boolean",
           "description": "Recursively remove all of the objects in the directory before deleting it",
@@ -284,7 +284,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "Bucket",
+          "name": "BUCKET_NAME",
           "viewName": "Bucket",
           "type": "autocomplete",
           "required": true,
@@ -295,7 +295,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
-          "name": "Prefix",
+          "name": "prefix",
           "viewName": "Prefix",
           "type": "string",
           "description": "Managing a prefix to limit the response to the keys.",
@@ -367,7 +367,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "Bucket",
+          "name": "BUCKET_NAME",
           "viewName": "Bucket",
           "type": "autocomplete",
           "required": true,
@@ -442,7 +442,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "bucket",
+          "name": "BUCKET_NAME",
           "viewName": "Bucket",
           "type": "autocomplete",
           "required": true,
@@ -505,7 +505,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/managing-acls.html"
         },
         {
-          "name": "groups",
+          "name": "URI",
           "viewName": "Groups URIs",
           "type": "options",
           "parserType": "array",
@@ -528,7 +528,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/s3/model/GroupGrantee.html"
         },
         {
-          "name": "users",
+          "name": "userID",
           "viewName": "Users Canonical IDs",
           "type": "text",
           "parserType": "array",
@@ -537,7 +537,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/finding-canonical-user-id.html#:~:text=The%20canonical%20user%20ID%20is,and%20objects%20using%20Amazon%20S3."
         },
         {
-          "name": "emails",
+          "name": "emailAddress",
           "viewName": "Users Email Addresses",
           "type": "text",
           "parserType": "array",
@@ -594,7 +594,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "Bucket",
+          "name": "BUCKET_NAME",
           "viewName": "Bucket",
           "type": "autocomplete",
           "required": true,
@@ -664,7 +664,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "Bucket",
+          "name": "bucketName",
           "viewName": "Bucket",
           "type": "autocomplete",
           "required": true,
@@ -675,7 +675,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
-          "name": "Status",
+          "name": "status",
           "viewName": "Status",
           "type": "options",
           "options": [
@@ -693,7 +693,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html"
         },
         {
-          "name": "MFADelete",
+          "name": "mfaDelete",
           "viewName": "MFA Delete",
           "type": "options",
           "options": [
@@ -711,7 +711,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingMFADelete.html"
         },
         {
-          "name": "MFA",
+          "name": "mfa",
           "viewName": "MFA",
           "type": "string",
           "description": "MFA-protected API access is used to enforce another authentication factor (MFA code) when accessing sensitive Amazon S3 resources.",
@@ -751,7 +751,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "Bucket",
+          "name": "bucketName",
           "viewName": "Bucket",
           "type": "autocomplete",
           "required": true,
@@ -762,7 +762,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         },
         {
-          "name": "Policy",
+          "name": "policy",
           "viewName": "Policy Object",
           "type": "text",
           "parserType": "object",
@@ -803,7 +803,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "Bucket",
+          "name": "bucketName",
           "viewName": "Bucket",
           "type": "autocomplete",
           "required": true,
@@ -846,7 +846,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "Bucket",
+          "name": "bucketName",
           "viewName": "Bucket",
           "type": "autocomplete",
           "required": true,
@@ -889,7 +889,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "srcBucket",
+          "name": "bucketName",
           "viewName": "Source Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -947,7 +947,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html"
         },
         {
-          "name": "groups",
+          "name": "groupUris",
           "viewName": "Groups URIs",
           "type": "options",
           "parserType": "array",
@@ -970,7 +970,7 @@
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html#:~:text=If%20you%20access%20a%20bucket,URLs%20to%20access%20a%20bucket."
         },
         {
-          "name": "users",
+          "name": "userIds",
           "viewName": "User Canonical IDs",
           "type": "text",
           "parserType": "array",
@@ -1036,7 +1036,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "bucket",
+          "name": "bucketName",
           "viewName": "Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -1253,7 +1253,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "Bucket",
+          "name": "bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
           "required": true,
@@ -1296,7 +1296,7 @@
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
-          "name": "Bucket",
+          "name": "bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
           "required": true,

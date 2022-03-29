@@ -1,16 +1,22 @@
-// Prepare payload functions
 function prepareCreateBucketPayload(params, region) {
   return {
-    Bucket: params.Bucket,
+    Bucket: params.BUCKET_NAME,
     CreateBucketConfiguration: {
       LocationConstraint: region,
     },
   };
 }
 
+function prepareListObjectsPayload(params) {
+  return {
+    Bucket: params.BUCKET_NAME,
+    Prefix: params.prefix,
+  };
+}
+
 function prepareManagePublicAccessBlockPayload(params) {
   return {
-    Bucket: params.Bucket,
+    Bucket: params.BUCKET_NAME,
     PublicAccessBlockConfiguration: {
       BlockPublicAcls: params.BlockPublicAcls || false,
       BlockPublicPolicy: params.BlockPublicPolicy || false,
@@ -20,18 +26,37 @@ function prepareManagePublicAccessBlockPayload(params) {
   };
 }
 
+function preparePutCannedAclPayload(params) {
+  return {
+    Bucket: params.BUCKET_NAME,
+    ACL: params.ACL,
+  };
+}
+
 function preparePutBucketVersioningPayload(params) {
   if (params.MFADelete === "Enabled" && !params.MFA) {
     throw new Error("MFA cannot be empty if MFA Delete is enabled!");
   }
 
   return {
-    Bucket: params.Bucket,
-    MFA: params.MFA,
+    Bucket: params.bucketName,
+    MFA: params.mfa,
     VersioningConfiguration: {
-      MFADelete: params.MFADelete || "Disabled",
-      Status: params.Status,
+      MFADelete: params.mfaDelete || "Disabled",
+      Status: params.status,
     },
+  };
+}
+
+function prepareGetBucketPolicyPayload(params) {
+  return {
+    Bucket: params.bucketName,
+  };
+}
+
+function prepareDeleteBucketPolicyPayload(params) {
+  return {
+    Bucket: params.bucketName,
   };
 }
 
@@ -64,10 +89,28 @@ function preparePutBucketWebsiteRedirectPayload(params) {
   };
 }
 
+function prepareGetBucketWebsitePayload(params) {
+  return {
+    Bucket: params.bucket,
+  };
+}
+
+function prepareDeleteBucketWebsitePayload(params) {
+  return {
+    Bucket: params.bucket,
+  };
+}
+
 module.exports = {
   prepareCreateBucketPayload,
   prepareManagePublicAccessBlockPayload,
   preparePutBucketVersioningPayload,
   preparePutBucketWebsitePayload,
   preparePutBucketWebsiteRedirectPayload,
+  prepareListObjectsPayload,
+  preparePutCannedAclPayload,
+  prepareGetBucketPolicyPayload,
+  prepareDeleteBucketPolicyPayload,
+  prepareGetBucketWebsitePayload,
+  prepareDeleteBucketWebsitePayload,
 };
