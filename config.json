@@ -1197,6 +1197,7 @@
           "name": "redirectTo",
           "viewName": "Redirect To Host",
           "type": "string",
+          "required": true,
           "description": "The host name to redirect all requests to",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
