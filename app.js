@@ -98,9 +98,7 @@ async function putBucketLogging(client, params) {
   if (params.disableLogging) {
     return client.putBucketLogging({
       Bucket: params.srcBucket,
-      BucketLoggingStatus: {
-        LoggingEnabled: false,
-      },
+      BucketLoggingStatus: {},
     }).promise();
   }
 
