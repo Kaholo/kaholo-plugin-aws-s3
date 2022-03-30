@@ -39,11 +39,8 @@ function combineGrants(currentGrants, newGrants) {
         && a.Grantee.Type === b.Grantee.Type
         && getGranteeId(a) === getGranteeId(b);
 
-  const applicableNewGrants = newGrants.reduce(
-    (acc, current) => (currentGrants.every((grant) => !grantsAreEqual(grant, current))
-      ? [...acc, current]
-      : acc),
-    [],
+  const applicableNewGrants = newGrants.filter(
+    (newGrant) => currentGrants.every((currentGrant) => !grantsAreEqual(currentGrant, newGrant)),
   );
 
   return [
