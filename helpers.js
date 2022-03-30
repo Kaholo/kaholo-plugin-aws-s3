@@ -167,6 +167,9 @@ async function emptyDirectory(client, bucket, directory = "") {
 }
 
 function sanitizeS3Path(path, filename) {
+  if (!path) {
+    return filename;
+  }
   let resultPath = path.trim();
   if (path === "" || path === "/") {
     return filename;
