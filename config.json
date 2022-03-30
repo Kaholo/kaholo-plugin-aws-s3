@@ -132,7 +132,7 @@
           "type": "string",
           "required": true,
           "description": "Destination to upload the file in the S3 bucket.",
-          "placeholder": "s3://home/folder/",
+          "placeholder": "/home/folder/",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html"
         }
       ]
