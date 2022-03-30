@@ -141,9 +141,13 @@ async function getNewGrantees(client, {
 }
 
 async function emptyDirectory(client, bucket, directory = "") {
+  let pathToDelete = directory;
+  if (!_.endsWith(directory, "/")) {
+    pathToDelete = `${directory}/`;
+  }
   const listPayload = removeUndefinedAndEmpty({
     Bucket: bucket,
-    Prefix: directory,
+    Prefix: pathToDelete,
   });
 
   const listedObjects = await client.listObjectsV2(listPayload).promise();

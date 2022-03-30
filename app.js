@@ -36,7 +36,11 @@ async function deleteObject(client, params) {
       Prefix: params.OBJECT_NAME,
     }).promise();
 
-    if (listObjectsResult.Contents.length === 0) {
+    const foundObject = listObjectsResult.Contents.find(
+      (object) => object.Key === params.OBJECT_NAME || object.Key.startsWith(`${params.OBJECT_NAME}/`),
+    );
+
+    if (!foundObject) {
       throw new Error(`No object in selected bucket under path: "${params.OBJECT_NAME}"`);
     }
   }
