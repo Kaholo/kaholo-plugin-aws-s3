@@ -1,19 +1,23 @@
 {
-    "name": "kaholo-plugin-amazon-aws-s3",
-    "description": "Kaholo plugin for integration with AWS S3 API.",
-    "main": "app.js",
-    "scripts": {
-    "lint": "npx eslint .",
-    "lint:fix": "npx eslint . --fix"
-    },
-    "author": "Kaholo Group(Amit Alon)",
-    "license": "ISC",
-    "dependencies": {
-        "aws-sdk": "2.1030.0"
-    },
-    "devDependencies": {
-        "eslint": "8.10.0",
-        "eslint-config-airbnb-base": "15.0.0",
-        "eslint-plugin-import": "2.25.4"
-    }
+	"name": "kaholo-plugin-amazon-aws-s3",
+	"description": "Kaholo plugin for integration with AWS S3 API.",
+	"main": "app.js",
+	"scripts": {
+		"test": "npx jest .",
+		"lint": "npx eslint .",
+		"lint:fix": "npx eslint . --fix"
+	},
+	"author": "Kaholo Group(Amit Alon)",
+	"license": "ISC",
+	"devDependencies": {
+		"eslint": "8.8.0",
+		"eslint-config-airbnb-base": "15.0.0",
+		"eslint-plugin-import": "2.25.4",
+		"jest": "27.5.0"
+	},
+	"dependencies": {
+		"aws-sdk": "2.1030.0",
+		"kaholo-aws-plugin": "github:Kaholo/aws-plugin-library#1.0.0",
+		"lodash": "4.17.21"
+	}
 }

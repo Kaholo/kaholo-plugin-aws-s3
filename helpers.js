@@ -1,18 +1,24 @@
+const _ = require("lodash");
+const fs = require("fs");
+const { removeUndefinedAndEmpty } = require("kaholo-aws-plugin/helpers");
+
 const GRANTEE_TYPE_TO_FIELD = {
   CanonicalUser: "ID",
   AmazonCustomerByEmail: "EmailAddress",
+  EmailAddress: "EmailAddress",
   Group: "URI",
 };
 
-function combineGrants(currentGrants, newGrants) {
-  if (currentGrants.length === 0) { return newGrants; }
-  return currentGrants.concat(newGrants.filter((newGrant) => !currentGrants.find((grant) => {
-    if (grant.Permission !== newGrant.Permission) { return false; }
-    if (grant.Grantee.Type !== newGrant.Grantee.Type) { return false; }
-    const valField = GRANTEE_TYPE_TO_FIELD[grant.Grantee.Type];
-    if (grant.Grantee[valField] !== newGrant.Grantee[valField]) { return false; }
-    return true;
-  })));
+function getGranteeId(grant) {
+  return grant.Grantee[GRANTEE_TYPE_TO_FIELD[grant.Grantee.Type]];
+}
+
+function parseGrantee(grantee, granteeType) {
+  const valField = GRANTEE_TYPE_TO_FIELD[granteeType];
+  return {
+    Type: granteeType,
+    [valField]: grantee,
+  };
 }
 
 function parseGrantees(grantees, granteeType) {
@@ -20,55 +26,170 @@ function parseGrantees(grantees, granteeType) {
 }
 
 function getGrants(grantees, permissionTypes) {
-  return permissionTypes.map((permissionType) => grantees.map((grantee) => ({
+  return _.flatten(permissionTypes.map((permissionType) => grantees.map((grantee) => ({
     Grantee: grantee,
     Permission: permissionType,
-  }))).flat();
+  }))));
 }
 
-function parseGrantee(grantee, granteeType) {
-  const valField = GRANTEE_TYPE_TO_FIELD[granteeType];
-  const granteeObj = {
-    Type: granteeType,
-  };
-  granteeObj[valField] = grantee;
-  return granteeObj;
+function combineGrants(currentGrants, newGrants) {
+  if (currentGrants.length === 0) { return newGrants; }
+
+  const grantsAreEqual = (a, b) => a.Permission === b.Permission
+        && a.Grantee.Type === b.Grantee.Type
+        && getGranteeId(a) === getGranteeId(b);
+
+  const applicableNewGrants = newGrants.filter(
+    (newGrant) => currentGrants.every((currentGrant) => !grantsAreEqual(currentGrant, newGrant)),
+  );
+
+  return [
+    ...currentGrants, ...applicableNewGrants,
+  ];
 }
 
-function getAwsCallback(resolve, reject) {
-  return (err, data) => {
-    if (err) { return reject(err); }
-    return resolve(data);
-  };
+function resolveACLGrantType(aclGrantType) {
+  switch (aclGrantType) {
+    case "readWrite":
+      return ["READ_ACP", "WRITE_ACP"];
+    case "GrantReadACP":
+      return ["READ_ACP"];
+    case "GrantWriteACP":
+      return ["WRITE_ACP"];
+    case "":
+    case "none":
+      return [];
+    default:
+      return [aclGrantType];
+  }
 }
 
-function removeUndefinedAndEmpty(obj, removeSpecial) {
-  const resolvedObj = obj;
-  Object.entries(resolvedObj).forEach(([key, value]) => {
-    if (value === undefined) {
-      delete resolvedObj[key];
-    }
-    if (removeSpecial && typeof (value) === "string") {
-      delete resolvedObj[key];
-    }
-    if (Array.isArray(value) && value.length === 0) {
-      delete resolvedObj[key];
-    }
-    if (typeof (value) === "object") {
-      removeUndefinedAndEmpty(value);
-      if (Object.keys(value).length === 0) {
-        delete resolvedObj[key];
-      }
-    }
+function resolveObjectGrantType(objectGrantType) {
+  switch (objectGrantType) {
+    case "readWrite":
+      return ["READ", "WRITE"];
+    case "GrantRead":
+      return ["READ"];
+    case "GrantWrite":
+      return ["WRITE"];
+    case "":
+    case "none":
+      return [];
+    default:
+      return [objectGrantType];
+  }
+}
+
+function resolveBucketAclPermissions(params) {
+  if (params.aclGrantType === "readWrite" && params.objGrantType === "readWrite") {
+    return ["FULL_CONTROL"];
+  }
+
+  const result = _.concat(
+    resolveObjectGrantType(params.objGrantType),
+    resolveACLGrantType(params.aclGrantType),
+  );
+
+  if (_.isEmpty(result)) {
+    throw new Error("You must specify at least one of the following: Object Grant Type/ACL Grant Type");
+  }
+
+  return result;
+}
+
+async function readFile(filepath) {
+  if (!fs.existsSync(filepath)) {
+    throw new Error(`Couldn't find the file at ${filepath}`);
+  }
+  const filestream = fs.createReadStream(filepath);
+
+  let body = "";
+  return new Promise((resolve, reject) => {
+    filestream.on("error", (err) => {
+      reject(new Error(`Error reading source file: ${err.message}`));
+    });
+    filestream.on("data", (chunk) => {
+      body += chunk;
+    });
+    filestream.on("end", () => {
+      resolve(body);
+    });
   });
-  return resolvedObj;
+}
+
+async function getUserId(client) {
+  return (await client.listBuckets().promise()).Owner.ID;
+}
+
+async function getNewGrantees(client, {
+  groupUris, userIds, emails, grantToSignedUser,
+}) {
+  const newGrantees = [
+    ...parseGrantees(groupUris || [], "Group"),
+    ...parseGrantees(userIds || [], "CanonicalUser"),
+    ...parseGrantees(emails || [], "AmazonCustomerByEmail"),
+  ];
+
+  if (grantToSignedUser && !_.isNil(client)) {
+    newGrantees.push(parseGrantee(await getUserId(client), "CanonicalUser"));
+  }
+
+  return newGrantees;
+}
+
+async function emptyDirectory(client, bucket, directory = "") {
+  let pathToDelete = directory;
+  if (!_.endsWith(directory, "/")) {
+    pathToDelete = `${directory}/`;
+  }
+  const listPayload = removeUndefinedAndEmpty({
+    Bucket: bucket,
+    Prefix: pathToDelete,
+  });
+
+  const listedObjects = await client.listObjectsV2(listPayload).promise();
+  if (listedObjects.Contents.length === 0) {
+    return;
+  }
+
+  const deletePayload = {
+    Bucket: bucket,
+    Delete: { Objects: [] },
+  };
+
+  listedObjects.Contents.forEach(({ Key }) => {
+    deletePayload.Delete.Objects.push({ Key });
+  });
+
+  await client.deleteObjects(deletePayload).promise();
+  if (listedObjects.IsTruncated) {
+    await emptyDirectory(bucket, directory);
+  }
+}
+
+function sanitizeS3Path(path, filename) {
+  if (!path) {
+    return filename;
+  }
+  let resultPath = path.trim();
+  if (path === "" || path === "/") {
+    return filename;
+  }
+  if (_.startsWith(resultPath, "/")) {
+    resultPath = resultPath.substring(1);
+  }
+  if (_.endsWith(resultPath, "/")) {
+    resultPath += filename;
+  }
+  return resultPath;
 }
 
 module.exports = {
-  removeUndefinedAndEmpty,
-  parseGrantees,
-  parseGrantee,
-  getAwsCallback,
+  readFile,
+  resolveBucketAclPermissions,
+  getNewGrantees,
   getGrants,
   combineGrants,
+  emptyDirectory,
+  sanitizeS3Path,
 };

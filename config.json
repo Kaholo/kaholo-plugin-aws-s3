@@ -60,13 +60,14 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Create the new bucket in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
         },
         {
           "name": "BUCKET_NAME",
+          "required": true,
           "viewName": "Name",
           "type": "string",
           "description": "The name of the new bucket to create.",
@@ -100,7 +101,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Make this request in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -110,7 +111,8 @@
           "viewName": "Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "required": true,
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to upload the object to.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -119,6 +121,7 @@
           "name": "FILE_PATH",
           "viewName": "File Path",
           "type": "string",
+          "required": true,
           "description": "Local location of the file to upload.",
           "placeholder": "/home/user/file_to_upload.js",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html"
@@ -128,7 +131,7 @@
           "viewName": "Dest Object Path",
           "type": "string",
           "description": "Destination to upload the file in the S3 bucket.",
-          "placeholder": "s3://home/folder/",
+          "placeholder": "/home/folder/",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html"
         }
       ]
@@ -158,7 +161,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Make this request in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -167,8 +170,9 @@
           "name": "BUCKET_NAME",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to delete.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -207,7 +211,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Make this request in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -216,8 +220,9 @@
           "name": "BUCKET_NAME",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -226,6 +231,7 @@
           "name": "OBJECT_NAME",
           "viewName": "Object Path",
           "type": "string",
+          "required": true,
           "description": "Objects are the fundamental entities stored in Amazon S3. Objects consist of object data and metadata. The metadata is a set of name-value pairs that describe the object. These pairs include some default metadata, such as the date last modified, and standard HTTP metadata, such as Content-Type.",
           "placeholder": "object-name-1",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/delete-objects.html"
@@ -234,7 +240,14 @@
           "name": "RECURSIVELY",
           "viewName": "Delete Recursively",
           "type": "boolean",
-          "description" : "Recursively delete object and all its contents.",
+          "description": "Recursively remove all of the objects in the directory before deleting it",
+          "default": false
+        },
+        {
+          "name": "failOnObjectNotFound",
+          "viewName": "Fail on object not found",
+          "type": "boolean",
+          "description": "Check this option if the action should fail in case the object under provided  path does not exist",
           "default": false
         }
       ]
@@ -264,7 +277,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Make this request in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -273,8 +286,9 @@
           "name": "BUCKET_NAME",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -286,22 +300,6 @@
           "description": "Managing a prefix to limit the response to the keys.",
           "placeholder": "folder1/folder2/",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html"
-        },
-        {
-          "name": "maxResults",
-          "viewName": "Max Results",
-          "type": "string",
-          "description": "The maximum number of results to return. Default value is 1000.",
-          "placeholder": "1000",
-          "learnUrl": "https://github.com/Kaholo/kaholo-plugin-amazon-s3"
-        },
-        {
-          "name": "nextToken",
-          "viewName": "Next Continuation Token",
-          "type": "string",
-          "description": "In case of pagination. If listed objects and more results are left to return then 'NextContinuationToken' will be provided for you to continue listing from the point stopped.",
-          "placeholder": "1ueGcxLPRx1Tr/XYExHnhbYLgveDs2J/wm36Hy4vbOwM=",
-          "learnUrl": "ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken is obfuscated and is not a real key."
         }
       ]
     },
@@ -330,7 +328,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Make this request in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -362,7 +360,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Make this request in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -371,8 +369,9 @@
           "name": "BUCKET_NAME",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -436,7 +435,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Make this request in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -445,8 +444,9 @@
           "name": "BUCKET_NAME",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -507,6 +507,7 @@
           "name": "URI",
           "viewName": "Groups URIs",
           "type": "options",
+          "parserType": "array",
           "description": "The uri of the predefined group(s) to allow access to the bucket. To specify multiple values provide an array of group URIs from code.",
           "options": [
             {
@@ -529,6 +530,7 @@
           "name": "userID",
           "viewName": "Users Canonical IDs",
           "type": "text",
+          "parserType": "array",
           "description": "The canonical user ID is an alpha-numeric identifier, that is an obfuscated form of the AWS account ID. You may use this ID to identify an AWS account when granting cross-account access.",
           "placeholder": "79a59df900b949e55d96a1e698fbacedfd6e09d98eacf8f8d5218e7cd47ef2be",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/finding-canonical-user-id.html#:~:text=The%20canonical%20user%20ID%20is,and%20objects%20using%20Amazon%20S3."
@@ -537,6 +539,7 @@
           "name": "emailAddress",
           "viewName": "Users Email Addresses",
           "type": "text",
+          "parserType": "array",
           "description": "Permitting the access to users with the mentioned email addresses.",
           "placeholder": "user@gmail.com",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html"
@@ -584,7 +587,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Make this request in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -593,8 +596,9 @@
           "name": "BUCKET_NAME",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -603,6 +607,7 @@
           "name": "ACL",
           "viewName": "Canned ACL Type",
           "type": "options",
+          "required": true,
           "options": [
             {
               "id": "private",
@@ -652,7 +657,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Make this request in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -661,8 +666,9 @@
           "name": "bucketName",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -738,7 +744,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Make this request in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -747,8 +753,9 @@
           "name": "bucketName",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -757,6 +764,8 @@
           "name": "policy",
           "viewName": "Policy Object",
           "type": "text",
+          "parserType": "object",
+          "required": true,
           "description": "The policy to apply to this bucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html"
         }
@@ -787,7 +796,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Make this request in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -796,8 +805,9 @@
           "name": "bucketName",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -829,7 +839,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Make this request in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -838,8 +848,9 @@
           "name": "bucketName",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -871,7 +882,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Create the new bucket in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -881,7 +892,7 @@
           "viewName": "Source Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to enable or disable logging in.",
           "placeholder": "bucket-01",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/logging-with-S3.html"
@@ -899,7 +910,7 @@
           "viewName": "Target Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "Save logs in the specified bucket in the field.",
           "placeholder": "angular-bucket-app",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html"
@@ -938,6 +949,7 @@
           "name": "groupUris",
           "viewName": "Groups URIs",
           "type": "options",
+          "parserType": "array",
           "description": "Uniform Resource Identifier (URI) to help streamline user login workflows.",
           "options": [
             {
@@ -960,6 +972,7 @@
           "name": "userIds",
           "viewName": "User Canonical IDs",
           "type": "text",
+          "parserType": "array",
           "description": "The canonical user ID is an alpha-numeric identifier, that is an obfuscated form of the AWS account ID. You can use this ID to identify an AWS account when granting cross-account access.",
           "placeholder": "79a59df900b949e55d96a1e698fbacedfd6e09d98eacf8f8d5218e7cd47ef2be",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/finding-canonical-user-id.html#:~:text=The%20canonical%20user%20ID%20is,and%20objects%20using%20Amazon%20S3."
@@ -968,6 +981,7 @@
           "name": "emails",
           "viewName": "Email Addresses",
           "type": "text",
+          "parserType": "array",
           "description": "Permitting the access to the logs inside the specified bucket to users with the mentioned email addresses.",
           "placeholder": "user@gmail.com",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html"
@@ -1015,7 +1029,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Create the new bucket in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -1025,7 +1039,7 @@
           "viewName": "Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -1057,7 +1071,7 @@
           "viewName": "KMS Master Key",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listKeysAuto",
+          "functionName": "listKeysAutocomplete",
           "description": "S3 service master key S3 will decrypt the object for anyone with permission to access this object. Use an AWS Key Management Service master key. S3 will decrypt the object for anyone with permission to access this object and permission to use the master key.",
           "placeholder": "aws:s3:arn.:::bucket-01",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html"
@@ -1097,7 +1111,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Create the new bucket in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -1107,7 +1121,7 @@
           "viewName": "Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -1163,7 +1177,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Create the new bucket in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -1173,7 +1187,7 @@
           "viewName": "Bucket",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to make the request on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -1182,6 +1196,7 @@
           "name": "redirectTo",
           "viewName": "Redirect To Host",
           "type": "string",
+          "required": true,
           "description": "The host name to redirect all requests to",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -1231,7 +1246,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Create the new bucket in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -1240,8 +1255,9 @@
           "name": "bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to get it's static website hosting configuration.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
@@ -1273,7 +1289,7 @@
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "functionName": "listRegions",
+          "functionName": "listRegionsAutocomplete",
           "description": "Create the new bucket in the specified region.",
           "placeholder": "us-east-2",
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
@@ -1282,8 +1298,9 @@
           "name": "bucket",
           "viewName": "Bucket",
           "type": "autocomplete",
+          "required": true,
           "autocompleteType": "function",
-          "functionName": "listBucketsAuto",
+          "functionName": "listBucketsAutocomplete",
           "description": "The bucket to disable static website hosting on.",
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"

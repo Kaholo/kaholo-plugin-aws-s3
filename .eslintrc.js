@@ -15,6 +15,5 @@ module.exports = {
     quotes: ["error", "double"],
     curly: ["error", "all"],
     "no-console": ["error", { allow: ["info", "warn", "error"] }],
-    "no-use-before-define": ["error", { functions: false }],
   },
 };
