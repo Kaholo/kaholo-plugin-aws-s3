@@ -173,20 +173,25 @@ async function putBucketEncryption(client, params) {
   return client.putBucketEncryption(payload).promise();
 }
 
-module.exports = awsPlugin.bootstrap(
-  aws.S3,
-  {
-    ...simpleAwsFunctions,
-    deleteBucket,
-    deleteObject,
-    uploadFileToBucket,
-    putBucketAcl,
-    putBucketLogging,
-    putBucketEncryption,
-    putBucketPolicy,
-  },
-  {
+module.exports = {
+  ...awsPlugin.bootstrap(
+    aws.S3,
+    {
+      ...simpleAwsFunctions,
+      deleteBucket,
+      deleteObject,
+      uploadFileToBucket,
+      putBucketAcl,
+      putBucketLogging,
+      putBucketEncryption,
+      putBucketPolicy,
+    },
     // Autocomplete Functions
-    ...autocomplete,
-  },
-);
+    _.omit(autocomplete, "listKeysAutocomplete"),
+  ),
+  ...awsPlugin.bootstrap(
+    aws.KMS,
+    {},
+    _.pick(autocomplete, "listKeysAutocomplete"),
+  ),
+};

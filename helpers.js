@@ -33,7 +33,9 @@ function getGrants(grantees, permissionTypes) {
 }
 
 function combineGrants(currentGrants, newGrants) {
-  if (currentGrants.length === 0) { return newGrants; }
+  if (currentGrants.length === 0) {
+    return newGrants;
+  }
 
   const grantsAreEqual = (a, b) => a.Permission === b.Permission
         && a.Grantee.Type === b.Grantee.Type
