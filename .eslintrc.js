@@ -15,5 +15,6 @@ module.exports = {
     quotes: ["error", "double"],
     curly: ["error", "all"],
     "no-console": ["error", { allow: ["info", "warn", "error"] }],
+    "brace-style": ["error", "1tbs", { allowSingleLine: false }],
   },
 };
