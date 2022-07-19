@@ -1,7 +1,7 @@
 const _ = require("lodash");
 const path = require("path");
 const aws = require("aws-sdk");
-const awsPlugin = require("kaholo-aws-plugin");
+const awsPlugin = require("@kaholo/aws-plugin-library");
 
 const payloadFunctions = require("./payload-functions");
 const helpers = require("./helpers");
