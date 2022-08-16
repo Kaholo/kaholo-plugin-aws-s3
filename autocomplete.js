@@ -1,4 +1,4 @@
-const { autocomplete } = require("kaholo-aws-plugin");
+const { autocomplete } = require("@kaholo/aws-plugin-library");
 
 module.exports = {
   listRegionsAutocomplete: autocomplete.listRegions,

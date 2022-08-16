@@ -1,6 +1,6 @@
 const _ = require("lodash");
 const fs = require("fs");
-const { removeUndefinedAndEmpty } = require("kaholo-aws-plugin/helpers");
+const { removeUndefinedAndEmpty } = require("@kaholo/aws-plugin-library").helpers;
 
 const GRANTEE_TYPE_TO_FIELD = {
   CanonicalUser: "ID",
