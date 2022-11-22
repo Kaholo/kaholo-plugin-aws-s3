@@ -7,7 +7,7 @@
   "version": "2.1.1",
   "description": "Kaholo plugin for integration with AWS S3 API.",
   "category": "STORAGE",
-  "keywords": ["GCP", "compute", "google", "platform", "vm", "instance", "cloud", "cluster", "project", "infra", "infrastructure", "cli", "network", "subnetwork", "firewall", "IP", "route"],
+  "keywords": ["aws", "s3", "bucket", "storage", "amazon", "cloud", "cluster", "project", "infra", "infrastructure", "cli", "network", "subnetwork", "firewall", "IP", "route"],
   "auth": {
     "authId": "awsAccount",
     "params": [
