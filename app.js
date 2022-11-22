@@ -204,4 +204,5 @@ module.exports = {
       REGION: "region",
     },
   ),
+  listRegionsAutocomplete: awsPlugin.autocomplete.listRegions,
 };
