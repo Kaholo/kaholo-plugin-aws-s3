@@ -1,5 +1,6 @@
 {
   "name": "Amazon-aws-s3",
+  "viewName": "AWS S3",
   "type": "executer",
   "imgUrl": "logo.png",
   "execProgram": "node",
