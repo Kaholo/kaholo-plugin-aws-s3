@@ -16,7 +16,7 @@
     "jest": "27.5.0"
   },
   "dependencies": {
-    "@kaholo/aws-plugin-library": "^2.0.0",
+    "@kaholo/aws-plugin-library": "^2.0.1",
     "aws-sdk": "2.1030.0",
     "lodash": "4.17.21"
   }

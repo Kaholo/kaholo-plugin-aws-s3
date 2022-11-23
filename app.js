@@ -188,10 +188,21 @@ module.exports = {
     },
     // Autocomplete Functions
     _.omit(autocomplete, "listKeysAutocomplete"),
+    {
+      ACCESS_KEY: "accessKeyId",
+      SECRET_KEY: "secretAccessKey",
+      REGION: "region",
+    },
   ),
   ...awsPlugin.bootstrap(
     aws.KMS,
     {},
     _.pick(autocomplete, "listKeysAutocomplete"),
+    {
+      ACCESS_KEY: "accessKeyId",
+      SECRET_KEY: "secretAccessKey",
+      REGION: "region",
+    },
   ),
+  listRegionsAutocomplete: awsPlugin.autocomplete.listRegions,
 };
