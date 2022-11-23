@@ -32,7 +32,7 @@
   },
   "settings": [
     {
-      "name": "region",
+      "name": "REGION",
       "viewName": "Region",
       "type": "string",
       "description": "The ID of the default region to make requests on.",
