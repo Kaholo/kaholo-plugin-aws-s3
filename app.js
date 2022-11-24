@@ -191,7 +191,7 @@ module.exports = {
     {
       ACCESS_KEY: "accessKeyId",
       SECRET_KEY: "secretAccessKey",
-      REGION: "region",
+      REGION: "REGION",
     },
   ),
   ...awsPlugin.bootstrap(
@@ -201,7 +201,7 @@ module.exports = {
     {
       ACCESS_KEY: "accessKeyId",
       SECRET_KEY: "secretAccessKey",
-      REGION: "region",
+      REGION: "REGION",
     },
   ),
   listRegionsAutocomplete: awsPlugin.autocomplete.listRegions,
