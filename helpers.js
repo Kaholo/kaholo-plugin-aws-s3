@@ -139,14 +139,10 @@ async function getNewGrantees(client, {
   return newGrantees;
 }
 
-async function emptyDirectory(client, bucket, directory = "") {
-  let pathToDelete = directory;
-  if (!_.endsWith(directory, "/")) {
-    pathToDelete = `${directory}/`;
-  }
+async function emptyDirectory(client, bucket, prefix = "") {
   const listPayload = removeUndefinedAndEmpty({
     Bucket: bucket,
-    Prefix: pathToDelete,
+    Prefix: prefix,
   });
 
   const listedObjects = await client.listObjectsV2(listPayload).promise();
@@ -165,7 +161,7 @@ async function emptyDirectory(client, bucket, directory = "") {
 
   await client.deleteObjects(deletePayload).promise();
   if (listedObjects.IsTruncated) {
-    await emptyDirectory(bucket, directory);
+    await emptyDirectory(bucket, prefix);
   }
 }
 

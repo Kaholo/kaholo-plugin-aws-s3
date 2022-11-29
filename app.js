@@ -45,7 +45,8 @@ async function deleteObject(client, params) {
     }
   }
   if (params.RECURSIVELY) {
-    await helpers.emptyDirectory(client, params.BUCKET_NAME, params.OBJECT_NAME);
+    const objectPrefix = ["/", "*"].includes(params.OBJECT_NAME) ? "" : params.OBJECT_NAME;
+    await helpers.emptyDirectory(client, params.BUCKET_NAME, objectPrefix);
   }
   return client.deleteObject({ Bucket: params.BUCKET_NAME, Key: params.OBJECT_NAME }).promise();
 }
