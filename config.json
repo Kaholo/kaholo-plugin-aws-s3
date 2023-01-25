@@ -1,35 +1,41 @@
 {
   "name": "Amazon-aws-s3",
+  "viewName": "AWS S3",
   "type": "executer",
   "imgUrl": "logo.png",
   "execProgram": "node",
   "main": "app.js",
-  "version": "2.1.1",
-  "description": "Kaholo plugin for integration with AWS S3 API.",
+  "version": "3.0.0",
+  "description": "Cloud object storage in Amazon Web Services (AWS)",
   "category": "STORAGE",
-  "keywords": ["GCP", "compute", "google", "platform", "vm", "instance", "cloud", "cluster", "project", "infra", "infrastructure", "cli", "network", "subnetwork", "firewall", "IP", "route"],
+  "keywords": ["aws", "s3", "bucket", "storage", "amazon", "cloud", "cluster", "project", "infra", "infrastructure", "cli", "network", "subnetwork", "firewall", "IP", "route"],
+  "auth": {
+    "authId": "awsAccount",
+    "params": [
+      {
+        "name": "accessKeyId",
+        "viewName": "Access Key ID",
+        "type": "vault",
+        "description": "The AWS Access Key ID to use for authentication.",
+        "placeholder": "AKIAIOSFODNN7EXAMPLE",
+        "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
+      },
+      {
+        "name": "secretAccessKey",
+        "viewName": "Secret Key",
+        "type": "vault",
+        "description": "The AWS Secret Key to use for authentication.",
+        "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+        "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
+      }
+    ]
+  },
   "settings": [
     {
-      "name": "AWS_ACCESS_KEY_ID",
-      "viewName": "Access Key ID",
-      "type": "vault",
-      "description": "The default AWS Access Key ID to use for authentication.",
-      "placeholder": "AKIAIOSFODNN7EXAMPLE",
-      "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-    },
-    {
-      "name": "AWS_SECRET_ACCESS_KEY",
-      "viewName": "Access Key Secret",
-      "type": "vault",
-      "description": "The default AWS Access Key secret to use for authentication.",
-      "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-      "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-    },
-    {
       "name": "REGION",
-      "viewName": "Region",
+      "viewName": "Default Region",
       "type": "string",
-      "description": "The ID of the default region to make requests on.",
+      "description": "The ID of the region to use by default.",
       "placeholder": "us-east-2",
       "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
     }
@@ -39,22 +45,6 @@
       "name": "createBucket",
       "viewName": "Create Bucket",
       "params": [
-        {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
         {
           "name": "REGION",
           "viewName": "Region",
@@ -80,22 +70,6 @@
       "name": "uploadFileToBucket",
       "viewName": "Upload File To Bucket",
       "params": [
-        {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
         {
           "name": "REGION",
           "viewName": "Region",
@@ -141,22 +115,6 @@
       "viewName": "Delete Bucket",
       "params": [
         {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
@@ -190,22 +148,6 @@
       "name": "deleteObject",
       "viewName": "Delete Object",
       "params": [
-        {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
         {
           "name": "REGION",
           "viewName": "Region",
@@ -257,22 +199,6 @@
       "viewName": "List Bucket's Objects",
       "params": [
         {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
@@ -308,22 +234,6 @@
       "viewName": "List Buckets",
       "params": [
         {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
@@ -339,22 +249,6 @@
       "name": "managePublicAccessBlock",
       "viewName": "Manage Public Access Block",
       "params": [
-        {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
         {
           "name": "REGION",
           "viewName": "Region",
@@ -414,22 +308,6 @@
       "name": "putBucketAcl",
       "viewName": "Manage Bucket ACL",
       "params": [
-        {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
         {
           "name": "REGION",
           "viewName": "Region",
@@ -567,22 +445,6 @@
       "viewName": "Apply Canned ACL to Bucket",
       "params": [
         {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
@@ -636,22 +498,6 @@
       "name": "putBucketVersioning",
       "viewName": "Manage Bucket Versioning",
       "params": [
-        {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
         {
           "name": "REGION",
           "viewName": "Region",
@@ -724,22 +570,6 @@
       "viewName": "Apply Bucket Policy",
       "params": [
         {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
@@ -776,22 +606,6 @@
       "viewName": "Get Bucket Policy",
       "params": [
         {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
@@ -819,22 +633,6 @@
       "viewName": "Delete Bucket Policy",
       "params": [
         {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
@@ -861,22 +659,6 @@
       "name": "putBucketLogging",
       "viewName": "Manage Bucket Logging",
       "params": [
-        {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
         {
           "name": "REGION",
           "viewName": "Region",
@@ -1009,22 +791,6 @@
       "viewName": "Manage Bucket Encryption",
       "params": [
         {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
@@ -1091,22 +857,6 @@
       "viewName": "Enable Bucket Website Hosting",
       "params": [
         {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
@@ -1156,22 +906,6 @@
       "name": "putBucketWebsiteRedirect",
       "viewName": "Enable Bucket Website Redirect",
       "params": [
-        {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
         {
           "name": "REGION",
           "viewName": "Region",
@@ -1226,22 +960,6 @@
       "viewName": "Get Bucket Website Hosting Configuration",
       "params": [
         {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
           "name": "REGION",
           "viewName": "Region",
           "type": "autocomplete",
@@ -1268,22 +986,6 @@
       "name": "deleteBucketWebsite",
       "viewName": "Disable Bucket Website Hosting",
       "params": [
-        {
-          "name": "AWS_ACCESS_KEY_ID",
-          "viewName": "Access Key ID",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "AKIAIOSFODNN7EXAMPLE",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
-        {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "viewName": "Access Key Secret",
-          "type": "vault",
-          "description": "This is a parameter taken from the vault to access AWS",
-          "placeholder": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-          "learnUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey"
-        },
         {
           "name": "REGION",
           "viewName": "Region",
