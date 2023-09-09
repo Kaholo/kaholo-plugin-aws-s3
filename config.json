@@ -6,7 +6,7 @@
   "execProgram": "node",
   "main": "app.js",
   "version": "3.0.0",
-  "description": "Cloud object storage in Amazon Web Services (AWS)",
+  "description": "Cloud object storage in Amazon Web Services",
   "category": "STORAGE",
   "keywords": ["aws", "s3", "bucket", "storage", "amazon", "cloud", "cluster", "project", "infra", "infrastructure", "cli", "network", "subnetwork", "firewall", "IP", "route"],
   "auth": {
@@ -275,7 +275,7 @@
           "viewName": "Block Public Acls",
           "type": "boolean",
           "description": "S3 Block Public Access provides controls across an entire AWS Account or at the individual S3 bucket level to ensure that objects never have public access, now and in the future. Public access is granted to buckets and objects through access control lists (ACLs), bucket policies, or both.",
-          "placeholder": "Disable / Enable",
+          "default": false,
           "learnUrl": "https://aws.amazon.com/s3/features/block-public-access/"
         },
         {
@@ -283,7 +283,7 @@
           "viewName": "Block Public Policy",
           "type": "boolean",
           "description": "S3 Block Public Access provides controls across an entire AWS Account or at the individual S3 bucket level to ensure that objects never have public access, now and in the future. Public access is granted to buckets and objects through access control lists (ACL), bucket policies, or both.",
-          "placeholder": "Disable / Enable",
+          "default": false,
           "learnUrl": "https://aws.amazon.com/s3/features/block-public-access/"
         },
         {
@@ -291,7 +291,7 @@
           "viewName": "Ignore Public Acls",
           "type": "boolean",
           "description": "In order to ensure that public access to all your S3 buckets and objects is blocked, turn on block all public access at the account level. These settings apply account-wide for all current and future buckets.",
-          "placeholder": "Disable / Enable",
+          "default": false,
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html"
         },
         {
@@ -299,7 +299,7 @@
           "viewName": "Restrict Public Buckets",
           "type": "boolean",
           "description": "Specifies whether AWS should restrict public bucket policies for this bucket.",
-          "placeholder": "bucket-01",
+          "default": false,
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html"
         }
       ]
@@ -427,7 +427,7 @@
           "viewName": "Grant To Signed User",
           "type": "boolean",
           "description": "Permitting a user to request access to the logging resources.",
-          "placeholder": "Disable / Enable",
+          "default": false,
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html"
         },
         {
@@ -435,7 +435,7 @@
           "viewName": "Don't Overwrite",
           "type": "boolean",
           "description": "If true, add new permissions to existing permissions(In case they don't already exist). If false, overwrite existing permissions with new permissions provided in the request.",
-          "placeholder": "Disable / Enable",
+          "default": false,
           "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html"
         }
       ]
@@ -684,7 +684,7 @@
           "viewName": "Disable Logging",
           "type": "boolean",
           "description": "Enable/Disable logging for the S3 bucket.",
-          "placeholder": "Disable / Enable",
+          "default": false,
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/logging-with-S3.html"
         },
         {
@@ -773,7 +773,7 @@
           "viewName": "Grant To Signed User",
           "type": "boolean",
           "description": "Permitting a user to request access to the logging resources.",
-          "placeholder": "Disable / Enable",
+          "default": false,
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html"
         },
         {
@@ -781,7 +781,7 @@
           "viewName": "Don't Overwrite",
           "type": "boolean",
           "description": "Not to overwrite written logs and keep creating new log files.",
-          "placeholder": "Disable / Enable",
+          "default": false,
           "learnUrl": "https://aws.amazon.com/premiumsupport/knowledge-center/secure-s3-resources/"
         }
       ]
@@ -847,7 +847,7 @@
           "viewName": "Bucket Key Enabled",
           "type": "boolean",
           "description": "Specifies whether AWS should use an S3 Bucket Key with server-side encryption using KMS (SSE-KMS) for new objects in the bucket. Existing objects are not affected.",
-          "placeholder": "Disabled / Enabled",
+          "default": false,
           "learnUrl": "https://docs.aws.amazon.com/kms/latest/developerguide/services-s3.html"
         }
       ]
