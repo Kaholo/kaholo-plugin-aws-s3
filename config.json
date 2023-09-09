@@ -347,6 +347,9 @@
           "name": "objGrantType",
           "viewName": "Object Grant Type",
           "type": "options",
+          "default": "readWrite",
+          "required": true,
+          "placeholder": "please select one",
           "options": [
             {
               "id": "readWrite",
@@ -366,13 +369,15 @@
             }
           ],
           "description": "The type of permission to give to the specified users and groups for access to the buckets objects.",
-          "placeholder": "Read and Write | Read | Write | None",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/managing-acls.html"
         },
         {
           "name": "aclGrantType",
           "viewName": "ACL Grant Type",
           "type": "options",
+          "default": "readWrite",
+          "required": true,
+          "placeholder": "please select one",
           "options": [
             {
               "id": "readWrite",
@@ -392,13 +397,15 @@
             }
           ],
           "description": "The type of permission to give to the specified users and groups for accessing and editing permissions for this bucket.",
-          "placeholder": "Read and Write | Read | Write | None",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/managing-acls.html"
         },
         {
           "name": "URI",
           "viewName": "Groups URIs",
           "type": "options",
+          "default": "http://acs.amazonaws.com/groups/global/AuthenticatedUsers",
+          "required": true,
+          "placeholder": "please select one",
           "parserType": "array",
           "description": "The uri of the predefined group(s) to allow access to the bucket. To specify multiple values provide an array of group URIs from code.",
           "options": [
@@ -415,7 +422,6 @@
               "name": "Log Delivery Group"
             }
           ],
-          "placeholder": "Authenticated Users | All Users | Log Delivery Group",
           "learnUrl": "https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/s3/model/GroupGrantee.html"
         },
         {
@@ -483,7 +489,9 @@
           "name": "ACL",
           "viewName": "Canned ACL Type",
           "type": "options",
+          "default": "private",
           "required": true,
+          "placeholder": "please select one",
           "options": [
             {
               "id": "private",
@@ -503,7 +511,6 @@
             }
           ],
           "description": "Each S3 bucket and file has an associated Access Control List (ACL) with grantees and permissions. A canned ACL is a predefined set of grantees and permissions that can be set when creating a bucket or file.",
-          "placeholder": "Private | Public Read | Public Read Write | Authenticated Read",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectAcl.html"
         }
       ]
@@ -537,6 +544,9 @@
           "name": "status",
           "viewName": "Status",
           "type": "options",
+          "default": "Suspended",
+          "required": true,
+          "placeholder": "please select one",
           "options": [
             {
               "id": "Enabled",
@@ -548,13 +558,15 @@
             }
           ],
           "description": "whether to enable or disable versioning in the bucket.",
-          "placeholder": "Disable / Enable",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html"
         },
         {
           "name": "mfaDelete",
           "viewName": "MFA Delete",
           "type": "options",
+          "default": "Disabled",
+          "required": true,
+          "placeholder": "please select one",
           "options": [
             {
               "id": "Enabled",
@@ -566,7 +578,6 @@
             }
           ],
           "description": "whether to enable or disable MFA Delete feature in the bucket.",
-          "placeholder": "Enabled | Disabled. Default value is disabled.",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingMFADelete.html"
         },
         {
@@ -723,6 +734,9 @@
           "name": "permissionType",
           "viewName": "Permission Type",
           "type": "options",
+          "default": "Read",
+          "required": true,
+          "placeholder": "please select one",
           "options": [
             {
               "id": "READ",
@@ -738,13 +752,15 @@
             }
           ],
           "description": "Permitting the access to the logs inside the specified bucket.",
-          "placeholder": "Read | Write | Full Control",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html"
         },
         {
           "name": "groupUris",
           "viewName": "Groups URIs",
           "type": "options",
+          "default": "http://acs.amazonaws.com/groups/global/AuthenticatedUsers",
+          "required": true,
+          "placeholder": "please select one",
           "parserType": "array",
           "description": "Uniform Resource Identifier (URI) to help streamline user login workflows.",
           "options": [
@@ -761,7 +777,6 @@
               "name": "Log Delivery Group"
             }
           ],
-          "placeholder": "Authenticated Users | All Users | Log Delivery Group",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-bucket-intro.html#:~:text=If%20you%20access%20a%20bucket,URLs%20to%20access%20a%20bucket."
         },
         {
@@ -828,6 +843,9 @@
           "name": "sseAlgo",
           "viewName": "Encryption Algorithm",
           "type": "options",
+          "default": "none",
+          "required": true,
+          "placeholder": "please select one",
           "options": [
             {
               "id": "AES256",
@@ -843,7 +861,6 @@
             }
           ],
           "description": "AWS encrypts data using 256-bit AES encryption, also known as AES-256. You can apply encryption to data stored using Amazon S3's Standard.",
-          "placeholder": "SSE-S3 AES256 | SSE-KMS | none",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/serv-side-encryption.html"
         },
         {
@@ -953,6 +970,9 @@
           "name": "redirectProtocol",
           "viewName": "Redirect Algorithm",
           "type": "options",
+          "default": "https",
+          "required": true,
+          "placeholder": "please select one",
           "options": [
             {
               "id": "http",
@@ -964,7 +984,6 @@
             }
           ],
           "description": "Defining if the internet url is secure or not.",
-          "placeholder": "HTTP | HTTPS",
           "learnUrl": "https://github.com/Kaholo/kaholo-plugin-amazon-s3"
         }
       ]
