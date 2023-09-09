@@ -7,8 +7,20 @@
   "main": "app.js",
   "version": "3.0.0",
   "description": "Cloud object storage in Amazon Web Services",
-  "category": "STORAGE",
-  "keywords": ["aws", "s3", "bucket", "storage", "amazon", "cloud", "cluster", "project", "infra", "infrastructure", "cli", "network", "subnetwork", "firewall", "IP", "route"],
+  "category": "Storage",
+  "keywords": [
+    "aws",
+    "s3",
+    "bucket",
+    "storage",
+    "amazon",
+    "cloud",
+    "object",
+    "static",
+    "infrastructure",
+    "cli",
+    "website"
+  ],
   "auth": {
     "authId": "awsAccount",
     "params": [
@@ -139,7 +151,7 @@
           "name": "RECURSIVELY",
           "viewName": "Delete Recursively",
           "type": "boolean",
-          "description" : "Recursively delete bucket and all its objects.",
+          "description": "Recursively delete bucket and all its objects.",
           "default": false
         }
       ]
