@@ -1,6 +1,6 @@
 {
   "name": "kaholo-plugin-amazon-aws-s3",
-  "description": "Kaholo plugin for integration with AWS S3 API.",
+  "description": "Cloud object storage in Amazon Web Services",
   "main": "app.js",
   "scripts": {
     "test": "npx jest .",
