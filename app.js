@@ -1,3 +1,4 @@
+const fs = require("fs");
 const _ = require("lodash");
 const path = require("path");
 const aws = require("aws-sdk");
@@ -52,13 +53,14 @@ async function deleteObject(client, params) {
 }
 
 async function uploadFileToBucket(client, params) {
-  const fileBody = await helpers.readFile(params.FILE_PATH);
-  const filename = path.basename(params.FILE_PATH);
+  if (!fs.existsSync(params.FILE_PATH)) {
+    throw new Error(`Couldn't find the file at ${params.FILE_PATH}`);
+  }
 
   const payload = {
     Bucket: params.BUCKET_NAME,
-    Key: helpers.sanitizeS3Path(params.DEST_FILE_PATH, filename),
-    Body: fileBody,
+    Key: helpers.sanitizeS3Path(params.DEST_FILE_PATH, path.basename(params.FILE_PATH)),
+    Body: fs.createReadStream(params.FILE_PATH),
   };
 
   return client.upload(payload).promise();
