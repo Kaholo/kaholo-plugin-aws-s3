@@ -1,5 +1,4 @@
 const _ = require("lodash");
-const fs = require("fs");
 const { removeUndefinedAndEmpty } = require("@kaholo/aws-plugin-library").helpers;
 
 const GRANTEE_TYPE_TO_FIELD = {
@@ -99,26 +98,6 @@ function resolveBucketAclPermissions(params) {
   return result;
 }
 
-async function readFile(filepath) {
-  if (!fs.existsSync(filepath)) {
-    throw new Error(`Couldn't find the file at ${filepath}`);
-  }
-  const filestream = fs.createReadStream(filepath);
-
-  let body = "";
-  return new Promise((resolve, reject) => {
-    filestream.on("error", (err) => {
-      reject(new Error(`Error reading source file: ${err.message}`));
-    });
-    filestream.on("data", (chunk) => {
-      body += chunk;
-    });
-    filestream.on("end", () => {
-      resolve(body);
-    });
-  });
-}
-
 async function getUserId(client) {
   return (await client.listBuckets().promise()).Owner.ID;
 }
@@ -183,7 +162,6 @@ function sanitizeS3Path(path, filename) {
 }
 
 module.exports = {
-  readFile,
   resolveBucketAclPermissions,
   getNewGrantees,
   getGrants,
