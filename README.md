@@ -1,240 +1,194 @@
-# kaholo-plugin-Amazon-aws-s3
-AWS-s3 plugin for Kaholo
+# Kaholo AWS S3 Plugin
+This plugin extends Kaholo's capabilities to interact with Amazon Web Services [Simple Cloud Storage](https://aws.amazon.com/pm/serv-s3) (AWS S3). The plugin makes use of npm package [aws-sdk API](https://www.npmjs.com/package/aws-sdk) to provide methods work with buckets and object in S3.
 
-This plugin is based on S3 AWS SDK [Documentaion](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html)
+## Prerequisites
+To use this plugin you must have an account (either root or IAM) with Amazon Web Services (AWS) with sufficient permissions to work with EC2, and a pair of Access Keys associated with that account.
 
-##  Settings
-1. Access Key ID (Vault) **Required if not in action** - The ID of the access key of the default IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in action** - The access key secret of the default IAM user to connect with.
-3. Region (String) **Required if not in action** - The AWS region to make requests to on default.
+## Plugin Settings
+To Access Plugin Settings, click on Settings | Plugins, find the "AWS S3" plugin, and then click on the plugin's name, which is blue hypertext. There is only one plugin-level setting for AWS S3, the default AWS region. If you specify a region here, e.g. `ap-southeast-1`, then newly created AWS S3 actions will inherit that region by default. This is provided only as a convenience, and each action's region can be modified after creation if the configured default is not appropriate.
+
+## Plugin Account
+This plugin makes use of a Kaholo Account to manage authentication. This allows the authentication to be configured once and then conveniently selected from a drop-down on an action-by-action basis. The security-sensitive AWS Access Keys are stored encrypted in the Kaholo vault to protect them from exposure in the UI, Activity Log, Final Result, and server logs. They may be stored in the vault before or during Kaholo Account creation.
+
+The same Kaholo Account can be used for several AWS-related Kaholo plugins. If you've already configured one, for example to use with AWS CLI Plugin, then no further account configuration is necessary.
+
+### Account Name
+Account Name is an arbitrary name to identify a specific Kaholo account. It is suggested to name it after the AWS IAM user name associated with the access keys, and/or the type(s) of AWS access granted to that user. The names of the ID and Secret components in the Vault are ideally named similarly.
+
+### Access Key ID (Vault)
+This is the Access Key ID as provided by AWS or the AWS administrator. While the ID is not technically a secret it is vaulted anyway for better security. An Access Key ID looks something like this:
+
+    AKIA3LQJ67DUTPFST5GM
+
+### Access Key Secret (Vault)
+This is the Access Key Secret as provided by AWS or the AWS administrator. This is a genuine secret and must be vaulted in the Kaholo Vault. An Access Key Secret looks something like this:
+
+    DByOuQgqqwUWa8Y4Wu3hE3HTWZB6+mQVt8Qs0Phv
+
+## Common Parameter: Region
+Region is a required parameter in most methods of this plugin. It is the AWS geographical region (and datacenter) where buckets and object exist. This parameter has an autocomplete function so you may select the region using either the CLI-type ID string, for example `ap-southeast-1`, or the user-friendly location, e.g. "Asia Pacific (Singapore)". If using the code layer, use the CLI-type ID string.
+
+## Common Parameter: Bucket
+Bucket is a required parameter in most methods of this plugin. A bucket is a container for objects stored in Amazon S3. You can store any number of objects in a bucket and can have up to 100 buckets in your account.
+
+Bucket names are restricted by [AWS bucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html). Specifically:
+* Buckets names must be 3-63 characters long.
+* Bucket names can consist only of lowercase letters, numbers, periods (`.`), and hyphens (`-`).
+* Bucket names must begin and end with a an alphanumeric character.
+* Bucket names must be unique across all AWS accounts in all the AWS Regions within a partition.
+* Assorted other restricitons - see S3 documentation for further details.
 
 ## Method: Create Bucket
-Create a new S3 bucket
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** - Create the new bucket in the specified region.
-4. Name (String) **Required** - The name of the new bucket to create.
+This method creates a new AWS S3 bucket.
+### Parameter: Name
+A unique name for the new bucket. This is name used as Parameter "Bucket" for all other methods.
 
 ## Method: Upload File To Bucket
-Upload a file to the specified bucket.
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** - Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to upload the object to.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-5. File Path (String) **Required** - The local path of the file on the agent running this action.
-6. Dest Object Path (String) **Required** - The Path and name(key) of the new object created in the bucket for the file.
+Uploads the specified file from the Kaholo agent to an S3 bucket.
+### Parameter: File Path
+Absolute or relative path to the file on the Kaholo agent. A relative path is relative to the agent's default working directly
+### Parameter: Dest Object Path
+Actually the S3 name of the object, but if the name includes one or more `/`, the S3 Web Console will display the object as if it were in a hierarchical filesystem, i.e. on a path. This is so a large flat object store like an S3 bucket can be treated as, compared to and kept in sync with a hierarchical filesystem. Be careful to avoid object names ending in `/` or containing consecutive slashes (`//`) or there may be confusing results.
 
 ## Method: Delete Bucket
-Delete the specified bucket
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to delete.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
+Deletes an S3 bucket. Normally a bucket must be empty to be deleted.
+### Parameter: Delete Recursively
+If the S3 bucket to be deleted is not empty, enable this parameter to delete all objects in the bucket before deleting the bucket itself.
 
 ## Method: Delete Object
-Delete the specified object in the specified bucket.
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-5. Object Path (String) **Required** - The path and name(key) of the object to delete.
+Deletes one or more objects within an S3 bucket.
+### Parameter: Object Path
+The name of the S3 object (or root object) to delete. A root object is any for which other objects are named the same plus `/` plus anything more - for the purpose of deleting recursively.
+### Parameter: Delete Recursively
+If enabled, any object matching the specified object name plus `/` plus anything more will also be deleted.
+### Parameter: Fail on object not found
+If the specified object is not found, stop the Kaholo action with `error` status (and if configured the pipeline).
 
 ## Method: List Bucket's Objects
-List all objects matching the provided criteria in the specified bucket.
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-5. Prefix (String) **Optional** - Limits the response to keys that begin with the specified prefix.
-6. Max Results (String) **Optional** - The maximum number of results to return. Default value is 1000.
-7. Next Continuation Token (String) **Optional** - In case of pagination. If listed objects and more results left to return than 'NextContinuationToken' will be provided for you to continue listing from the point stopped.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html)
+Lists the objects contained in a bucket
+### Parameter: Prefix
+To list only a subset of objects, provide an object name or path to match. Objects matching exactly or starting the same plus `/` plus anything more will be listed.
 
 ## Method: List Buckets
-List all buckets owned by the signed user.
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
+Lists all bucket in the specified region.
 
 ## Method: Manage Public Access Block
-Manage the public access block of the specified bucket.
+Manages public (unauthenticated) access to the S3 bucket.
+### Parameter: Block Public ACLs
+Blocks public access based on access control lists (ACLs).
+* PUT Bucket acl and PUT Object acl calls fail if the specified access control list (ACL) is public.
+* PUT Object calls fail if the request includes a public ACL.
 
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-5. Block Public Acls (Boolean) **Optional** - Specifies whether AWS should block public access control lists (ACLs) for this bucket and objects in this bucket.
-6. Block Public Policy (Boolean) **Optional** - Specifies whether AWS should block public bucket policies for this bucket.
-7. Ignore Public Acls (Boolean) **Optional** - Specifies whether AWS should ignore public ACLs for this bucket and objects in this bucket.
-8. Restrict Public Buckets (Boolean) **Optional** - Specifies whether AWS should restrict public bucket policies for this bucket. 
+However, existing policies and ACLs for buckets and objects are not modified. This setting enables you to protect against public access while allowing you to audit, refine, or otherwise alter the existing policies and ACLs for your buckets and objects.
+
+### Parameter: Block Public Policy
+Enabling this option causes Amazon S3 to reject calls to PUT Bucket policy if the specified bucket policy allows public access. It also causes Amazon S3 to reject calls to PUT access point policy for all of the bucket's same-account access points if the specified policy allows public access.
+
+### Parameter: Ignore Public ACLs
+Enabling this option causes Amazon S3 to ignore all public ACLs on a bucket and any objects that it contains. This setting enables you to safely block public access granted by ACLs while still allowing PUT Object calls that include a public ACL.
+
+### Parameter: Restrict Public Buckets
+Enabling this option restricts access to an access point or bucket with a public policy to only AWS service principals and authorized users within the bucket owner's account and access point owner's account. This setting blocks all cross-account access to the access point or bucket (except by AWS service principals), while still allowing users within the account to manage the access point or bucket.
 
 ## Method: Manage Bucket ACL
-Manage the permissions of the specified bucket.
+Amazon S3 access control lists (ACLs) enable you to manage access to buckets and objects. Each bucket and object has an ACL attached to it as a subresource. It defines which AWS accounts or groups are granted access and the type of access. When a request is received against a resource, Amazon S3 checks the corresponding ACL to verify that the requester has the necessary access permissions.
 
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-5. Object Grant Type (Options) **Required if no ACL Grant Type** - The type of permission to give to the specified users and groups for access to the buckets objects. Possible values: **Read and Write | Read | Write | None**
-6. ACL Grant Type (Options) **Required if no Object Grant Type** - The type of permission to give to the specified users and groups for accessing and editing permissions for this bucket. Possible values: **Read and Write | Read | Write | None**
-7. Groups URIs (Options) **Required if no other grantees** - The uri of the predefined group(s) to allow access to the bucket. To specify multiple values provide an array of group URIs from code. Possible values: **Authenticated Users | All Users | Log Delivery Group**
-8. Users Canonical IDs (Text) **Required if no other grantees** - 
-9. Users Email Addresses (Text) **Required if no other grantees** - Grant the users with the provided email addresses access to the bucket. Only available in the regions: US East (N. Virginia) | US West (N. California) | US West (Oregon) | Asia Pacific (Singapore) | Asia Pacific (Sydney) | Asia Pacific (Tokyo) | Europe (Ireland) | South America (São Paulo)
-10. Grant To Signed User (Boolean) **Required if no other grantees** - Grant the user making this request access to the bucket.
-11. Don't Overwrite (Boolean) **Optional** - If true, add new permissions to existing permissions(In case they don't already exist). If false, overwrite existing permissions with new permissions provided in the request.
+Which users are granted access may be specified any of a number of ways - group URI, canonical ID, email address, or all users who are signed, i.e. authenticated.
+### Parameter: Object Grant Type
+Use the choices parameter to select whether to grant read, write, both, or no access at all to objects in the bucket.
+### Parameter: ACL Grant Type
+Use the choices parameter to select whether to grant read, write, both, or no access at all to the ACL of the the bucket.
+### Parameter: Groups URIs
+Select a predefined group of users to be granted/denied access.
+### Parameter: Users Canonical IDs
+Specify specific canonical users to be granted/denied access. A canonical user ID is an alphanumeric identifier that obfuscates the AWS account ID for the purpose of granting cross-account access to buckets.
+### Parameter: Users Email Addresses
+Specify the email address of an AWS account to be granted/denied access.
+### Parameter: Grant To Signed User
+Grant the access to ANY authenticated user.
+### Parameter: Don't Overwrite
+If enabled, the granted permissions are added to existing permissions. If NOT enabled, the existing bucket ACL is instead replaced.
 
 ## Method: Apply Canned ACL to Bucket
-Apply a predefined set of ACL permissions to the bucket.
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-5. Canned ACL Type (Options) **Required** - The type of predfined ACL permissions to apply to the bucket. Possible values: **Private | Public Read | Public Read Write | Authenticated Read**
+Apply an AWS pre-packaged (canned) ACL to the bucket. This is a convenient way to quickly arrive at a recommended ACL configuration.
+### Parameter: Canned ACL Type
+Choose among the listed ACLs - private, public read (only), public read/write, or read (only) for authenticated users.
 
 ## Method: Manage Bucket Versioning
-Manage the versioning settings of the bucket
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-5. Status (Options) **Required** - whether to enable or disable versioning in the bucket. Possible values Enabled | Disabled.
-5. MFA Delete (Options) **Optional** - whether to enable or disable MFA Delete feature in the bucket. Possible values Enabled | Disabled. Default value is disabled.
-6. MFA (String) **Required if MFA Delete is enabled** - The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device.
+Manages the configuration of bucket versioning, including an option to require multi-factor authentication (MFA) for delete operations.
+### Parameter: Status
+Enable or disable bucket versioning
+### Parameter: MFA Delete
+If enabled, the bucket owner must include two forms of authentication in any request to delete a version or change the versioning state of the bucket.
+### Parameter: MFA
+The concatenation of the authentication device's serial number, a space, and the value that is displayed on the authentication device.
 
 ## Method: Apply Bucket Policy
-Apply the specified policy to the specified bucket.
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-5. Policy Object (JSON/Object) **Required** - The policy to apply to this bucket.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html) 
+Apply a specific policy to a bucket. Policies are written as JSON documents.
+### Parameter: Policy Object
+The code-layer object or JSON document containing the policy to apply to the bucket.
 
 ## Method: Get Bucket Policy
-Get the current policy of the specified bucket.
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
+Retreive the current policy applied to a bucket.
 
 ## Method: Delete Bucket Policy
-Delete the current policy of the specified bucket.
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
+Delete the current policy applied to a bucket.
 
 ## Method: Manage Bucket Logging
-Manage the logging settings of the specified bucket.
+You can record the actions that are taken by users, roles, or AWS services on Amazon S3 resources and maintain log records for auditing and compliance purposes. To do this, you can use server-access logging, AWS CloudTrail logging, or a combination of both.
 
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Source Bucket (Autocomplete) **Required** - The bucket to enable or disable logging in.
-5. Disable Logging (Boolean) **Optional** - If true disable logging, else enable it.
-6. Target Bucket (Autocomplete) **Required** - In case of enabling logging, save all logs in the specified bucket.
-7. Target Prefix (String) **Required** - assign the specified prefix to the names of all log files created. Should include the path the logs is saved in the target bucket.
-8. Permission Type (Options) **Optional** - If specified, give access to the logging resources of the bucket to all users and groups specified. Possible values: **Read | Write | Full Control** 
-9. Groups URIs (Options) **Optional** - The uri of the predefined group(s) to allow access to the bucket. To specify multiple values provide an array of group URIs from code. Possible values: **Authenticated Users | All Users | Log Delivery Group**
-10. User Canonical IDs (Text) **Optional** - Give access to the logging resources of the bucket to all the users with the specified canonical IDs. You can enter multiple values by seperating each with a new line.
-11. Email Addresses (Text) **Optional** - Give access to the logging resources of the bucket to all the users with the specified emails. You can enter multiple values by seperating each with a new line. **Only available in the regions**: US East (N. Virginia) | US West (N. California) | US West (Oregon) | Asia Pacific (Singapore) | Asia Pacific (Sydney) | Asia Pacific (Tokyo) | Europe (Ireland) | South America (São Paulo)
-12. Grant To Signed User (Boolean) **Optional** - Grant the user making this request access to the bucket logging resources.
-13. Don't Overwrite (Boolean) **Optional** - If true, only update values provided and not all of them. If false, overwite existing configuration with all field values.
+This method manages the configuration of server-access logging only. Which users are granted access to the logs in the target bucket may be specified any of a number of ways - group URI, canonical ID, email address, or all users who are signed, i.e. authenticated.
+
+### Parameter: Source Bucket
+The bucket for which logging is to be enabled or disabled.
+### Parameter: Disable Logging
+Enable or disable logging for the bucket.
+### Parameter: Target Bucket
+The bucket that is to recieve the logging information.
+### Parameter: Target Prefix
+A prefix for the object name fo the logged information.
+### Parameter: Permission Type
+The permission to grant over the logged information, i.e. the logs in the target bucket.
+### Parameter: Groups URIs
+Select a predefined group of users to be granted/denied access.
+### Parameter: Users Canonical IDs
+Specify specific canonical users to be granted/denied access. A canonical user ID is an alphanumeric identifier that obfuscates the AWS account ID for the purpose of granting cross-account access to buckets.
+### Parameter: Users Email Addresses
+Specify the email address of an AWS account to be granted/denied access.
+### Parameter: Grant To Signed User
+Grant the access to ANY authenticated user.
+### Parameter: Don't Overwrite
+If enabled, the specified permissions are added to existing ones for the target bucket. If not the ACL is replaced.
 
 ## Method: Manage Bucket Encryption
-Manage the encryption of the specified bucket.
+Amazon S3 buckets have bucket encryption enabled by default, and new objects are automatically encrypted by using server-side encryption with Amazon S3 managed keys (SSE-S3). This encryption applies to all new objects in Amazon S3 buckets, at no cost.
 
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-5. Encryption Algorithm (Options) **Optional** - Whether to enable encryption, and if AWS should use S3 default key, or a specified KMS Key. Possible values: **SSE-S3 AES256 | SSE-KMS | none**
-6. KMS Master Key (Autocomplete) **Required for SSE-KMS encryption** - For SSE-KMS encryption, the ID of the KMS key to provide for the bucket encryption.
-7. Bucket Key Enabled (Boolean) **Optional** - Specifies whether AWS should use an S3 Bucket Key with server-side encryption using KMS (SSE-KMS) for new objects in the bucket. Existing objects are not affected. 
+For more control over encryption keys, this method instead manually manages bucket encryption.
+### Parameter: Encryption Algorithm
+Which algorythm to use for bucket encryption, or `none` to disable bucket encryption.
+### Parameter: KMS Master Key
+The ARN of the KMS master key for the bucket's encryption.
+### Parameter: Bucket Key Enabled
+Select this to enable use of an S3 Bucket Key for SSE-KMS on new objects, to reduce requests to (and costs associated with) AWS KMS.
 
 ## Method: Enable Bucket Website Hosting
-Enable Bucket Website Hosting
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-5. Error Document (String) **Optional** - The object key name to use when a 4XX class error occurs.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/CustomErrorDocSupport.html)
-6. Index Document Suffix (String) **Optional** - A suffix that is appended to a request that is for a directory on the website endpoint. Can't use ecscape characters. For index.html suffix value, on a request to samplebucket/images/ the object with the key images/index.html will be returned.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/IndexDocumentSupport.html)
-7. Routing Rules (String) **Optional** - Rules that define when a redirect is applied and the redirect behavior.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/how-to-page-redirect.html#advanced-conditional-redirects)
+Enable an S3 bucket to be used as a static website.
+### Parameter: Error Document
+The document to show when an error occurs.
+### Parameter: Index Document Suffix
+The document to be used as the home or default page of the website, typically `index.html`.
+### Parameter: Routing Rules
+A JSON document specifiying the redirection rules to automatically redirect webpage requests for specific content.
 
 ## Method: Enable Bucket Website Redirect
-Enable Bucket Website Redirect
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to make the request on.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-5. Redirect To Host (String) **Required** - The host name to redirect all requests to.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
-6. Redirect Algorithm (Options) **Required** - Possible values: **HTTP | HTTPS**
+Enable a redirect for requests for a specific object in the bucket.
+### Parameter: Redirect To Host
+The host to which to redirect the request.
+### Parameter: Redirect Algorithm
+The protocol to use for the redirect - HTTP, HTTPS, or none.
 
 ## Method: Get Bucket Website Hosting Configuration
-Get Bucket Website Hosting Configuration
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to get it's static website hosting configuration.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
+Retreives the current website hosting configuration of the bucket.
 
 ## Method: Disable Bucket Website Hosting
-Disable Bucket Website Hosting
-
-## Parameters
-1. Access Key ID (Vault) **Required if not in settings** - The ID of the access key of the IAM user to authenticate with.
-2. Access Key Secret (Vault) **Required if not in setting** - The access key secret of the IAM user to authenticate with.
-3. Region (Autocomplete) **Required if not in setting** -  Make this request in the specified region.
-4. Bucket (Autocomplete) **Required** - The bucket to disable static website hosting on.
-[Learn More](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
+Disables website hosting for the bucket.
