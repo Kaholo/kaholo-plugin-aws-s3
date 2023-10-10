@@ -1,3 +1,4 @@
+const { ListObjectsV2Command, DeleteObjectsCommand, ListBucketsCommand } = require("@aws-sdk/client-s3");
 const _ = require("lodash");
 const { removeUndefinedAndEmpty } = require("@kaholo/aws-plugin-library").helpers;
 
@@ -99,11 +100,15 @@ function resolveBucketAclPermissions(params) {
 }
 
 async function getUserId(client) {
-  return (await client.listBuckets().promise()).Owner.ID;
+  const { Owner } = await client.send(new ListBucketsCommand());
+  return Owner.ID;
 }
 
 async function getNewGrantees(client, {
-  groupUris, userIds, emails, grantToSignedUser,
+  groupUris,
+  userIds,
+  emails,
+  grantToSignedUser,
 }) {
   const newGrantees = [
     ...parseGrantees(groupUris || [], "Group"),
@@ -124,7 +129,7 @@ async function emptyDirectory(client, bucket, prefix = "") {
     Prefix: prefix,
   });
 
-  const listedObjects = await client.listObjectsV2(listPayload).promise();
+  const listedObjects = await client.send(new ListObjectsV2Command(listPayload));
   if (listedObjects.Contents.length === 0) {
     return;
   }
@@ -138,7 +143,7 @@ async function emptyDirectory(client, bucket, prefix = "") {
     deletePayload.Delete.Objects.push({ Key });
   });
 
-  await client.deleteObjects(deletePayload).promise();
+  await client.send(new DeleteObjectsCommand(deletePayload));
   if (listedObjects.IsTruncated) {
     await emptyDirectory(bucket, prefix);
   }

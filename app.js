@@ -1,41 +1,98 @@
 const fs = require("fs");
 const _ = require("lodash");
 const path = require("path");
-const aws = require("aws-sdk");
 const awsPlugin = require("@kaholo/aws-plugin-library");
+
+const { KMSClient } = require("@aws-sdk/client-kms");
+
+const {
+  S3Client,
+  CreateBucketCommand,
+  ListObjectsV2Command,
+  ListBucketsCommand,
+  PutPublicAccessBlockCommand,
+  PutBucketAclCommand,
+  PutBucketVersioningCommand,
+  GetBucketPolicyCommand,
+  DeleteBucketPolicyCommand,
+  DeleteBucketWebsiteCommand,
+  GetBucketWebsiteCommand,
+  PutBucketWebsiteCommand,
+  DeleteBucketCommand,
+  DeleteObjectCommand,
+  PutObjectCommand,
+  GetBucketAclCommand,
+  PutBucketPolicyCommand,
+  PutBucketLoggingCommand,
+  GetBucketLoggingCommand,
+  PutBucketEncryptionCommand,
+} = require("@aws-sdk/client-s3");
 
 const payloadFunctions = require("./payload-functions");
 const helpers = require("./helpers");
 const autocomplete = require("./autocomplete");
 
 const simpleAwsFunctions = {
-  createBucket: awsPlugin.generateAwsMethod("createBucket", payloadFunctions.prepareCreateBucketPayload),
-  listObjectsInBucket: awsPlugin.generateAwsMethod("listObjectsV2", payloadFunctions.prepareListObjectsPayload),
-  listBuckets: awsPlugin.generateAwsMethod("listBuckets"),
-  managePublicAccessBlock: awsPlugin.generateAwsMethod("putPublicAccessBlock", payloadFunctions.prepareManagePublicAccessBlockPayload),
-  putCannedACL: awsPlugin.generateAwsMethod("putBucketAcl", payloadFunctions.preparePutCannedAclPayload),
-  putBucketVersioning: awsPlugin.generateAwsMethod("putBucketVersioning", payloadFunctions.preparePutBucketVersioningPayload),
-  getBucketPolicy: awsPlugin.generateAwsMethod("getBucketPolicy", payloadFunctions.prepareGetBucketPolicyPayload),
-  deleteBucketPolicy: awsPlugin.generateAwsMethod("deleteBucketPolicy", payloadFunctions.prepareDeleteBucketPolicyPayload),
-  deleteBucketWebsite: awsPlugin.generateAwsMethod("deleteBucketWebsite", payloadFunctions.prepareDeleteBucketWebsitePayload),
-  getBucketWebsite: awsPlugin.generateAwsMethod("getBucketWebsite", payloadFunctions.prepareGetBucketWebsitePayload),
-  putBucketWebsite: awsPlugin.generateAwsMethod("putBucketWebsite", payloadFunctions.preparePutBucketWebsitePayload),
-  putBucketWebsiteRedirect: awsPlugin.generateAwsMethod("putBucketWebsite", payloadFunctions.preparePutBucketWebsiteRedirectPayload),
+  createBucket: awsPlugin.generateAwsMethod(
+    CreateBucketCommand,
+    payloadFunctions.prepareCreateBucketPayload,
+  ),
+  listObjectsInBucket: awsPlugin.generateAwsMethod(
+    ListObjectsV2Command,
+    payloadFunctions.prepareListObjectsPayload,
+  ),
+  listBuckets: awsPlugin.generateAwsMethod(ListBucketsCommand),
+  managePublicAccessBlock: awsPlugin.generateAwsMethod(
+    PutPublicAccessBlockCommand,
+    payloadFunctions.prepareManagePublicAccessBlockPayload,
+  ),
+  putCannedACL: awsPlugin.generateAwsMethod(
+    PutBucketAclCommand,
+    payloadFunctions.preparePutCannedAclPayload,
+  ),
+  putBucketVersioning: awsPlugin.generateAwsMethod(
+    PutBucketVersioningCommand,
+    payloadFunctions.preparePutBucketVersioningPayload,
+  ),
+  getBucketPolicy: awsPlugin.generateAwsMethod(
+    GetBucketPolicyCommand,
+    payloadFunctions.prepareGetBucketPolicyPayload,
+  ),
+  deleteBucketPolicy: awsPlugin.generateAwsMethod(
+    DeleteBucketPolicyCommand,
+    payloadFunctions.prepareDeleteBucketPolicyPayload,
+  ),
+  deleteBucketWebsite: awsPlugin.generateAwsMethod(
+    DeleteBucketWebsiteCommand,
+    payloadFunctions.prepareDeleteBucketWebsitePayload,
+  ),
+  getBucketWebsite: awsPlugin.generateAwsMethod(
+    GetBucketWebsiteCommand,
+    payloadFunctions.prepareGetBucketWebsitePayload,
+  ),
+  putBucketWebsite: awsPlugin.generateAwsMethod(
+    PutBucketWebsiteCommand,
+    payloadFunctions.preparePutBucketWebsitePayload,
+  ),
+  putBucketWebsiteRedirect: awsPlugin.generateAwsMethod(
+    PutBucketWebsiteCommand,
+    payloadFunctions.preparePutBucketWebsiteRedirectPayload,
+  ),
 };
 
 async function deleteBucket(client, params) {
   if (params.RECURSIVELY) {
     await helpers.emptyDirectory(client, params.BUCKET_NAME);
   }
-  return client.deleteBucket({ Bucket: params.BUCKET_NAME }).promise();
+  return client.send(new DeleteBucketCommand({ Bucket: params.BUCKET_NAME }));
 }
 
 async function deleteObject(client, params) {
   if (params.failOnObjectNotFound) {
-    const listObjectsResult = await client.listObjectsV2({
-      Bucket: params.BUCKET_NAME,
-      Prefix: params.OBJECT_NAME,
-    }).promise();
+    const listObjectsResult = await simpleAwsFunctions.listObjectsInBucket({
+      BUCKET_NAME: params.BUCKET_NAME,
+      prefix: params.OBJECT_NAME,
+    });
 
     const foundObject = listObjectsResult.Contents.find(
       (object) => object.Key === params.OBJECT_NAME || object.Key.startsWith(`${params.OBJECT_NAME}/`),
@@ -45,11 +102,19 @@ async function deleteObject(client, params) {
       throw new Error(`No object in selected bucket under path: "${params.OBJECT_NAME}"`);
     }
   }
+
   if (params.RECURSIVELY) {
-    const objectPrefix = ["/", "*"].includes(params.OBJECT_NAME) ? "" : params.OBJECT_NAME;
+    const objectPrefix = ["/", "*"].includes(params.OBJECT_NAME)
+      ? ""
+      : params.OBJECT_NAME;
+
     await helpers.emptyDirectory(client, params.BUCKET_NAME, objectPrefix);
   }
-  return client.deleteObject({ Bucket: params.BUCKET_NAME, Key: params.OBJECT_NAME }).promise();
+
+  return client.send(new DeleteObjectCommand({
+    Bucket: params.BUCKET_NAME,
+    Key: params.OBJECT_NAME,
+  }));
 }
 
 async function uploadFileToBucket(client, params) {
@@ -63,7 +128,7 @@ async function uploadFileToBucket(client, params) {
     Body: fs.createReadStream(params.FILE_PATH),
   };
 
-  return client.upload(payload).promise();
+  return client.send(new PutObjectCommand(payload));
 }
 
 async function putBucketAcl(client, params) {
@@ -77,7 +142,7 @@ async function putBucketAcl(client, params) {
 
   const permissionTypes = helpers.resolveBucketAclPermissions(params);
   const newGrantees = await helpers.getNewGrantees(client, params);
-  const currentAcl = await client.getBucketAcl({ Bucket: params.BUCKET_NAME }).promise();
+  const currentAcl = await client.send(new GetBucketAclCommand({ Bucket: params.BUCKET_NAME }));
   const currentGrants = params.dontOverwrite ? currentAcl.Grants : [];
   const newGrants = helpers.getGrants(newGrantees, permissionTypes);
   const payload = {
@@ -88,7 +153,7 @@ async function putBucketAcl(client, params) {
     },
   };
 
-  return client.putBucketAcl(payload).promise()
+  return client.send(new PutBucketAclCommand(payload))
     .catch((error) => {
       if (error.code === "UnsupportedArgument" && params.emailAddress.length > 0) {
         console.error("Notice: Using email address to specify a grantee is only supported for buckets created in specific AWS Regions. For more information visit: https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAcl.html\n");
@@ -98,25 +163,28 @@ async function putBucketAcl(client, params) {
 }
 
 async function putBucketPolicy(client, params) {
-  return client.putBucketPolicy({
+  return client.send(new PutBucketPolicyCommand({
     Bucket: params.bucketName,
     Policy: JSON.stringify(params.policy),
-  }).promise();
+  }));
 }
 
 async function putBucketLogging(client, params) {
   if (params.disableLogging) {
-    return client.putBucketLogging({
+    return client.send(new PutBucketLoggingCommand({
       Bucket: params.bucketName,
       BucketLoggingStatus: {},
-    }).promise();
+    }));
   }
 
   let { targetBucket, targetPrefix } = params;
   let currentGrants = [];
 
   if (params.dontOverwrite) {
-    const loggingConfig = await client.getBucketLogging({ Bucket: params.bucketName }).promise();
+    const loggingConfig = await client.send(new GetBucketLoggingCommand({
+      Bucket: params.bucketName,
+    }));
+
     if (loggingConfig.LoggingEnabled) {
       currentGrants = loggingConfig.TargetGrants || currentGrants;
       targetBucket = loggingConfig.TargetBucket || targetBucket;
@@ -145,15 +213,15 @@ async function putBucketLogging(client, params) {
     },
   };
 
-  return client.putBucketLogging(payload).promise();
+  return client.send(new PutBucketLoggingCommand(payload));
 }
 
 async function putBucketEncryption(client, params) {
   if (!params.sseAlgo || params.sseAlgo === "none") {
-    return client.putBucketEncryption({
+    return client.send(new PutBucketEncryptionCommand({
       Bucket: params.bucketName,
       ServerSideEncryptionConfiguration: { Rules: [] },
-    }).promise();
+    }));
   }
 
   if (params.sseAlgo === "aws:kms" && !params.kmsMasterKey) {
@@ -173,12 +241,12 @@ async function putBucketEncryption(client, params) {
     },
   };
 
-  return client.putBucketEncryption(payload).promise();
+  return client.send(new PutBucketEncryptionCommand(payload));
 }
 
 module.exports = {
   ...awsPlugin.bootstrap(
-    aws.S3,
+    S3Client,
     {
       ...simpleAwsFunctions,
       deleteBucket,
@@ -198,7 +266,7 @@ module.exports = {
     },
   ),
   ...awsPlugin.bootstrap(
-    aws.KMS,
+    KMSClient,
     {},
     _.pick(autocomplete, "listKeysAutocomplete"),
     {
