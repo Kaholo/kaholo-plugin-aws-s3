@@ -84,6 +84,7 @@ async function deleteBucket(client, params) {
   if (params.RECURSIVELY) {
     await helpers.emptyDirectory(client, params.BUCKET_NAME);
   }
+
   return client.send(new DeleteBucketCommand({ Bucket: params.BUCKET_NAME }));
 }
 
