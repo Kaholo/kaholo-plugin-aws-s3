@@ -130,7 +130,7 @@ async function emptyDirectory(client, bucket, prefix = "") {
   });
 
   const listedObjects = await client.send(new ListObjectsV2Command(listPayload));
-  if (listedObjects.Contents?.length === 0) {
+  if (listedObjects.KeyCount === 0) {
     return;
   }
 
