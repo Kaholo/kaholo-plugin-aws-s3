@@ -1,6 +1,8 @@
+const { ListKeysCommand } = require("@aws-sdk/client-kms");
+const { ListBucketsCommand } = require("@aws-sdk/client-s3");
 const { autocomplete } = require("@kaholo/aws-plugin-library");
 
 module.exports = {
-  listBucketsAutocomplete: autocomplete.autocompleteListFromAwsCall("listBuckets", "Buckets", "Name"),
-  listKeysAutocomplete: autocomplete.autocompleteListFromAwsCall("listKeys", "Keys", "KeyId"),
+  listBucketsAutocomplete: autocomplete.autocompleteListFromAwsCall(ListBucketsCommand, "Buckets", "Name"),
+  listKeysAutocomplete: autocomplete.autocompleteListFromAwsCall(ListKeysCommand, "Keys", "KeyId"),
 };

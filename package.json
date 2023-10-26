@@ -16,8 +16,9 @@
     "jest": "27.5.0"
   },
   "dependencies": {
-    "@kaholo/aws-plugin-library": "^2.0.1",
-    "aws-sdk": "2.1030.0",
+    "@aws-sdk/client-kms": "^3.427.0",
+    "@aws-sdk/client-s3": "^3.427.0",
+    "@kaholo/aws-plugin-library": "^4.0.1",
     "lodash": "4.17.21"
   }
 }
