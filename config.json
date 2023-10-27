@@ -125,6 +125,49 @@
       ]
     },
     {
+      "name": "downloadFileFromBucket",
+      "viewName": "Download File from Bucket",
+      "allowEmptyResult": true,
+      "params": [
+        {
+          "name": "REGION",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAutocomplete",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
+        },
+        {
+          "name": "bucket",
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAutocomplete",
+          "description": "The bucket to upload the object to.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html",
+          "required": true
+        },
+        {
+          "name": "objectPath",
+          "viewName": "Object Path",
+          "type": "string",
+          "description": "Path of the object in the bucket",
+          "required": true
+        },
+        {
+          "name": "destinationPath",
+          "viewName": "Destination Path",
+          "type": "string",
+          "description": "Path to save the downloaded object",
+          "parserType": "filePath",
+          "required": true
+        }
+      ]
+    },
+    {
       "name": "deleteBucket",
       "viewName": "Delete Bucket",
       "params": [

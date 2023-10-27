@@ -26,8 +26,10 @@ const {
   PutBucketLoggingCommand,
   GetBucketLoggingCommand,
   PutBucketEncryptionCommand,
+  GetObjectCommand,
 } = require("@aws-sdk/client-s3");
 
+const { promisify } = require("util");
 const payloadFunctions = require("./payload-functions");
 const helpers = require("./helpers");
 const autocomplete = require("./autocomplete");
@@ -78,6 +80,12 @@ const simpleAwsFunctions = {
     PutBucketWebsiteCommand,
     payloadFunctions.preparePutBucketWebsiteRedirectPayload,
   ),
+};
+
+const CREDENTIAL_KEYS = {
+  ACCESS_KEY: "accessKeyId",
+  SECRET_KEY: "secretAccessKey",
+  REGION: "REGION",
 };
 
 async function deleteBucket(client, params) {
@@ -245,36 +253,51 @@ async function putBucketEncryption(client, params) {
   return client.send(new PutBucketEncryptionCommand(payload));
 }
 
-module.exports = {
-  ...awsPlugin.bootstrap(
+async function downloadFileFromBucket(
+  /** @type {S3Client} */ client,
+  params,
+) {
+  const { absolutePath } = params.destinationPath;
+  const payload = {
+    Bucket: params.bucket,
+    Key: params.objectPath,
+  };
+
+  console.info(`Downloading ${payload.Key} object from ${payload.Bucket} bucket`);
+  const response = await client.send(new GetObjectCommand(payload));
+
+  console.info(`File downloaded, saving to ${absolutePath}`);
+  const destinationStream = fs.createWriteStream(absolutePath);
+  response.Body.pipe(destinationStream);
+  await promisify(destinationStream.on.bind(destinationStream))("close");
+
+  return "";
+}
+
+module.exports = _.merge(
+  awsPlugin.bootstrap(
     S3Client,
     {
       ...simpleAwsFunctions,
       deleteBucket,
       deleteObject,
       uploadFileToBucket,
+      downloadFileFromBucket,
       putBucketAcl,
       putBucketLogging,
       putBucketEncryption,
       putBucketPolicy,
     },
-    // Autocomplete Functions
     _.omit(autocomplete, "listKeysAutocomplete"),
-    {
-      ACCESS_KEY: "accessKeyId",
-      SECRET_KEY: "secretAccessKey",
-      REGION: "REGION",
-    },
+    CREDENTIAL_KEYS,
   ),
-  ...awsPlugin.bootstrap(
+  awsPlugin.bootstrap(
     KMSClient,
     {},
     _.pick(autocomplete, "listKeysAutocomplete"),
-    {
-      ACCESS_KEY: "accessKeyId",
-      SECRET_KEY: "secretAccessKey",
-      REGION: "REGION",
-    },
+    CREDENTIAL_KEYS,
   ),
-  listRegionsAutocomplete: awsPlugin.autocomplete.listRegions,
-};
+  {
+    listRegionsAutocomplete: awsPlugin.autocomplete.listRegions,
+  },
+);
