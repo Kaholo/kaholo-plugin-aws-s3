@@ -197,6 +197,14 @@
           "placeholder": "mybucket",
           "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html",
           "required": true
+        },
+        {
+          "name": "destinationPath",
+          "viewName": "Destination Path",
+          "type": "string",
+          "description": "Path to save the downloaded object",
+          "parserType": "filePath",
+          "required": true
         }
       ]
     },

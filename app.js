@@ -284,9 +284,9 @@ async function downloadFileFromBucket(
   const objectsLength = objectsToDownload.length;
   await objectsToDownload.reduce(async (previousPromise, { objectKey, fsPath }, currentIndex) => {
     await previousPromise;
-    await helpers.ensureDirectory(path.dirname(fsPath));
-
     console.info(`[${currentIndex + 1}/${objectsLength}] Downloading "${objectKey}" object to "${fsPath}"\n`);
+
+    await helpers.ensureDirectory(path.dirname(fsPath));
     const response = await client.send(new GetObjectCommand({
       Bucket: params.bucket,
       Key: objectKey,
@@ -299,11 +299,20 @@ async function downloadFileFromBucket(
   return "";
 }
 
+function downloadBucket(client, params) {
+  return downloadFileFromBucket(client, {
+    destinationPath: params.destinationPath,
+    bucket: params.bucket,
+    recursively: true,
+  });
+}
+
 module.exports = _.merge(
   awsPlugin.bootstrap(
     S3Client,
     {
       ...simpleAwsFunctions,
+      downloadBucket,
       deleteBucket,
       deleteObject,
       uploadFileToBucket,

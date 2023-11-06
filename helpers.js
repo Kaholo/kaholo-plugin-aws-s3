@@ -177,6 +177,10 @@ async function emptyDirectory(client, bucket, prefix = "") {
 }
 
 function appendPathSeparatorIfNecessary(objectPath) {
+  if (!objectPath) {
+    return "";
+  }
+
   return objectPath.endsWith("/") ? objectPath : `${objectPath}/`;
 }
 
