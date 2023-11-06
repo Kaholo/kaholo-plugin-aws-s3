@@ -258,18 +258,43 @@ async function downloadFileFromBucket(
   params,
 ) {
   const { absolutePath } = params.destinationPath;
-  const payload = {
-    Bucket: params.bucket,
-    Key: params.objectPath,
-  };
 
-  console.info(`Downloading ${payload.Key} object from ${payload.Bucket} bucket`);
-  const response = await client.send(new GetObjectCommand(payload));
+  const objectsToDownload = [];
+  if (params.recursively) {
+    await helpers.ensureDirectory(absolutePath);
+    const allObjects = await helpers.listObjectsRecursively(
+      client,
+      {
+        Bucket: params.bucket,
+        Prefix: helpers.appendPathSeparatorIfNecessary(params.objectPath),
+      },
+    );
 
-  console.info(`File downloaded, saving to ${absolutePath}`);
-  const destinationStream = fs.createWriteStream(absolutePath);
-  response.Body.pipe(destinationStream);
-  await promisify(destinationStream.on.bind(destinationStream))("close");
+    objectsToDownload.push(...allObjects.map(({ Key }) => ({
+      objectKey: Key,
+      fsPath: path.resolve(absolutePath, Key),
+    })));
+  } else {
+    objectsToDownload.push({
+      objectKey: params.objectPath,
+      fsPath: absolutePath,
+    });
+  }
+
+  const objectsLength = objectsToDownload.length;
+  await objectsToDownload.reduce(async (previousPromise, { objectKey, fsPath }, currentIndex) => {
+    await previousPromise;
+    await helpers.ensureDirectory(path.dirname(fsPath));
+
+    console.info(`[${currentIndex + 1}/${objectsLength}] Downloading "${objectKey}" object to "${fsPath}"\n`);
+    const response = await client.send(new GetObjectCommand({
+      Bucket: params.bucket,
+      Key: objectKey,
+    }));
+    const destinationStream = fs.createWriteStream(fsPath);
+    response.Body.pipe(destinationStream);
+    await promisify(destinationStream.on.bind(destinationStream))("close");
+  }, Promise.resolve());
 
   return "";
 }
