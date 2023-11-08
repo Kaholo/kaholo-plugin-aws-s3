@@ -60,7 +60,7 @@
       "viewName": "Create Bucket",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -85,7 +85,7 @@
       "viewName": "Upload File To Bucket",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -125,11 +125,96 @@
       ]
     },
     {
+      "name": "downloadFileFromBucket",
+      "viewName": "Download File from Bucket",
+      "allowEmptyResult": true,
+      "params": [
+        {
+          "name": "region",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAutocomplete",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
+        },
+        {
+          "name": "bucket",
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAutocomplete",
+          "description": "The bucket to upload the object to.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html",
+          "required": true
+        },
+        {
+          "name": "objectPath",
+          "viewName": "Object Path",
+          "type": "string",
+          "description": "Path of the object in the bucket",
+          "required": true
+        },
+        {
+          "name": "destinationPath",
+          "viewName": "Destination Path",
+          "type": "string",
+          "description": "Path to save the downloaded object",
+          "parserType": "filePath",
+          "required": true
+        },
+        {
+          "name": "recursively",
+          "viewName": "Download Recursively",
+          "type": "boolean",
+          "description": "Recursively download all objects which are in the Object Path"
+        }
+      ]
+    },
+    {
+      "name": "downloadBucket",
+      "viewName": "Download Bucket",
+      "allowEmptyResult": true,
+      "params": [
+        {
+          "name": "region",
+          "viewName": "Region",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listRegionsAutocomplete",
+          "description": "Make this request in the specified region.",
+          "placeholder": "us-east-2",
+          "learnUrl": "https://docs.aws.amazon.com/general/latest/gr/s3.html"
+        },
+        {
+          "name": "bucket",
+          "viewName": "Bucket",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "listBucketsAutocomplete",
+          "description": "The bucket to upload the object to.",
+          "placeholder": "mybucket",
+          "learnUrl": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html",
+          "required": true
+        },
+        {
+          "name": "destinationPath",
+          "viewName": "Destination Path",
+          "type": "string",
+          "description": "Path to save the downloaded object",
+          "parserType": "filePath",
+          "required": true
+        }
+      ]
+    },
+    {
       "name": "deleteBucket",
       "viewName": "Delete Bucket",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -163,7 +248,7 @@
       "viewName": "Delete Object",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -213,7 +298,7 @@
       "viewName": "List Bucket's Objects",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -248,7 +333,7 @@
       "viewName": "List Buckets",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -264,7 +349,7 @@
       "viewName": "Manage Public Access Block",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -323,7 +408,7 @@
       "viewName": "Manage Bucket ACL",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -465,7 +550,7 @@
       "viewName": "Apply Canned ACL to Bucket",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -520,7 +605,7 @@
       "viewName": "Manage Bucket Versioning",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -595,7 +680,7 @@
       "viewName": "Apply Bucket Policy",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -631,7 +716,7 @@
       "viewName": "Get Bucket Policy",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -658,7 +743,7 @@
       "viewName": "Delete Bucket Policy",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -685,7 +770,7 @@
       "viewName": "Manage Bucket Logging",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -820,7 +905,7 @@
       "viewName": "Manage Bucket Encryption",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -888,7 +973,7 @@
       "viewName": "Enable Bucket Website Hosting",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -938,7 +1023,7 @@
       "viewName": "Enable Bucket Website Redirect",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -993,7 +1078,7 @@
       "viewName": "Get Bucket Website Hosting Configuration",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",
@@ -1020,7 +1105,7 @@
       "viewName": "Disable Bucket Website Hosting",
       "params": [
         {
-          "name": "REGION",
+          "name": "region",
           "viewName": "Region",
           "type": "autocomplete",
           "autocompleteType": "function",

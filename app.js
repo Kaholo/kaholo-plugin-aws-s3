@@ -26,8 +26,10 @@ const {
   PutBucketLoggingCommand,
   GetBucketLoggingCommand,
   PutBucketEncryptionCommand,
+  GetObjectCommand,
 } = require("@aws-sdk/client-s3");
 
+const { promisify } = require("util");
 const payloadFunctions = require("./payload-functions");
 const helpers = require("./helpers");
 const autocomplete = require("./autocomplete");
@@ -78,6 +80,12 @@ const simpleAwsFunctions = {
     PutBucketWebsiteCommand,
     payloadFunctions.preparePutBucketWebsiteRedirectPayload,
   ),
+};
+
+const CREDENTIAL_KEYS = {
+  ACCESS_KEY: "accessKeyId",
+  SECRET_KEY: "secretAccessKey",
+  REGION: "region",
 };
 
 async function deleteBucket(client, params) {
@@ -245,36 +253,102 @@ async function putBucketEncryption(client, params) {
   return client.send(new PutBucketEncryptionCommand(payload));
 }
 
-module.exports = {
-  ...awsPlugin.bootstrap(
+async function downloadFileFromBucket(
+  /** @type {S3Client} */ client,
+  params,
+) {
+  const { absolutePath } = params.destinationPath;
+
+  const objectsToDownload = [];
+  if (params.recursively) {
+    await helpers.ensureDirectory(absolutePath);
+    const allObjects = await helpers.listObjectsRecursively(
+      client,
+      {
+        Bucket: params.bucket,
+        Prefix: params.objectPath,
+      },
+    );
+
+    const mappedObjects = allObjects
+      .map(({ Key }) => ({
+        objectKey: Key,
+        fsPath: path.resolve(absolutePath, Key),
+      }))
+      .sort((a, b) => b.fsPath.length - a.fsPath.length);
+    objectsToDownload.push(...mappedObjects);
+  } else {
+    objectsToDownload.push({
+      objectKey: params.objectPath,
+      fsPath: absolutePath,
+    });
+  }
+
+  const objectsCount = objectsToDownload.length;
+  await objectsToDownload.reduce(async (previousPromise, { objectKey, fsPath }, currentIndex) => {
+    await previousPromise;
+    await helpers.ensureDirectory(path.dirname(fsPath));
+    try {
+      await helpers.assertPathAvailability(fsPath);
+    } catch (error) {
+      if (error.message === "PATH_IS_DIRECTORY") {
+        console.info(`[${currentIndex + 1}/${objectsCount}] "${objectKey}" object skipped because file name would conflict with an existing directory at "${fsPath}"\n`);
+      } else if (error.message === "PATH_IS_FILE") {
+        console.info(`[${currentIndex + 1}/${objectsCount}] "${objectKey}" object skipped because file name would conflict with an existing file at "${fsPath}"\n`);
+      } else {
+        console.info(`[${currentIndex + 1}/${objectsCount}] "${objectKey}" object skipped because "${fsPath}" path is unavailable\n`);
+      }
+      return;
+    }
+
+    const response = await client.send(new GetObjectCommand({
+      Bucket: params.bucket,
+      Key: objectKey,
+    }));
+
+    const destinationStream = fs.createWriteStream(fsPath);
+    response.Body.pipe(destinationStream);
+    await promisify(destinationStream.on.bind(destinationStream))("close");
+
+    console.info(`[${currentIndex + 1}/${objectsCount}] "${objectKey}" object downloaded to "${fsPath}"\n`);
+  }, Promise.resolve());
+
+  return "";
+}
+
+async function downloadBucket(client, params) {
+  return downloadFileFromBucket(client, {
+    destinationPath: params.destinationPath,
+    bucket: params.bucket,
+    recursively: true,
+  });
+}
+
+module.exports = _.merge(
+  awsPlugin.bootstrap(
     S3Client,
     {
       ...simpleAwsFunctions,
+      downloadBucket,
       deleteBucket,
       deleteObject,
       uploadFileToBucket,
+      downloadFileFromBucket,
       putBucketAcl,
       putBucketLogging,
       putBucketEncryption,
       putBucketPolicy,
     },
-    // Autocomplete Functions
     _.omit(autocomplete, "listKeysAutocomplete"),
-    {
-      ACCESS_KEY: "accessKeyId",
-      SECRET_KEY: "secretAccessKey",
-      REGION: "REGION",
-    },
+    CREDENTIAL_KEYS,
   ),
-  ...awsPlugin.bootstrap(
+  awsPlugin.bootstrap(
     KMSClient,
     {},
     _.pick(autocomplete, "listKeysAutocomplete"),
-    {
-      ACCESS_KEY: "accessKeyId",
-      SECRET_KEY: "secretAccessKey",
-      REGION: "REGION",
-    },
+    CREDENTIAL_KEYS,
   ),
-  listRegionsAutocomplete: awsPlugin.autocomplete.listRegions,
-};
+  {
+    listRegionsAutocomplete: awsPlugin.autocomplete.listRegions,
+  },
+);

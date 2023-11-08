@@ -1,6 +1,11 @@
-const { ListObjectsV2Command, DeleteObjectsCommand, ListBucketsCommand } = require("@aws-sdk/client-s3");
 const _ = require("lodash");
+const fs = require("fs/promises");
 const { removeUndefinedAndEmpty } = require("@kaholo/aws-plugin-library").helpers;
+const {
+  ListObjectsV2Command,
+  DeleteObjectsCommand,
+  ListBucketsCommand,
+} = require("@aws-sdk/client-s3");
 
 const GRANTEE_TYPE_TO_FIELD = {
   CanonicalUser: "ID",
@@ -123,30 +128,78 @@ async function getNewGrantees(client, {
   return newGrantees;
 }
 
-async function emptyDirectory(client, bucket, prefix = "") {
-  const listPayload = removeUndefinedAndEmpty({
-    Bucket: bucket,
-    Prefix: prefix,
+async function listObjectsRecursively(
+  client,
+  listPayload,
+  continuationToken = null,
+) {
+  const resolvedListPayload = removeUndefinedAndEmpty({
+    ...listPayload,
+    ContinuationToken: continuationToken,
   });
+  const listedObjects = await client.send(new ListObjectsV2Command(resolvedListPayload));
 
-  const listedObjects = await client.send(new ListObjectsV2Command(listPayload));
   if (listedObjects.KeyCount === 0) {
+    return [];
+  }
+  if (!listedObjects.IsTruncated) {
+    return listedObjects.Contents;
+  }
+
+  const recursiveResult = await listObjectsRecursively(
+    client,
+    listPayload,
+    listedObjects.NextContinuationToken,
+  );
+  return [...listedObjects.Contents, ...recursiveResult];
+}
+
+async function emptyDirectory(client, bucket, prefix = "") {
+  const listedObjects = await listObjectsRecursively(
+    client,
+    {
+      Bucket: bucket,
+      Prefix: prefix,
+    },
+  );
+
+  if (listedObjects.length === 0) {
     return;
   }
 
   const deletePayload = {
     Bucket: bucket,
-    Delete: { Objects: [] },
+    Delete: {
+      Objects: listedObjects.map(({ Key }) => ({ Key })),
+    },
   };
-
-  listedObjects.Contents.forEach(({ Key }) => {
-    deletePayload.Delete.Objects.push({ Key });
-  });
-
   await client.send(new DeleteObjectsCommand(deletePayload));
-  if (listedObjects.IsTruncated) {
-    await emptyDirectory(bucket, prefix);
+}
+
+function appendPathSeparatorIfNecessary(objectPath) {
+  if (!objectPath) {
+    return "";
   }
+
+  return objectPath.endsWith("/") ? objectPath : `${objectPath}/`;
+}
+
+async function assertPathAvailability(fsPath) {
+  let pathStat;
+  try {
+    pathStat = await fs.stat(fsPath);
+  } catch {
+    return true;
+  }
+
+  if (pathStat.isDirectory()) {
+    throw new Error("PATH_IS_DIRECTORY");
+  }
+  if (pathStat.isFile()) {
+    throw new Error("PATH_IS_FILE");
+  }
+
+  throw new Error("PATH_UNAVAILABLE");
 }
 
 function sanitizeS3Path(path, filename) {
@@ -166,8 +219,28 @@ function sanitizeS3Path(path, filename) {
   return resultPath;
 }
 
+async function ensureDirectory(dirPath) {
+  let pathStat;
+  try {
+    pathStat = await fs.stat(dirPath);
+  } catch (error) {
+    await fs.mkdir(dirPath, { recursive: true });
+    return true;
+  }
+
+  if (!pathStat.isDirectory()) {
+    throw new Error(`Path "${dirPath}" exists and is not a directory`);
+  }
+
+  return true;
+}
+
 module.exports = {
+  ensureDirectory,
+  assertPathAvailability,
+  listObjectsRecursively,
   resolveBucketAclPermissions,
+  appendPathSeparatorIfNecessary,
   getNewGrantees,
   getGrants,
   combineGrants,
