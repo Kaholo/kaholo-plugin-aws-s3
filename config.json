@@ -176,6 +176,7 @@
     {
       "name": "downloadBucket",
       "viewName": "Download Bucket",
+      "allowEmptyResult": true,
       "params": [
         {
           "name": "region",
