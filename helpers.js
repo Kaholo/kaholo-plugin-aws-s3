@@ -184,6 +184,24 @@ function appendPathSeparatorIfNecessary(objectPath) {
   return objectPath.endsWith("/") ? objectPath : `${objectPath}/`;
 }
 
+async function assertPathAvailability(fsPath) {
+  let pathStat;
+  try {
+    pathStat = await fs.stat(fsPath);
+  } catch {
+    return true;
+  }
+
+  if (pathStat.isDirectory()) {
+    throw new Error("PATH_IS_DIRECTORY");
+  }
+  if (pathStat.isFile()) {
+    throw new Error("PATH_IS_FILE");
+  }
+
+  return true;
+}
+
 function sanitizeS3Path(path, filename) {
   if (!path) {
     return filename;
@@ -207,15 +225,19 @@ async function ensureDirectory(dirPath) {
     pathStat = await fs.stat(dirPath);
   } catch (error) {
     await fs.mkdir(dirPath, { recursive: true });
+    return true;
   }
 
-  if (pathStat && !pathStat.isDirectory()) {
+  if (!pathStat.isDirectory()) {
     throw new Error(`Path "${dirPath}" exists and is not a directory`);
   }
+
+  return true;
 }
 
 module.exports = {
   ensureDirectory,
+  assertPathAvailability,
   listObjectsRecursively,
   resolveBucketAclPermissions,
   appendPathSeparatorIfNecessary,

@@ -266,14 +266,17 @@ async function downloadFileFromBucket(
       client,
       {
         Bucket: params.bucket,
-        Prefix: helpers.appendPathSeparatorIfNecessary(params.objectPath),
+        Prefix: params.objectPath,
       },
     );
 
-    objectsToDownload.push(...allObjects.map(({ Key }) => ({
-      objectKey: Key,
-      fsPath: path.resolve(absolutePath, Key),
-    })));
+    const mappedObjects = allObjects
+      .map(({ Key }) => ({
+        objectKey: Key,
+        fsPath: path.resolve(absolutePath, Key),
+      }))
+      .sort((a, b) => b.fsPath.length - a.fsPath.length);
+    objectsToDownload.push(...mappedObjects);
   } else {
     objectsToDownload.push({
       objectKey: params.objectPath,
@@ -281,25 +284,38 @@ async function downloadFileFromBucket(
     });
   }
 
-  const objectsLength = objectsToDownload.length;
+  const objectsCount = objectsToDownload.length;
   await objectsToDownload.reduce(async (previousPromise, { objectKey, fsPath }, currentIndex) => {
     await previousPromise;
-    console.info(`[${currentIndex + 1}/${objectsLength}] Downloading "${objectKey}" object to "${fsPath}"\n`);
-
     await helpers.ensureDirectory(path.dirname(fsPath));
+    try {
+      await helpers.assertPathAvailability(fsPath);
+    } catch (error) {
+      if (error.message === "PATH_IS_DIRECTORY") {
+        console.info(`[${currentIndex + 1}/${objectsCount}] "${objectKey}" object skipped because file name would conflict with an existing directory at "${fsPath}"\n`);
+      }
+      if (error.message === "PATH_IS_FILE") {
+        console.info(`[${currentIndex + 1}/${objectsCount}] "${objectKey}" object skipped because file name would conflict with an existing file at "${fsPath}"\n`);
+      }
+      return;
+    }
+
     const response = await client.send(new GetObjectCommand({
       Bucket: params.bucket,
       Key: objectKey,
     }));
+
     const destinationStream = fs.createWriteStream(fsPath);
     response.Body.pipe(destinationStream);
     await promisify(destinationStream.on.bind(destinationStream))("close");
+
+    console.info(`[${currentIndex + 1}/${objectsCount}] "${objectKey}" object downloaded to "${fsPath}"\n`);
   }, Promise.resolve());
 
   return "";
 }
 
-function downloadBucket(client, params) {
+async function downloadBucket(client, params) {
   return downloadFileFromBucket(client, {
     destinationPath: params.destinationPath,
     bucket: params.bucket,
