@@ -85,7 +85,7 @@ const simpleAwsFunctions = {
 const CREDENTIAL_KEYS = {
   ACCESS_KEY: "accessKeyId",
   SECRET_KEY: "secretAccessKey",
-  REGION: "REGION",
+  REGION: "region",
 };
 
 async function deleteBucket(client, params) {
