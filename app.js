@@ -293,9 +293,10 @@ async function downloadFileFromBucket(
     } catch (error) {
       if (error.message === "PATH_IS_DIRECTORY") {
         console.info(`[${currentIndex + 1}/${objectsCount}] "${objectKey}" object skipped because file name would conflict with an existing directory at "${fsPath}"\n`);
-      }
-      if (error.message === "PATH_IS_FILE") {
+      } else if (error.message === "PATH_IS_FILE") {
         console.info(`[${currentIndex + 1}/${objectsCount}] "${objectKey}" object skipped because file name would conflict with an existing file at "${fsPath}"\n`);
+      } else {
+        console.info(`[${currentIndex + 1}/${objectsCount}] "${objectKey}" object skipped because "${fsPath}" path is unavailable\n`);
       }
       return;
     }

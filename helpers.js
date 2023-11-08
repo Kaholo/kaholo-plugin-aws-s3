@@ -199,7 +199,7 @@ async function assertPathAvailability(fsPath) {
     throw new Error("PATH_IS_FILE");
   }
 
-  return true;
+  throw new Error("PATH_UNAVAILABLE");
 }
 
 function sanitizeS3Path(path, filename) {
