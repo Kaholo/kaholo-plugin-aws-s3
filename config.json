@@ -205,7 +205,7 @@
           "type": "string",
           "description": "Path to save the downloaded object",
           "parserType": "filePath",
-          "required": true
+          "required": false
         }
       ]
     },
