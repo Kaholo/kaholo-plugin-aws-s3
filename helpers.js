@@ -206,7 +206,7 @@ async function ensureDirectory(dirPath) {
   try {
     pathStat = await fs.stat(dirPath);
   } catch (error) {
-    await fs.mkdir(dirPath);
+    await fs.mkdir(dirPath, { recursive: true });
   }
 
   if (pathStat && !pathStat.isDirectory()) {
