@@ -2,6 +2,7 @@ const fs = require("fs");
 const _ = require("lodash");
 const path = require("path");
 const awsPlugin = require("@kaholo/aws-plugin-library");
+const kpl = require("@kaholo/plugin-library");
 
 const { KMSClient } = require("@aws-sdk/client-kms");
 
@@ -318,7 +319,7 @@ async function downloadFileFromBucket(
 
 async function downloadBucket(client, params) {
   return downloadFileFromBucket(client, {
-    destinationPath: params.destinationPath,
+    destinationPath: params.destinationPath || await kpl.helpers.analyzePath(params.bucket),
     bucket: params.bucket,
     recursively: true,
   });
